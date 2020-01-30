@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // DATABASE CONFIG
-const uri = require("./config/keys").mongoURI;
+const uri = require("./config/keys").MONGO_URI;
 
 mongoose
   .connect(uri, {

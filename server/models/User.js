@@ -14,25 +14,24 @@ var UserSchema = new mongoose.Schema({
   // User's username
   username: {
     type: String,
-    required: true,
-    unique: true
+    required: true
+    // unique: true
   },
   // User's email address
   email: {
     type: String,
-    required: true,
-    unique: true
+    required: true
+    // unique: true
   },
   // User's account password
   password: {
     type: String,
-    required: true,
-    minlength: 5
+    required: true
+    // minlength: 5
   },
   // User's profile image
   avatar: {
-    type: String,
-    required: true
+    type: String
   },
   // User's signup date
   date: {

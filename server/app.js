@@ -1,19 +1,19 @@
 // PACKAGES
 const express = require("express");
-const app = express();
 
-const db = require("./db");
-
-// GENERAL SETTINGS
-
-// HANDLERS
-
-// MODELS
+const bodyParser = require("body-parser");
 
 // ROUTES
 const auth = require("./routes/api/auth");
 const profile = require("./routes/api/profile");
 const posts = require("./routes/api/posts");
+const app = express();
+
+// GENERAL SETTINGS
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+// DATABASE CONNECTION
+const db = require("./db");
 
 // USE ROUTES
 app.use("/api/users", auth);
