@@ -9,6 +9,10 @@ const bcrypt = require("bcryptjs");
 
 const SALTROUNDS = 10;
 
+const jwt = require("jsonwebtoken");
+const keys = require("../../config/keys.js");
+const passport = require("passport");
+
 // MODEL
 const User = require("../../models/User");
 
@@ -87,7 +91,22 @@ router.post("/signin", (req, res) => {
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
         // password matches
-        // res.json({ message: "Success!" });
+        // jwt payload
+        const payload = {
+          id: user.id,
+          username: user.username,
+          avatar: user.avatar
+        };
+        jwt.sign(
+          payload,
+          keys.secretOrKey,
+          {
+            expiresIn: 360000 //  hours
+          },
+          (err, token) => {
+            res.json({ success: true, token: "Bearer " + token });
+          }
+        );
       } else {
         return res.status(400).json({
           password: "Incorrect password!"
@@ -96,5 +115,23 @@ router.post("/signin", (req, res) => {
     });
   });
 });
+
+// @route       : /api/users/user
+// @method      : GET
+// @access      : private
+// @description : route to return the current user
+router.get(
+  "/user",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({
+      id: req.user.id,
+      firstname: req.user.firstname,
+      lastname: req.user.lastname,
+      username: req.user.username,
+      email: req.user.email
+    });
+  }
+);
 
 module.exports = router;

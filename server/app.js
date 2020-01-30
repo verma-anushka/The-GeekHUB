@@ -1,7 +1,8 @@
 // PACKAGES
 const express = require("express");
-
 const bodyParser = require("body-parser");
+
+const passport = require("passport");
 
 // ROUTES
 const auth = require("./routes/api/auth");
@@ -12,8 +13,15 @@ const app = express();
 // GENERAL SETTINGS
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
 // DATABASE CONNECTION
 const db = require("./db");
+
+// PASSPORT MIDDLEWARE
+app.use(passport.initialize());
+
+// PASSPORT CONFIG
+require("./config/passport.js")(passport);
 
 // USE ROUTES
 app.use("/api/users", auth);
