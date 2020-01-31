@@ -13,6 +13,10 @@ const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys.js");
 const passport = require("passport");
 
+// INPUT VALIDATIONS
+const validateSignUpInputs = require("../../validation/signup");
+const validateSignInInputs = require("../../validation/signin");
+
 // MODEL
 const User = require("../../models/User");
 
@@ -21,13 +25,23 @@ const User = require("../../models/User");
 // @access      : public
 // @description : route to register new user (SIGNUP)
 router.post("/signup", (req, res) => {
+  // Destructuring the errors and validations
+  const { errors, isValid } = validateSignUpInputs(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors); // error
+  }
+
   // Check if the email id already exists
   User.findOne({ email: req.body.email }).then(user => {
     // console.log(user);
     if (user) {
       // the email entered by the user already exists, send error
+      errors.email =
+        "Email Already exists! Please choose another email address.";
       return res.status(400).json({
-        email: "Email Already exists! Please choose another email address"
+        errors
       });
     } else {
       // the email entered by the user already is unique
@@ -75,15 +89,24 @@ router.post("/signup", (req, res) => {
 // @access      : public
 // @description : route to login user (SIGNIN)
 router.post("/signin", (req, res) => {
+  // Destructuring the errors and validations
+  const { errors, isValid } = validateSignInInputs(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors); // error
+  }
+  // Destructuring the required properties
   const { email, password } = req.body;
 
   // Find the user (email)
   User.findOne({ email }).then(user => {
     if (!user) {
+      errors.email = "User not found!";
       // the user is not registred
       return res.status(404).json({
         // 404 error -> not found
-        email: "User not found"
+        errors
       });
     }
 
@@ -108,8 +131,9 @@ router.post("/signin", (req, res) => {
           }
         );
       } else {
+        errors.password = "Incorrect password!";
         return res.status(400).json({
-          password: "Incorrect password!"
+          errors
         });
       }
     });
