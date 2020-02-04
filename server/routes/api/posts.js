@@ -20,14 +20,13 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    // ------------------------validations
+    // Destructuring the errors and validations
     const { errors, isValid } = validatePostInputs(req.body);
 
+    // Check validation
     if (!isValid) {
-      return res.status(400).json(errors);
+      return res.status(400).json(errors); // error
     }
-    // ------------------------validations
-
     // Create new post
     const newPost = new Post({
       content: req.body.content,
@@ -188,14 +187,13 @@ router.post(
   "/comment/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    // ------------------------validations
-
+    // Destructuring the errors and validations
     const { errors, isValid } = validatePostInputs(req.body);
 
+    // Check validation
     if (!isValid) {
-      return res.status(400).json(errors);
+      return res.status(400).json(errors); // error
     }
-    // ------------------------validations
 
     Post.findById(req.params.id)
       .then(post => {

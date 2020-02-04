@@ -14,8 +14,8 @@ const keys = require("../../config/keys.js");
 const passport = require("passport");
 
 // INPUT VALIDATIONS
-const validateSignUpInputs = require("../../validation/signup");
-const validateSignInInputs = require("../../validation/signin");
+const validateSignUpInputs = require("../../validation/auth/signup");
+const validateSignInInputs = require("../../validation/auth/signin");
 
 // MODEL
 const User = require("../../models/User");

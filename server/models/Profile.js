@@ -51,13 +51,13 @@ const ProfileSchema = new mongoose.Schema({
   //   achievements: [
   //     // array of objects
   //     {
+  //       // header
   //       title: {
-  //         // header
   //         type: String,
   //         required: true
   //       },
+  //       // description
   //       description: {
-  //         // description
   //         type: String,
   //         max: 40
   //       }
@@ -73,72 +73,72 @@ const ProfileSchema = new mongoose.Schema({
   },
   // User's projects
   projects: [
+    // array of objects
     {
-      // array of objects
+      // project title
       title: {
-        // project title
         type: String,
         required: true
       },
+      // start date
       from: {
-        // start date
         type: Date,
         required: true
       },
+      // end date
       to: {
-        // end date
         type: Date
       },
+      // ongoing (optional)
       current: {
-        // ongoing (optional)
         type: Boolean,
         default: false
       },
+      // description
       description: {
-        // description
         type: String
       },
+      // project link
       link: {
-        // project link
         type: String
       }
     }
   ],
   // User's education
   education: [
+    // array of objects
     {
-      // array of objects
+      // school/college name
       name: {
-        // school/college name
         type: String,
         required: true
       },
+      // degree of education
       degree: {
-        // degree of education
         type: String,
         required: true
       },
+      // major subjects/stream
       fieldOfStudy: {
-        // major subjects/stream
         type: String,
         required: true
       },
+      // start date
       from: {
-        // start date
         type: Date,
         required: true
       },
+      // end date
       to: {
-        // end date
         type: Date
       },
+      // ongoing (optional)
       current: {
-        // ongoing (optional)
         type: Boolean,
         default: false
       },
+      // description
       description: {
-        // description
         type: String
       }
     }
@@ -147,36 +147,36 @@ const ProfileSchema = new mongoose.Schema({
   experience: [
     // array of objects
     {
+      // experience header
       title: {
-        // experience header
         type: String,
         required: true
       },
+      // organization name
       organization: {
-        // organization name
         type: String,
         required: true
       },
+      // organization location
       location: {
-        // organization location
         type: String
       },
+      // start date
       from: {
-        // start date
         type: Date,
         required: true
       },
+      // end date
       to: {
-        // end date
         type: Date
       },
+      // ongoing (optional)
       current: {
-        // ongoing (optional)
         type: Boolean,
         default: false
       },
+      // description
       description: {
-        // description
         type: String,
         max: 40
       }
@@ -209,8 +209,8 @@ const ProfileSchema = new mongoose.Schema({
       type: String
     }
   },
+  // Date of account creation
   date: {
-    // Date of account creation
     type: Date,
     default: Date.now
   }

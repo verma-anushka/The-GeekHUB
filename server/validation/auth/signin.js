@@ -1,9 +1,10 @@
 const Validator = require("validator");
-const isEmpty = require("./isEmpty");
+const isEmpty = require("../isEmpty");
 
 module.exports = function validateSignInInputs(inputData) {
   let errors = {}; // object to store all the errors
 
+  // Using in built function to convert user input to string
   inputData.email = !isEmpty(inputData.email) ? inputData.email : "";
   inputData.password = !isEmpty(inputData.password) ? inputData.password : "";
 
