@@ -224,6 +224,120 @@ router.post(
   }
 );
 
+// @route       : /api/profile/education
+// @method      : POST
+// @access      : private
+// @description : route to add education to profile
+router.post(
+  "/education",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }) // find user using user id
+      .then(profile => {
+        const newEducation = {
+          name: req.body.name,
+          degree: req.body.degree,
+          fieldOfStudy: req.body.fieldOfStudy,
+          from: req.body.from,
+          to: req.body.to,
+          current: req.body.current,
+          description: req.body.description
+        };
+
+        profile.education.unshift(newEducation); // add new education to education array in the profile schema
+        profile
+          .save() // save the new education in the existing profile
+          .then(profile => {
+            // returns profile with the new education
+            res.json(profile);
+          });
+      });
+  }
+);
+
+// @route       : /api/profile/education/:edu_id
+// @method      : DELETE
+// @access      : private
+// @description : route to delete education from profile
+router.delete(
+  "/education/:edu_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        // the index of the user education to be deleted
+        const idx = profile.education
+          .map(item => item.id)
+          .indexOf(req.params.edu_id);
+        // splice the education to be deleted out of the array
+        profile.education.splice(idx, 1);
+        profile.save().then(profile => {
+          res.json(profile);
+        });
+      })
+      .catch(err => {
+        res.status(404).json(err);
+      });
+  }
+);
+
+// @route       : /api/profile/experience
+// @method      : POST
+// @access      : private
+// @description : route to add experience to profile
+router.post(
+  "/experience",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }) // find user using user id
+      .then(profile => {
+        const newExperience = {
+          title: req.body.title,
+          organization: req.body.organization,
+          location: req.body.localtion,
+          from: req.body.from,
+          to: req.body.to,
+          current: req.body.current,
+          description: req.body.description
+        };
+
+        profile.experience.unshift(newExperience); // add new experience to experience array in the profile schema
+        profile
+          .save() // save the new experience in the existing profile
+          .then(profile => {
+            // returns profile with the new experience
+            res.json(profile);
+          });
+      });
+  }
+);
+
+// @route       : /api/profile/experience/:exp_id
+// @method      : DELETE
+// @access      : private
+// @description : route to delete experience from profile
+router.delete(
+  "/experience/:exp_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        // the index of the user experience to be deleted
+        const idx = profile.experience
+          .map(item => item.id)
+          .indexOf(req.params.exp_id);
+        // splice the experience to be deleted out of the array
+        profile.experience.splice(idx, 1);
+        profile.save().then(profile => {
+          res.json(profile);
+        });
+      })
+      .catch(err => {
+        res.status(404).json(err);
+      });
+  }
+);
+
 // @route       : /api/profile/
 // @method      : DELETE
 // @access      : private
