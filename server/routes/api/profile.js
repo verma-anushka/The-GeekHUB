@@ -118,6 +118,14 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    // Destructuring the errors and validations
+    const { errors, isValid } = validateProfileInputs(req.body);
+
+    // Check validation
+    if (!isValid) {
+      return res.status(400).json(errors); // error
+    }
+
     const profileFields = {}; // object to store all the profile information
     profileFields.user = req.user.id; // req.user -> current logged in user from token(payload)
 
@@ -232,6 +240,14 @@ router.post(
   "/education",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    // Destructuring the errors and validations
+    const { errors, isValid } = validateEducationInputs(req.body);
+
+    // Check validation
+    if (!isValid) {
+      return res.status(400).json(errors); // error
+    }
+
     Profile.findOne({ user: req.user.id }) // find user using user id
       .then(profile => {
         const newEducation = {
@@ -289,6 +305,14 @@ router.post(
   "/experience",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    // Destructuring the errors and validations
+    const { errors, isValid } = validateExperienceInputs(req.body);
+
+    // Check validation
+    if (!isValid) {
+      return res.status(400).json(errors); // error
+    }
+
     Profile.findOne({ user: req.user.id }) // find user using user id
       .then(profile => {
         const newExperience = {
