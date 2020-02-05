@@ -1,5 +1,8 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import "./NavBar.scss";
+// import SignUp from "../auth/SignUp";
+// import SignIn from "../auth/SignIn";
 
 class NavBar extends Component {
   render() {
@@ -7,9 +10,9 @@ class NavBar extends Component {
       <nav role="navigation" className="navbar navbar-custom navbar-fixed-top">
         <div className="container-fluid">
           <div className="navbar-header">
-            <a href="/" className="navbar-brand">
-              Go Geeks
-            </a>
+            <Link to="/" className="navbar-brand">
+              TheGeekHub
+            </Link>
 
             <button
               type="button"
@@ -27,24 +30,22 @@ class NavBar extends Component {
           <div className="navbar-collapse collapse" id="navbarCollapse">
             <ul className="nav navbar-nav">
               <li>
-                <a href="geeks.html">Geeks</a>
+                <Link to="/Geeks">Geeks</Link>
               </li>
               <li>
-                <a href="posts.html">Posts</a>
+                <Link to="/Posts">Posts</Link>
               </li>
             </ul>
 
             <ul className="nav navbar-nav navbar-right">
               <li>
-                <a href="geeks.html">Sign-Up</a>
+                <Link to="/signup">Sign-Up</Link>
               </li>
               <li>
-                <a href="geeks.html">Sign-In</a>
+                <Link to="/signin">Sign-In</Link>
               </li>
               <li>
-                <a href="geeks.html" data-toggle="modal">
-                  Logout
-                </a>
+                <Link to="/geeks">Logout</Link>
               </li>
             </ul>
           </div>
