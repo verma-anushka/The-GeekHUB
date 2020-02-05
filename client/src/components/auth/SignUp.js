@@ -1,7 +1,9 @@
-// ----------------------------------------- commit 6 conditional classes error handling incomplete
 import React, { Component } from "react";
-import axios from "axios";
 import classnames from "classnames";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
+import { signUpUser } from "../../store/actions/auth";
 
 class SignUp extends Component {
   state = {
@@ -25,20 +27,17 @@ class SignUp extends Component {
       password: this.state.password,
       confirmpassword: this.state.confirmpassword
     };
-
-    axios
-      .post("/api/users/signup", newUser)
-      .then(res => {
-        console.log(res.data);
-      })
-      .catch(err => {
-        console.log(err.response.data);
-        this.setState({ errors: err.response.data });
-      });
+    this.props.signUpUser(newUser, this.props.history);
   };
 
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
+  };
+
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
   };
 
   render() {
@@ -103,6 +102,7 @@ class SignUp extends Component {
               {errors.email && (
                 <div className="invalid-feedback">{errors.email}</div>
               )}
+              <small className="form-text">Gravatar email</small>
             </div>
             <div className="form-group">
               <input
@@ -141,4 +141,16 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+SignUp.propTypes = {
+  errors: PropTypes.object.isRequired,
+  signUpUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+  // isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(mapStateToProps, { signUpUser })(withRouter(SignUp));
