@@ -1,0 +1,32 @@
+{
+  "name": "thegeekhub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "concurrently": "^5.1.0",
+    "jwt-decode": "^2.2.0",
+    "react-redux": "^7.1.3",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "client-install": "npm install --prefix client",
+    "start": "node app.js",
+    "server": "nodemon server/app.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/verma-anushka/MERN-Stack-Project.git"
+  },
+  "author": "Anushka Verma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/verma-anushka/MERN-Stack-Project/issues"
+  },
+  "homepage": "https://github.com/verma-anushka/MERN-Stack-Project#readme"
+}
