@@ -1,0 +1,25 @@
+footer {
+  display: inline-block;
+  color: #fff;
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+  padding-top: 10px;
+  margin-top: 50px;
+  width: 100%;
+  /* same as navbar */
+  background-color: #3a2113;
+  border-color: #eedcc1;
+  background-image: -webkit-gradient(
+    linear,
+    left 0%,
+    left 100%,
+    from(#60391c),
+    to(#3a2113)
+  );
+  background-image: -webkit-linear-gradient(top, #60391c, 0%, #3a2113, 100%);
+  background-image: -moz-linear-gradient(top, #60391c 0%, #3a2113 100%);
+  background-image: linear-gradient(to bottom, #60391c 0%, #3a2113 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff60391c', endColorstr='#ff62aacf', GradientType=0);
+}
