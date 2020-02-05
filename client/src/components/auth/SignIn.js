@@ -13,7 +13,7 @@ class SignIn extends Component {
 
   onSubmit = event => {
     event.preventDefault();
-    console.log(this.state);
+    // console.log(this.state);
 
     const user = {
       email: this.state.email,
@@ -27,6 +27,12 @@ class SignIn extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  componentDidMount = () => {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  };
+
   componentWillReceiveProps = nextProps => {
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push("/dashboard");
@@ -38,8 +44,8 @@ class SignIn extends Component {
 
   render() {
     const { errors } = this.state;
-    console.log(errors.email);
-    console.log(errors.password);
+    // console.log(errors.email);
+    // console.log(errors.password);
     return (
       <div className="signin">
         <div>SIGNIN</div>

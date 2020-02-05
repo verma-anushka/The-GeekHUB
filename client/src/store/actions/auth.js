@@ -8,11 +8,9 @@ export const signUpUser = (newUser, history) => dispatch => {
   axios
     .post("/api/users/signup", newUser)
     .then(res => {
-      console.log(res.data);
       history.push("/signin");
     })
     .catch(err => {
-      console.log(err.response.data);
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
@@ -37,7 +35,6 @@ export const signInUser = user => dispatch => {
       dispatch(setCurrentUser(decodedUser));
     })
     .catch(err => {
-      console.log(err.response.data);
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
@@ -51,4 +48,14 @@ export const setCurrentUser = decodedUser => {
     type: SET_CURRENT_USER,
     payload: decodedUser
   };
+};
+
+// Logout User
+export const logoutUser = () => dispatch => {
+  // Remove token from Local Storage
+  localStorage.removeItem("jwtToken");
+  // Remove auth header for future requests
+  setAuthToken(false);
+  // Set current user to null
+  dispatch(setCurrentUser({}));
 };
