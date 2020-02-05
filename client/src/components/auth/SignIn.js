@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import classnames from "classnames";
+// import classnames from "classnames";
+import TextFieldGroup from "../TextFieldGroup";
 import { signInUser } from "../../store/actions/auth";
 
 class SignIn extends Component {
@@ -55,33 +56,22 @@ class SignIn extends Component {
             <i className="fas fa-user"></i> Sign into Your Account
           </p>
           <form className="form" onSubmit={this.onSubmit}>
-            <div className="form-group">
-              <input
-                type="email"
-                className={classnames({ "is-invalid": errors.email })}
-                placeholder="Email Address"
-                name="email"
-                value={this.state.email}
-                onChange={this.onChange}
-              />
-              {errors.email && (
-                <div className="invalid-feedback">{errors.email}</div>
-              )}
-            </div>
-            <div className="form-group">
-              <input
-                type="password"
-                placeholder="Password"
-                name="password"
-                className={classnames({ "is-invalid": errors.password })}
-                value={this.state.password}
-                onChange={this.onChange}
-              />
-
-              {errors.password && (
-                <div className="invalid-feedback">{errors.password}</div>
-              )}
-            </div>
+            <TextFieldGroup
+              type="email"
+              placeholder="Email Address"
+              name="email"
+              error={errors.email}
+              value={this.state.email}
+              onChange={this.onChange}
+            />
+            <TextFieldGroup
+              type="password"
+              placeholder="Password"
+              name="password"
+              error={errors.password}
+              value={this.state.password}
+              onChange={this.onChange}
+            />
             <input type="submit" className="btn btn-primary" value="Login" />
           </form>
           <p className="my-1">
