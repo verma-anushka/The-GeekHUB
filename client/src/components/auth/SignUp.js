@@ -1,7 +1,11 @@
-// ----------------------------------------- commit 6 conditional classes error handling incomplete
 import React, { Component } from "react";
-import axios from "axios";
-import classnames from "classnames";
+// import classnames from "classnames";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
+import TextFieldGroup from "../TextFieldGroup";
+
+import { signUpUser } from "../../store/actions/auth";
 
 class SignUp extends Component {
   state = {
@@ -25,20 +29,23 @@ class SignUp extends Component {
       password: this.state.password,
       confirmpassword: this.state.confirmpassword
     };
-
-    axios
-      .post("/api/users/signup", newUser)
-      .then(res => {
-        console.log(res.data);
-      })
-      .catch(err => {
-        console.log(err.response.data);
-        this.setState({ errors: err.response.data });
-      });
+    this.props.signUpUser(newUser, this.props.history);
   };
 
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
+  };
+
+  componentDidMount = () => {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  };
+
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
   };
 
   render() {
@@ -52,84 +59,54 @@ class SignUp extends Component {
             <i className="fas fa-user"></i> Create Your Account
           </p>
           <form noValidate className="form" onSubmit={this.onSubmit}>
-            <div className="form-group">
-              <input
-                type="text"
-                placeholder="Firstname"
-                name="firstname"
-                className={classnames({ "is-invalid": errors.firstname })}
-                value={this.state.firstname}
-                onChange={this.onChange}
-              />
-              {errors.firstname && (
-                <div className="invalid-feedback">{errors.firstname}</div>
-              )}
-            </div>
-            <div className="form-group">
-              <input
-                type="text"
-                placeholder="Lastname"
-                name="lastname"
-                className={classnames({ "is-invalid": errors.lastname })}
-                value={this.state.lastname}
-                onChange={this.onChange}
-              />
-              {errors.lastname && (
-                <div className="invalid-feedback">{errors.lastname}</div>
-              )}
-            </div>
-            <div className="form-group">
-              <input
-                type="text"
-                placeholder="Username"
-                name="username"
-                className={classnames({ "is-invalid": errors.username })}
-                value={this.state.username}
-                onChange={this.onChange}
-              />
-              {errors.username && (
-                <div className="invalid-feedback">{errors.username}</div>
-              )}
-            </div>
-            <div className="form-group">
-              <input
-                type="email"
-                placeholder="Email Address"
-                name="email"
-                className={classnames({ "is-invalid": errors.email })}
-                value={this.state.email}
-                onChange={this.onChange}
-              />
-              {errors.email && (
-                <div className="invalid-feedback">{errors.email}</div>
-              )}
-            </div>
-            <div className="form-group">
-              <input
-                type="password"
-                placeholder="Password"
-                name="password"
-                className={classnames({ "is-invalid": errors.password })}
-                value={this.state.password}
-                onChange={this.onChange}
-              />
-              {errors.password && (
-                <div className="invalid-feedback">{errors.password}</div>
-              )}
-            </div>
-            <div className="form-group">
-              <input
-                type="password"
-                placeholder="Confirm Password"
-                name="confirmpassword"
-                className={classnames({ "is-invalid": errors.confirmpassword })}
-                value={this.state.confirmpassword}
-                onChange={this.onChange}
-              />
-              {errors.confirmpassword && (
-                <div className="invalid-feedback">{errors.confirmpassword}</div>
-              )}
-            </div>
+            <TextFieldGroup
+              type="text"
+              placeholder="Firstname"
+              name="firstname"
+              error={errors.firstname}
+              value={this.state.firstname}
+              onChange={this.onChange}
+            />
+            <TextFieldGroup
+              type="text"
+              placeholder="Lastname"
+              name="lastname"
+              error={errors.lastname}
+              value={this.state.lastname}
+              onChange={this.onChange}
+            />
+            <TextFieldGroup
+              type="text"
+              placeholder="Username"
+              name="username"
+              error={errors.username}
+              value={this.state.username}
+              onChange={this.onChange}
+            />
+            <TextFieldGroup
+              type="email"
+              placeholder="Email Address"
+              name="email"
+              error={errors.email}
+              value={this.state.email}
+              onChange={this.onChange}
+            />
+            <TextFieldGroup
+              type="password"
+              placeholder="Password"
+              name="password"
+              error={errors.password}
+              value={this.state.password}
+              onChange={this.onChange}
+            />
+            <TextFieldGroup
+              type="password"
+              placeholder="Confirm Password"
+              name="confirmpassword"
+              error={errors.confirmpassword}
+              value={this.state.confirmpassword}
+              onChange={this.onChange}
+            />
             <input type="submit" className="btn btn-primary" value="signup" />
           </form>
           <p className="my-1">
@@ -141,4 +118,16 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+SignUp.propTypes = {
+  errors: PropTypes.object.isRequired,
+  signUpUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+  // isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(mapStateToProps, { signUpUser })(withRouter(SignUp));
