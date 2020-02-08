@@ -16,6 +16,8 @@ import SignIn from "./components/auth/SignIn";
 import Dashboard from "./components/dashboard/Dashboard";
 import { setCurrentUser, logoutUser } from "./store/actions/auth";
 import { clearCurrentProfile } from "./store/actions/profile";
+import CreateProfile from "./components/profile/CreateProfile";
+import EditProfile from "./components/profile/EditProfile";
 
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -53,6 +55,20 @@ class App extends Component {
               <Route exact path="/signin" component={SignIn} />
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/createprofile"
+                  component={CreateProfile}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/editprofile"
+                  component={EditProfile}
+                />
               </Switch>
             </div>
             <Footer />
