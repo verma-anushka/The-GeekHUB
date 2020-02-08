@@ -78,3 +78,25 @@ export const clearCurrentProfile = () => {
     // no payload reqd as no info to be sent
   };
 };
+
+// ACTION CREATOR TO DELETE THE USER PROFILE AND USER ACCOUNT
+export const deleteAccount = () => dispatch => {
+  if (window.confirm("Are you sure? This can NOT be undone!")) {
+    axios
+      .delete("/api/profile")
+      .then(res =>
+        // request successful
+
+        dispatch({
+          type: SET_CURRENT_USER,
+          payload: {} // a logged in user always need to exist
+        })
+      )
+      .catch(err =>
+        dispatch({
+          type: GET_ERRORS,
+          payload: err.response.data
+        })
+      );
+  }
+};
