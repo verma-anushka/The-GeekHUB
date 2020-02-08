@@ -18,6 +18,8 @@ import { setCurrentUser, logoutUser } from "./store/actions/auth";
 import { clearCurrentProfile } from "./store/actions/profile";
 import CreateProfile from "./components/profile/CreateProfile";
 import EditProfile from "./components/profile/EditProfile";
+import AddExperience from "./components/profile/AddExperience";
+import AddEducation from "./components/profile/AddEducation";
 
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -68,6 +70,20 @@ class App extends Component {
                   exact
                   path="/editprofile"
                   component={EditProfile}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/addexperience"
+                  component={AddExperience}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/addeducation"
+                  component={AddEducation}
                 />
               </Switch>
             </div>

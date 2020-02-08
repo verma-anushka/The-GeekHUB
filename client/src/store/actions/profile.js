@@ -100,3 +100,41 @@ export const deleteAccount = () => dispatch => {
       );
   }
 };
+
+// ACTION CREATOR TO ADD THE EXPERIENCE SECTION OF THE USER PROFILE
+export const addExperience = (experience, history) => dispatch => {
+  // console.log("experience");
+  // console.log(experience);
+  axios
+    .post("/api/profile/experience", experience)
+    .then(res => {
+      // console.log(res.data);
+
+      // request successful
+      history.push("/dashboard");
+    })
+    .catch(err =>
+      // request unsuccessful
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+// ACTION CREATOR TO ADD THE EDUCATION SECTION OF THE USER PROFILE
+export const addEducation = (education, history) => dispatch => {
+  axios
+    .post("/api/profile/education", education)
+    .then(res => {
+      // request successful
+      history.push("/dashboard");
+    })
+    .catch(err =>
+      // request unsuccessful
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
