@@ -138,3 +138,42 @@ export const addEducation = (education, history) => dispatch => {
       })
     );
 };
+
+// ACTION CREATOR TO DELETE THE EDUCATION SECTION OF THE USER PROFILE
+
+export const deleteExperience = id => dispatch => {
+  axios
+    .delete(`/api/profile/experience/${id}`)
+    .then(res => {
+      console.log("yahan?");
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data // profile with deleted exp
+      });
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+// ACTION CREATOR TO DELETE THE EDUCATION SECTION OF THE USER PROFILE
+
+export const deleteEducation = id => dispatch => {
+  axios
+    .delete(`/api/profile/education/${id}`)
+    .then(res =>
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
