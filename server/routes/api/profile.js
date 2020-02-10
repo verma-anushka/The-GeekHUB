@@ -88,11 +88,11 @@ router.get("/user/:user_id", (req, res) => {
     );
 });
 
-// @route       : /api/profile/all
+// @route       : /api/profile/allprofiles
 // @method      : GET
 // @access      : public
 // @description : route to show all users profiles
-router.get("/all", (req, res) => {
+router.get("/allprofiles", (req, res) => {
   const errors = {};
 
   Profile.find() // find all the available profiles
@@ -103,6 +103,7 @@ router.get("/all", (req, res) => {
         errors.noprofile = "There are no profiles to display!";
         return res.status(404).json(errors);
       }
+      // console.log(profiles);
       res.json(profiles); // return the profile found
     })
     .catch(err =>
@@ -168,35 +169,35 @@ router.post(
 
     // check if a linkedin profile link is provided by user
     if (req.body.linkedin) {
-      profileFields.social.linkedin = req.body.linkedin;
+      profileFields.socialLinks.linkedin = req.body.linkedin;
     }
     // check if a medium profile link is provided by user
     if (req.body.medium) {
-      profileFields.social.medium = req.body.medium;
+      profileFields.socialLinks.medium = req.body.medium;
     }
     // check if a behance profile link is provided by user
     if (req.body.behance) {
-      profileFields.social.behance = req.body.behance;
+      profileFields.socialLinks.behance = req.body.behance;
     }
     // check if a github link is provided by user
     if (req.body.github) {
-      profileFields.social.github = req.body.github;
+      profileFields.socialLinks.github = req.body.github;
     }
     // check if a youtube channel link is provided by user
     if (req.body.youtube) {
-      profileFields.social.youtube = req.body.youtube;
+      profileFields.socialLinks.youtube = req.body.youtube;
     }
     // check if a twitter channel link is provided by user
     if (req.body.twitter) {
-      profileFields.social.twitter = req.body.twitter;
+      profileFields.socialLinks.twitter = req.body.twitter;
     }
     // check if a facebook link is provided by user
     if (req.body.facebook) {
-      profileFields.social.facebook = req.body.facebook;
+      profileFields.socialLinks.facebook = req.body.facebook;
     }
     // check if an instagram link is provided by user
     if (req.body.instagram) {
-      profileFields.social.instagram = req.body.instagram;
+      profileFields.socialLinks.instagram = req.body.instagram;
     }
 
     // Creating/Updating the profile
@@ -318,7 +319,7 @@ router.post(
         const newExperience = {
           title: req.body.title,
           organization: req.body.organization,
-          location: req.body.localtion,
+          location: req.body.location,
           from: req.body.from,
           to: req.body.to,
           current: req.body.current,

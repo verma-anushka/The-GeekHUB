@@ -40,9 +40,7 @@ router.post("/signup", (req, res) => {
       // the email entered by the user already exists, send error
       errors.email =
         "Email Already exists! Please choose another email address.";
-      return res.status(400).json({
-        errors
-      });
+      return res.status(400).json(errors);
     } else {
       // the email entered by the user already is unique
 
@@ -104,10 +102,10 @@ router.post("/signin", (req, res) => {
     if (!user) {
       errors.email = "User not found!";
       // the user is not registred
-      return res.status(404).json({
+      return res.status(404).json(
         // 404 error -> not found
         errors
-      });
+      );
     }
 
     // Check for password
@@ -132,9 +130,7 @@ router.post("/signin", (req, res) => {
         );
       } else {
         errors.password = "Incorrect password!";
-        return res.status(400).json({
-          errors
-        });
+        return res.status(400).json(errors);
       }
     });
   });

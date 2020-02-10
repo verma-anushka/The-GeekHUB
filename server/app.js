@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const passport = require("passport");
+const path = require("path");
 
 // ROUTES
 const auth = require("./routes/api/auth");
@@ -27,6 +28,16 @@ require("./config/passport.js")(passport);
 app.use("/api/users", auth);
 app.use("/api/profile", profile);
 app.use("/api/posts", posts);
+
+// PRODUCTION MODE SETTINGS
+if (process.env.NODE_ENV === "production") {
+  // Set static folder
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 // PORT SETTINGS
 app.set("port", process.env.PORT || 8080);
