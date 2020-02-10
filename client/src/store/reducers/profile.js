@@ -1,6 +1,6 @@
 import {
   GET_PROFILE,
-  //   GET_PROFILES,
+  GET_PROFILES,
   PROFILE_LOADING,
   //   GET_ERRORS,
   CLEAR_CURRENT_PROFILE
@@ -9,7 +9,7 @@ import {
 
 const initialState = {
   profile: null,
-  allProfiles: null,
+  profiles: null,
   loading: false
 };
 
@@ -26,6 +26,12 @@ export default function(state = initialState, action) {
         ...state,
         loading: false, // stop the spinner
         profile: action.payload // user profile
+      };
+    case GET_PROFILES:
+      return {
+        ...state,
+        loading: false, // stop the spinner
+        profiles: action.payload // user profiles
       };
     case CLEAR_CURRENT_PROFILE:
       return {

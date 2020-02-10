@@ -2,7 +2,7 @@ import axios from "axios";
 
 import {
   GET_PROFILE,
-  //   GET_PROFILES,
+  GET_PROFILES,
   PROFILE_LOADING,
   GET_ERRORS,
   CLEAR_CURRENT_PROFILE,
@@ -11,8 +11,6 @@ import {
 
 // ACTION CREATOR TO GET THE CURRENT LOGGED IN USER'S PROFILE
 export const getCurrentProfile = () => dispatch => {
-  // console.log("get current profile");
-
   // dispatch the loading spinner while the profile is being fetched
   dispatch(setProfileLoading());
   // try {
@@ -20,7 +18,6 @@ export const getCurrentProfile = () => dispatch => {
   axios
     .get("/api/profile")
     .then(res => {
-      console.log(res.data);
       // request successful
       dispatch({
         type: GET_PROFILE,
@@ -28,8 +25,6 @@ export const getCurrentProfile = () => dispatch => {
       });
     })
     .catch(err => {
-      console.log(err);
-
       dispatch({
         // request successful - no profile exists
         type: GET_PROFILE,
@@ -63,8 +58,6 @@ export const createProfile = (profile, history) => dispatch => {
 
 // ACTION CREATOR TO DISPLAY THE LOADING SPINNER
 export const setProfileLoading = () => {
-  // console.log("profile loading");
-
   return {
     type: PROFILE_LOADING
     // no payload reqd as no info to be sent
@@ -86,7 +79,6 @@ export const deleteAccount = () => dispatch => {
       .delete("/api/profile")
       .then(res =>
         // request successful
-
         dispatch({
           type: SET_CURRENT_USER,
           payload: {} // a logged in user always need to exist
@@ -103,13 +95,11 @@ export const deleteAccount = () => dispatch => {
 
 // ACTION CREATOR TO ADD THE EXPERIENCE SECTION OF THE USER PROFILE
 export const addExperience = (experience, history) => dispatch => {
-  // console.log("experience");
   // console.log(experience);
   axios
     .post("/api/profile/experience", experience)
     .then(res => {
       // console.log(res.data);
-
       // request successful
       history.push("/dashboard");
     })
@@ -145,7 +135,6 @@ export const deleteExperience = id => dispatch => {
   axios
     .delete(`/api/profile/experience/${id}`)
     .then(res => {
-      console.log("yahan?");
       dispatch({
         type: GET_PROFILE,
         payload: res.data // profile with deleted exp
@@ -174,6 +163,44 @@ export const deleteEducation = id => dispatch => {
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
+      })
+    );
+};
+
+// ACTION CREATOR TO GET ALL THE USER PROFILES
+export const getProfiles = () => dispatch => {
+  dispatch(setProfileLoading());
+  axios
+    .get("/api/profile/allprofiles")
+    .then(res =>
+      dispatch({
+        type: GET_PROFILES,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_PROFILES,
+        payload: null
+      })
+    );
+};
+
+// ACTION CREATOR TO GET THE USER PROFILE BASED ON THE USER HANDLE
+export const getProfileByHandle = handle => dispatch => {
+  dispatch(setProfileLoading());
+  axios
+    .get(`/api/profile/handle/${handle}`)
+    .then(res =>
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_PROFILE,
+        payload: null
       })
     );
 };
