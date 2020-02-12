@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import TextFieldGroup from "../TextFieldGroup";
+import TextFieldGroup from "../formInputs/TextFieldGroup";
 
 import { signUpUser } from "../../store/actions/auth";
 
@@ -50,6 +50,7 @@ class SignUp extends Component {
 
   render() {
     const { errors } = this.state;
+    console.log(errors);
     return (
       <div className="SignUp">
         <div>SIGNUP</div>

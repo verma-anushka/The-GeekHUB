@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 // import classnames from "classnames";
-import TextFieldGroup from "../TextFieldGroup";
+import TextFieldGroup from "../formInputs/TextFieldGroup";
 import { signInUser } from "../../store/actions/auth";
 
 class SignIn extends Component {

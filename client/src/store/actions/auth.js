@@ -1,16 +1,34 @@
 import axios from "axios";
 import setAuthToken from "../../utils/setAuthToken";
 import jwtDecode from "jwt-decode";
-import { GET_ERRORS, SET_CURRENT_USER } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER, ACTIVATE_USER } from "./types";
 
 // Register User
 export const signUpUser = (newUser, history) => dispatch => {
+  // console.log(newUser);
   axios
     .post("/api/users/signup", newUser)
+    .then(res => {
+      history.push("/signup");
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+// Activate account
+export const activateAccount = (token, history) => dispatch => {
+  // console.log(token);
+  axios
+    .post("/api/users/activate-account", token)
     .then(res => {
       history.push("/signin");
     })
     .catch(err => {
+      // console.log(err);
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data

@@ -28,7 +28,7 @@ module.exports = function validateSignUpInputs(inputData) {
 
   // Validation for the username's length
   if (!Validator.isLength(inputData.username, { min: 5, max: 30 })) {
-    errors.name = "Username must be 5-30 characters long!";
+    errors.username = "Username must be 5-30 characters long!";
   }
 
   // Validation for the empty username field
