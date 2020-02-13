@@ -7,6 +7,8 @@ const router = express.Router();
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const _ = require("lodash");
+const { OAuth2Client } = require("google-auth-library");
+// const fetch = require('node-fetch');
 
 const SALTROUNDS = 10;
 
@@ -340,7 +342,7 @@ router.put("/reset-password", (req, res) => {
           });
         }
 
-        let updatedFields = {};
+        // let updatedFields = {};
         // Password encryption
         bcrypt.genSalt(SALTROUNDS, (err, salt) => {
           // if (err) {
@@ -356,10 +358,25 @@ router.put("/reset-password", (req, res) => {
               // throw err;
             }
 
-            updatedFields = {
+            const updatedFields = {
               password: hash,
               resetPasswordToken: ""
             };
+
+            user = _.extend(user, updatedFields);
+
+            user.save(err => {
+              if (err) {
+                // console.log(err);
+                return res.status(400).json({
+                  error: "Error resetting user password!"
+                });
+              } else {
+                return res.status(200).json({
+                  message: `Great! Now you can login with your new password`
+                });
+              }
+            });
             // password = hash;
             // newUser
             //   .save()
@@ -367,24 +384,73 @@ router.put("/reset-password", (req, res) => {
             //   .catch(err => console.log(`Error: ${err}`)); // registration unsuccessful
           });
         });
-
-        user = _.extend(user, updatedFields);
-
-        user.save(err => {
-          if (err) {
-            // console.log(err);
-            return res.status(400).json({
-              error: "Error resetting user password!"
-            });
-          } else {
-            return res.status(200).json({
-              message: `Great! Now you can login with your new password`
-            });
-          }
-        });
       });
     });
   }
+});
+
+// @route       : /api/users/google-login
+// @method      : POST
+// @access      : public
+// @description : route to register new user using Google Authentication (SIGNUP)
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+router.post("/google-login", (req, res) => {
+  const { idToken } = req.body;
+  // const token = req.body.token;
+  // console.log(req.body);
+  // console.log(idToken);
+
+  client
+    .verifyIdToken({ idToken, audience: process.env.GOOGLE_CLIENT_ID })
+    .then(response => {
+      // console.log("Google oauth response", response);
+      const { email_verified, email } = response.payload;
+      const firstname = response.payload.given_name;
+      const lastname = response.payload.family_name;
+      const username = response.payload.name;
+
+      if (email_verified) {
+        User.findOne({ email }).then(user => {
+          if (user) {
+            console.log("user");
+            console.log(user);
+            const token = jwt.sign({ _id: user._id }, keys.secretOrKey, {
+              expiresIn: "12h"
+            });
+            const { _id, email, username, firstname, lastname } = user;
+            return res.json({
+              token,
+              user: { _id, email, username, firstname, lastname }
+            });
+          } else {
+            let password = email + keys.secretOrKey;
+            user = new User({ username, firstname, lastname, email, password });
+            user.save((err, userData) => {
+              if (err) {
+                console.log("ERROR GOOGLE LOGIN ON USER SAVE", err);
+                return res.status(400).json({
+                  error: "User signup failed with google"
+                });
+              }
+              const token = jwt.sign({ _id: userData._id }, keys.secretOrKey, {
+                expiresIn: "12h"
+              });
+              console.log("userData");
+              console.log(userData);
+              const { _id, email, username, firstname, lastname } = userData;
+              return res.json({
+                token,
+                user: { _id, email, username, firstname, lastname }
+              });
+            });
+          }
+        });
+      } else {
+        return res.status(400).json({
+          error: "Google login failed. Try again!"
+        });
+      }
+    });
 });
 
 // @route       : /api/users/user

@@ -36,6 +36,36 @@ export const activateAccount = (token, history) => dispatch => {
     });
 };
 
+// google auth login
+export const googleOAuth = (token, history) => dispatch => {
+  // console.log(token);
+  axios
+    .post("/api/users/google-login", token)
+    .then(res => {
+      // Get Token
+      const { token } = res.data;
+      // Save token in Local Storage
+      localStorage.setItem("jwtToken", token);
+      // Set token to authorization header
+      setAuthToken(token);
+      // Decode token to get user data
+      const decodedUser = jwtDecode(token);
+      // console.log(decodedUser);
+      // Set current user
+      dispatch(setCurrentUser(res.data.user));
+      // console.log("google oauth");
+      // console.log(res);
+      // history.push("/dashboard");
+    })
+    .catch(err => {
+      // console.log(err);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
 // forgot password
 export const forgotPassword = (email, history) => dispatch => {
   // console.log(token);
