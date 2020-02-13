@@ -1,7 +1,7 @@
 import axios from "axios";
 import setAuthToken from "../../utils/setAuthToken";
 import jwtDecode from "jwt-decode";
-import { GET_ERRORS, SET_CURRENT_USER, ACTIVATE_USER } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER } from "./types";
 
 // Register User
 export const signUpUser = (newUser, history) => dispatch => {
@@ -25,6 +25,42 @@ export const activateAccount = (token, history) => dispatch => {
   axios
     .post("/api/users/activate-account", token)
     .then(res => {
+      history.push("/signin");
+    })
+    .catch(err => {
+      // console.log(err);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+// forgot password
+export const forgotPassword = (email, history) => dispatch => {
+  // console.log(token);
+  axios
+    .post("/api/users/forgot-password", email)
+    .then(res => {
+      console.log("forgot password" + res);
+      history.push("/forgot-password");
+    })
+    .catch(err => {
+      // console.log(err.response);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+// Reset password
+export const resetPassword = (reset, history) => dispatch => {
+  // console.log(reset);
+  axios
+    .put("/api/users/reset-password", reset)
+    .then(res => {
+      // console.log(res);
       history.push("/signin");
     })
     .catch(err => {
