@@ -8,7 +8,7 @@ const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const _ = require("lodash");
 const { OAuth2Client } = require("google-auth-library");
-// const fetch = require('node-fetch');
+const fetch = require("node-fetch");
 
 const SALTROUNDS = 10;
 
@@ -17,6 +17,7 @@ const keys = require("../../config/keys.js");
 const passport = require("passport");
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(keys.SENDGRID_API_KEY);
+
 // INPUT VALIDATIONS
 const validateSignUpInputs = require("../../validation/auth/signup");
 const validateSignInInputs = require("../../validation/auth/signin");
@@ -392,7 +393,7 @@ router.put("/reset-password", (req, res) => {
 // @route       : /api/users/google-login
 // @method      : POST
 // @access      : public
-// @description : route to register new user using Google Authentication (SIGNUP)
+// @description : route to register new user using Google Authentication
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 router.post("/google-login", (req, res) => {
   const { idToken } = req.body;
@@ -412,8 +413,7 @@ router.post("/google-login", (req, res) => {
       if (email_verified) {
         User.findOne({ email }).then(user => {
           if (user) {
-            console.log("user");
-            console.log(user);
+            // console.log(user);
             const token = jwt.sign({ _id: user._id }, keys.secretOrKey, {
               expiresIn: "12h"
             });
@@ -427,16 +427,15 @@ router.post("/google-login", (req, res) => {
             user = new User({ username, firstname, lastname, email, password });
             user.save((err, userData) => {
               if (err) {
-                console.log("ERROR GOOGLE LOGIN ON USER SAVE", err);
+                console.log(err);
                 return res.status(400).json({
-                  error: "User signup failed with google"
+                  error: "User signup failed with google!"
                 });
               }
               const token = jwt.sign({ _id: userData._id }, keys.secretOrKey, {
                 expiresIn: "12h"
               });
-              console.log("userData");
-              console.log(userData);
+              // console.log(userData);
               const { _id, email, username, firstname, lastname } = userData;
               return res.json({
                 token,
@@ -451,6 +450,81 @@ router.post("/google-login", (req, res) => {
         });
       }
     });
+});
+
+// @route       : /api/users/facebook-login
+// @method      : POST
+// @access      : public
+// @description : route to register new user using facebook Authentication
+router.post("/facebook-login", (req, res) => {
+  // console.log(req.body.response);
+  const { userID, firstname, lastname, accessToken } = req.body;
+  const url = `https://graph.facebook.com/v2.11/${userID}/?fields=id,name,email&access_token=${accessToken}`;
+
+  return (
+    fetch(url, {
+      method: "GET"
+    })
+      .then(response => response.json())
+      // .then(res => {
+      //   console.log("res");
+      //   console.log(res);
+      // })
+      .then(response => {
+        // console.log(response);
+        const email = response.email;
+        const username = response.name;
+
+        if (email) {
+          User.findOne({ email }).then(user => {
+            // console.log(user);
+            if (user) {
+              const token = jwt.sign({ _id: user._id }, keys.secretOrKey, {
+                expiresIn: "12h"
+              });
+              const { _id, email, firstname, lastname, username } = user;
+              // console.log(user);
+              return res.json({
+                token,
+                user: { _id, email, firstname, lastname, username }
+              });
+            } else {
+              let password = email + keys.secretOrKey;
+              user = new User({
+                username,
+                firstname,
+                lastname,
+                email,
+                password
+              });
+              user.save((err, data) => {
+                if (err) {
+                  console.log(err);
+                  return res.status(400).json({
+                    error: "User signup failed with facebook!"
+                  });
+                }
+                const token = jwt.sign({ _id: data._id }, keys.secretOrKey, {
+                  expiresIn: "12h"
+                });
+                const { _id, email, username, firstname, lastname } = data;
+                return res.json({
+                  token,
+                  user: { _id, email, username, firstname, lastname }
+                });
+              });
+            }
+          });
+        } else {
+          console.log("No email id provided. Please provide a valid email id!");
+        }
+      })
+      .catch(error => {
+        res.json({
+          error: "Facebook login failed. Try later!"
+        });
+      })
+  );
 });
 
 // @route       : /api/users/user

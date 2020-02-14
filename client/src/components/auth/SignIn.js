@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+
 // import classnames from "classnames";
 import TextFieldGroup from "../formInputs/TextFieldGroup";
 import { signInUser } from "../../store/actions/auth";
-
+import GoogleOAuth from "./GoogleOAuth";
+import FacebookAuth from "./FacebookAuth";
 class SignIn extends Component {
   state = {
     email: "",
@@ -55,6 +58,9 @@ class SignIn extends Component {
           <p className="lead">
             <i className="fas fa-user"></i> Sign into Your Account
           </p>
+          <GoogleOAuth />
+          <FacebookAuth />
+
           <form className="form" onSubmit={this.onSubmit}>
             <TextFieldGroup
               type="email"
@@ -77,6 +83,7 @@ class SignIn extends Component {
           <p className="my-1">
             Don't have an account? <a href="register.html">Sign Up</a>
           </p>
+          <Link to={"/forgot-password"}>forgot</Link>
         </section>
       </div>
     );

@@ -9,7 +9,7 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case SET_CURRENT_USER: {
-      console.log(action.payload);
+      // console.log(action.payload);
       // action.payload has all the user data
       return {
         ...state,
