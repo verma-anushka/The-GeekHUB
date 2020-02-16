@@ -4,17 +4,19 @@
 const express = require("express");
 const router = express.Router();
 
-const gravatar = require("gravatar");
-const bcrypt = require("bcryptjs");
+// const gravatar = require("gravatar");
 const _ = require("lodash");
+
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const SALTROUNDS = 10;
+
+const keys = require("../../config/keys.js");
+const passport = require("passport");
+
 const { OAuth2Client } = require("google-auth-library");
 const fetch = require("node-fetch");
 
-const SALTROUNDS = 10;
-
-const jwt = require("jsonwebtoken");
-const keys = require("../../config/keys.js");
-const passport = require("passport");
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(keys.SENDGRID_API_KEY);
 
@@ -42,65 +44,70 @@ router.post("/signup", (req, res) => {
 
   // console.log(req.body);
   const { firstname, lastname, username, email, password } = req.body;
+
   // Check if the email id already exists
-  User.findOne({ email }).then(user => {
-    // console.log(user);
-    if (user) {
-      // the email entered by the user already exists, send error
-      errors.email =
-        "Email Already exists! Please choose another email address.";
-      return res.status(400).json(errors);
-    } else {
-      // the email entered by the user already is unique
+  User.findOne({ email })
+    .then(user => {
+      // console.log(user);
+      if (user) {
+        // the email entered by the user already exists, send error
+        errors.email =
+          "Email Already exists! Please choose another email address.";
+        return res.status(400).json(errors);
+      } else {
+        // the email entered by the user already is unique
+        const payload = {
+          firstname,
+          lastname,
+          username,
+          email,
+          password
+        };
 
-      // console.log(req.body);
-      const payload = {
-        // id: user.id,
-        firstname,
-        lastname,
-        username,
-        email,
-        password
-      };
-      const jwtToken = jwt.sign(payload, keys.JWT_ACCOUNT_ACTIVATION, {
-        expiresIn: "1d" //  1 hour
-      });
+        const jwtToken = jwt.sign(payload, keys.JWT_ACCOUNT_ACTIVATION, {
+          expiresIn: "12h" //  12 hours
+        });
 
-      const msgToUser = {
-        to: email,
-        from: keys.EMAIL_FROM,
-        subject: "Account activation Link",
-        text: "Mail from Go Geeks for account activation!",
-        html: `<h4> Hello ${firstname} ${lastname} </h4>
+        const msgToUser = {
+          to: email,
+          from: keys.EMAIL_FROM,
+          subject: "Account activation Link",
+          text: "Mail from Go Geeks for account activation!",
+          html: `<h4> Hello ${firstname} ${lastname} </h4>
                   <p>Please use the following link to activate your account.</p>
                   <p>http://localhost:3000/activate/${jwtToken}</p>
                   `
-      };
-      const msgToAdmin = {
-        to: keys.EMAIL_TO,
-        from: keys.EMAIL_FROM,
-        subject: "Sign Up request at Go Geeks!",
-        text: "...",
-        html: `<h4> Hello Admin </h4>
+        };
+
+        const msgToAdmin = {
+          to: keys.EMAIL_TO,
+          from: keys.EMAIL_FROM,
+          subject: "Sign Up request at Go Geeks!",
+          text: "...",
+          html: `<h4> Hello Admin </h4>
         <p>some text</p>
         `
-      };
+        };
 
-      sgMail
-        .send(msgToUser)
-        .then(sentMail => {
-          // console.log(sentMail);
-          return res.json({
-            message: `Email has been sent to ${email}.Follow the instructions provided in the mail to activate your account.`
+        sgMail
+          .send(msgToUser)
+          .then(sentMail => {
+            // console.log(sentMail);
+            return res.json({
+              message: `An email has been sent to ${email}. Follow the instructions provided in the mail to activate your account.`
+            });
+          })
+          .catch(err => {
+            errors.message = err.message;
+            return res.status(400).json(errors);
           });
-        })
-        .catch(err => {
-          return res.status(400).json({
-            message: err.message
-          });
-        });
-    }
-  });
+      }
+    })
+    .catch(err => {
+      // console.log(err);
+      errors.message = err.message;
+      return res.status(400).json(errors);
+    });
 });
 
 // @route       : /api/users/activate-account
@@ -108,61 +115,68 @@ router.post("/signup", (req, res) => {
 // @access      : public
 // @description : route to register new user (SIGNUP)
 router.post("/activate-account", (req, res) => {
+  const errors = {}
   const token = req.body.token;
   if (token) {
     jwt.verify(token, keys.JWT_ACCOUNT_ACTIVATION, function(err, decodedToken) {
+      // console.log(decodedToken);
       if (err) {
         // console.log(err);
-        return res.status(401).json({
-          error:
-            "Link has expired. Please signup again to generate aother activation link."
-        });
+        errors.message =
+          "Link has expired. Please signup again to generate aother activation link.";
+        return res.status(401).json(errors);
       }
+
       // Create the avatar - user profile image
-      const avatar = gravatar.url(req.body.email, {
-        s: "200", // image size
-        r: "pg", // rating
-        d: "mm" // default image
-      });
+      // const avatar = gravatar.url(req.body.email, {
+      //   s: "200", // image size
+      //   r: "pg", // rating
+      //   d: "mm" // default image
+      // });
 
       const { firstname, lastname, username, email, password } = jwt.decode(
         token
       );
+
       // Create new user
       const newUser = new User({
         firstname,
         lastname,
         username,
         email,
-        password,
-        avatar
+        password
       });
+
       // Password encryption
       bcrypt.genSalt(SALTROUNDS, (err, salt) => {
-        // if (err) {
-        //   throw err;
-        // }
+        if (err) {
+          // console.log(err);
+          errors.message = "Something went wrong. Try again!";
+          return res.status(401).json(errors);
+        }
         // Password hashing
         bcrypt.hash(newUser.password, salt, (err, hash) => {
           if (err) {
             // console.log("Save User in DB error");
-            return res.status(401).json({
-              error: "Error occurred! Please sign up again."
-            });
-            // throw err;
+            errors.message = "Error occurred! Please sign up again";
+            return res.status(401).json(errors);
           }
           newUser.password = hash;
           newUser
             .save()
             .then(user => res.json(user)) // registration successful
-            .catch(err => console.log(`Error: ${err}`)); // registration unsuccessful
+            .catch(err => {
+              // registration unsuccessful
+              // console.log(err);
+              errors.message = err.message;
+              return res.status(401).json(errors);
+            });
         });
       });
     });
   } else {
-    return res.status(401).json({
-      error: "Something went wrong. Try again!"
-    });
+    errors.message = "Invalid Token! Try again!";
+    return res.status(401).json(errors);
   }
 });
 
@@ -182,42 +196,46 @@ router.post("/signin", (req, res) => {
   const { email, password } = req.body;
 
   // Find the user (email)
-  User.findOne({ email }).then(user => {
-    if (!user) {
-      errors.email = "User not found!";
-      // the user is not registred
-      return res.status(404).json(
-        // 404 error -> not found
-        errors
-      );
-    }
-
-    // Check for password
-    bcrypt.compare(password, user.password).then(isMatch => {
-      if (isMatch) {
-        // password matches
-        // jwt payload
-        const payload = {
-          id: user.id,
-          username: user.username,
-          avatar: user.avatar
-        };
-        jwt.sign(
-          payload,
-          keys.secretOrKey,
-          {
-            expiresIn: 12 * 3600 //  12 hours
-          },
-          (err, token) => {
-            res.json({ success: true, payload, token: "Bearer " + token });
-          }
-        );
-      } else {
-        errors.password = "Incorrect password!";
-        return res.status(400).json(errors);
+  User.findOne({ email })
+    .then(user => {
+      if (!user) {
+        errors.email = "User not found!";
+        // the user is not registred
+        return res.status(404).json(errors);
       }
+      // Check for password
+      bcrypt.compare(password, user.password).then(isMatch => {
+        if (isMatch) {
+          // password matches
+          // jwt payload
+          const payload = {
+            id: user.id,
+            username: user.username,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            avatar: user.avatar
+          };
+          jwt.sign(
+            payload,
+            keys.JWT_SECRET,
+            {
+              expiresIn: 12 * 3600 //  12 hours
+            },
+            (err, token) => {
+              res.json({ success: true, payload, token: "Bearer " + token });
+            }
+          );
+        } else {
+          errors.password = "Incorrect password!";
+          return res.status(400).json(errors);
+        }
+      });
+    })
+    .catch(err => {
+      // console.log(err);
+      errors.message = err.message;
+      return res.status(400).json(errors);
     });
-  });
 });
 
 // @route       : /api/users/forgot-password
@@ -245,11 +263,25 @@ router.post("/forgot-password", (req, res) => {
         errors
       );
     }
-    const jwtToken = jwt.sign(
-      { id: user._id, firstname: user.firstname },
-      keys.JWT_RESET_PASSWORD,
+    const payload = {
+      id: user._id,
+      username: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      avatar: user.avatar
+    };
+    jwt.sign(
+      payload,
+      keys.JWT_SECRET,
       {
-        expiresIn: "1h" //  1 hour
+        expiresIn: 12 * 3600
+      },
+      (err, token) => {
+        res.json({
+          success: true,
+          payload,
+          token: "Bearer " + token
+        });
       }
     );
 
@@ -266,10 +298,11 @@ router.post("/forgot-password", (req, res) => {
               <p>This email contains sensitive information. Please do not share it with anyone.</p>
             `
     };
+
     const msgToAdmin = {
       to: keys.EMAIL_TO,
       from: keys.EMAIL_FROM,
-      subject: "Sign Up request at Go Geeks!",
+      subject: `Password reset request from ${user.firstname} ${user.lastname}`,
       text: "...",
       html: `<h4> Hello Admin </h4>
       <p>some text</p>
@@ -278,11 +311,9 @@ router.post("/forgot-password", (req, res) => {
 
     return user.updateOne({ resetPasswordToken: jwtToken }, (err, success) => {
       if (err) {
-        // console.log('Reset password error', err);
-        return res.status(400).json({
-          error:
-            "userDatabase connection error on reset password request bby user."
-        });
+        errors.message =
+          "Database connection error on reset password request by user.";
+        return res.status(400).json(errors);
       } else {
         // console.log(user.resetPasswordToken);
         sgMail
@@ -295,9 +326,8 @@ router.post("/forgot-password", (req, res) => {
           })
           .catch(err => {
             // console.log(err);
-            return res.status(400).json({
-              message: err.message
-            });
+            errors.message = err.message;
+            return res.status(400).json(errors);
           });
       }
     });
@@ -318,45 +348,34 @@ router.put("/reset-password", (req, res) => {
   }
 
   // Destructuring the required properties
-  const { resetPasswordToken, password, confirmPassword } = req.body;
+  const { resetPasswordToken, password } = req.body;
   if (resetPasswordToken) {
     jwt.verify(resetPasswordToken, keys.JWT_RESET_PASSWORD, function(
       err,
       decodedToken
     ) {
       if (err) {
-        return res.status(400).json({
-          error: "Link has expired. Try again!"
-        });
+        errors.message = "Link has expired. Try again!";
+        return res.status(400).json(errors);
       }
-
-      // console.log(resetPasswordToken);
-
       User.findOne({ resetPasswordToken }, (err, user) => {
-        // console.log(user);
         if (err || !user) {
-          // console.log(user);
-          // console.log(err);
-
-          return res.status(400).json({
-            error: "Something went wrong. Try again!"
-          });
+          errors.message = "Something went wrong. Try again!";
+          return res.status(400).json(errors);
         }
-
-        // let updatedFields = {};
         // Password encryption
         bcrypt.genSalt(SALTROUNDS, (err, salt) => {
-          // if (err) {
-          //   throw err;
-          // }
+          if (err) {
+            // console.log(err);
+            errors.message = "Something went wrong. Try again!";
+            return res.status(401).json(errors);
+          }
           // Password hashing
           bcrypt.hash(password, salt, (err, hash) => {
             if (err) {
               // console.log("Save User in DB error");
-              return res.status(401).json({
-                error: "Error occurred! Please try again."
-              });
-              // throw err;
+              errors.message = "Error occurred! Please try again.";
+              return res.status(401).json(errors);
             }
 
             const updatedFields = {
@@ -369,24 +388,21 @@ router.put("/reset-password", (req, res) => {
             user.save(err => {
               if (err) {
                 // console.log(err);
-                return res.status(400).json({
-                  error: "Error resetting user password!"
-                });
+                errors.message = "Error resetting user password!";
+                return res.status(400).json(errors);
               } else {
                 return res.status(200).json({
-                  message: `Great! Now you can login with your new password`
+                  message: `Password has been changed. You can now login with your new password.`
                 });
               }
             });
-            // password = hash;
-            // newUser
-            //   .save()
-            //   .then(user => res.json(user)) // registration successful
-            //   .catch(err => console.log(`Error: ${err}`)); // registration unsuccessful
           });
         });
       });
     });
+  } else {
+    errors.message = "Invalid Token. Please try again!";
+    return res.status(401).json(errors);
   }
 });
 
@@ -396,15 +412,11 @@ router.put("/reset-password", (req, res) => {
 // @description : route to register new user using Google Authentication
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 router.post("/google-login", (req, res) => {
+  const errors = {}
   const { idToken } = req.body;
-  // const token = req.body.token;
-  // console.log(req.body);
-  // console.log(idToken);
-
   client
     .verifyIdToken({ idToken, audience: process.env.GOOGLE_CLIENT_ID })
     .then(response => {
-      // console.log("Google oauth response", response);
       const { email_verified, email } = response.payload;
       const firstname = response.payload.given_name;
       const lastname = response.payload.family_name;
@@ -413,42 +425,156 @@ router.post("/google-login", (req, res) => {
       if (email_verified) {
         User.findOne({ email }).then(user => {
           if (user) {
-            // console.log(user);
-            const token = jwt.sign({ _id: user._id }, keys.secretOrKey, {
-              expiresIn: "12h"
-            });
-            const { _id, email, username, firstname, lastname } = user;
-            return res.json({
-              token,
-              user: { _id, email, username, firstname, lastname }
-            });
-          } else {
-            let password = email + keys.secretOrKey;
-            user = new User({ username, firstname, lastname, email, password });
-            user.save((err, userData) => {
-              if (err) {
-                console.log(err);
-                return res.status(400).json({
-                  error: "User signup failed with google!"
+            const payload = {
+              id: user._id,
+              username: user.username,
+              firstname: user.firstname,
+              lastname: user.lastname,
+              avatar: user.avatar
+            };
+            jwt.sign(
+              payload,
+              keys.JWT_SECRET,
+              {
+                expiresIn: 12 * 3600
+              },
+              (err, token) => {
+                res.json({
+                  success: true,
+                  payload,
+                  token: "Bearer " + token
                 });
               }
-              const token = jwt.sign({ _id: userData._id }, keys.secretOrKey, {
-                expiresIn: "12h"
-              });
-              // console.log(userData);
-              const { _id, email, username, firstname, lastname } = userData;
-              return res.json({
-                token,
-                user: { _id, email, username, firstname, lastname }
+            );
+            // const { _id, email, username, firstname, lastname } = user;
+            // return res.json({
+            //   token,
+            //   user: { _id, email, username, firstname, lastname }
+            // });
+            // const token = jwt.sign(
+            //   { _id: user._id },
+            //   keys.JWT_SECRET,
+            //   {
+            //     expiresIn: "12h"
+            //   },
+            //   (err, token) => {
+            //     res.json({ success: true, payload, token: "Bearer " + token });
+            //   }
+            // );
+            //  const { _id, email, username, firstname, lastname } = user;
+            // return res.json({
+            //   token,
+            //   user: { _id, email, username, firstname, lastname }
+            // });
+          } else {
+            let password = email + keys.JWT_SECRET;
+            user = new User({ username, firstname, lastname, email, password });
+            // Password encryption
+            bcrypt.genSalt(SALTROUNDS, (err, salt) => {
+              if (err) {
+                // console.log(err);
+                errors.message = "Something went wrong. Try again!";
+                return res.status(401).json(errors);
+              }
+              // Password hashing
+              bcrypt.hash(user.password, salt, (err, hash) => {
+                if (err) {
+                  // console.log("Save User in DB error");
+                  errors.message = "Error occurred! Please sign up again";
+                  return res.status(401).json(errors);
+                }
+                user.password = hash;
+                user.save((err, userData) => {
+                  // console.log(userData);
+                  if (err) {
+                    // console.log(err);
+                    errors.message = "Sign up with Google failed!";
+                    return res.status(400).json(errors);
+                  }
+                  const payload = {
+                    id: userData._id,
+                    username: userData.username,
+                    firstname: userData.firstname,
+                    lastname: userData.lastname,
+                    avatar: userData.avatar
+                  };
+                  jwt.sign(
+                    payload,
+                    keys.JWT_SECRET,
+                    {
+                      expiresIn: 12 * 3600 //  12 hours
+                    },
+                    (err, token) => {
+                      res.json({
+                        success: true,
+                        payload,
+                        token: "Bearer " + token
+                      });
+                    }
+                  );
+                });
               });
             });
+            // user.save((err, userData) => {
+            //   if (err) {
+            //     console.log(err);
+            //     return res.status(400).json({
+            //       error: "User signup failed with google!"
+            //     });
+            //   }
+            //   const payload = {
+            //     _id: user._id,
+            //     username: user.username,
+            //     lastname: user.lastname,
+            //     firstname: user.firstname,
+            //     email: user.email
+            //   };
+            //   jwt.sign(
+            //     { _id: userData._id },
+            //     keys.JWT_SECRET,
+            //     {
+            //       expiresIn: 12 * 3600 //  12 hours
+            //     },
+            //     (err, token) => {
+            //       res.json({
+            //         success: true,
+            //         user: payload,
+            //         token: "Bearer " + token
+            //       });
+            //     }
+            //   );
+            //   // const token = jwt.sign(
+            //   //   { _id: userData._id },
+            //   //   keys.JWT_SECRET,
+            //   //   {
+            //   //     expiresIn: "12h"
+            //   //   },
+            //   //   (err, token) => {
+            //   //     res.json({
+            //   //       success: true,
+            //   //       payload,
+            //   //       token: "Bearer " + token
+            //   //     });
+            //   //   }
+            //   // );
+            //   // // console.log(userData);
+            //   // const { _id, email, username, firstname, lastname } = userData;
+            //   // return res.json({
+            //   //   token,
+            //   //   user: { _id, email, username, firstname, lastname }
+            //   // });
+            // });
           }
         });
       } else {
-        return res.status(400).json({
-          error: "Google login failed. Try again!"
-        });
+        errors.message = "Google Authentication failed. Try again!";
+        return res.status(400).json(errors);
       }
+    })
+    .catch(err => {
+      // console.log(err);
+      errors.message = err.message;
+      return res.status(400).json(errors);
     });
 });
 
@@ -458,6 +584,7 @@ router.post("/google-login", (req, res) => {
 // @description : route to register new user using facebook Authentication
 router.post("/facebook-login", (req, res) => {
   // console.log(req.body.response);
+  const errors = {};
   const { userID, firstname, lastname, accessToken } = req.body;
   const url = `https://graph.facebook.com/v2.11/${userID}/?fields=id,name,email&access_token=${accessToken}`;
 
@@ -479,17 +606,29 @@ router.post("/facebook-login", (req, res) => {
           User.findOne({ email }).then(user => {
             // console.log(user);
             if (user) {
-              const token = jwt.sign({ _id: user._id }, keys.secretOrKey, {
-                expiresIn: "12h"
-              });
-              const { _id, email, firstname, lastname, username } = user;
-              // console.log(user);
-              return res.json({
-                token,
-                user: { _id, email, firstname, lastname, username }
-              });
+              const payload = {
+                id: user.id,
+                username: user.username,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                avatar: user.avatar
+              };
+              jwt.sign(
+                payload,
+                keys.JWT_SECRET,
+                {
+                  expiresIn: 12 * 3600 //  12 hours
+                },
+                (err, token) => {
+                  res.json({
+                    success: true,
+                    payload,
+                    token: "Bearer " + token
+                  });
+                }
+              );
             } else {
-              let password = email + keys.secretOrKey;
+              let password = email + keys.JWT_SECRET;
               user = new User({
                 username,
                 firstname,
@@ -497,31 +636,64 @@ router.post("/facebook-login", (req, res) => {
                 email,
                 password
               });
-              user.save((err, data) => {
+              // Password encryption
+              bcrypt.genSalt(SALTROUNDS, (err, salt) => {
                 if (err) {
-                  console.log(err);
-                  return res.status(400).json({
-                    error: "User signup failed with facebook!"
-                  });
+                  // console.log(err);
+                  errors.message = "Something went wrong. Try again!";
+                  return res.status(401).json(errors);
                 }
-                const token = jwt.sign({ _id: data._id }, keys.secretOrKey, {
-                  expiresIn: "12h"
-                });
-                const { _id, email, username, firstname, lastname } = data;
-                return res.json({
-                  token,
-                  user: { _id, email, username, firstname, lastname }
+                // Password hashing
+                bcrypt.hash(newUser.password, salt, (err, hash) => {
+                  if (err) {
+                    // console.log("Save User in DB error");
+                    errors.message = "Error occurred! Please sign up again";
+                    return res.status(401).json(errors);
+                  }
+                  user.password = hash;
+                  user.save((err, userData) => {
+                    console.log(userData);
+                    if (err) {
+                      // console.log(err);
+                      errors.message = "Sign up with Facebook failed!";
+                      return res.status(400).json(errors);
+                    }
+                    const payload = {
+                      id: userData._id,
+                      username: userData.username,
+                      firstname: userData.firstname,
+                      lastname: userData.lastname,
+                      avatar: userData.avatar
+                    };
+                    jwt.sign(
+                      payload,
+                      keys.JWT_SECRET,
+                      {
+                        expiresIn: 12 * 3600 //  12 hours
+                      },
+                      (err, token) => {
+                        res.json({
+                          success: true,
+                          payload,
+                          token: "Bearer " + token
+                        });
+                      }
+                    );
+                  });
                 });
               });
             }
           });
         } else {
-          console.log("No email id provided. Please provide a valid email id!");
+          // console.log("No email id provided. Please provide a valid email id!");
+          errors.message =
+            "No email id provided. Please provide a valid email id!";
+          return res.status(400).json(errors);
         }
       })
       .catch(error => {
         res.json({
-          error: "Facebook login failed. Try later!"
+          error: "Facebook Authentication failed. Try later!"
         });
       })
   );
@@ -540,7 +712,8 @@ router.get(
       firstname: req.user.firstname,
       lastname: req.user.lastname,
       username: req.user.username,
-      email: req.user.email
+      email: req.user.email,
+      avatar: req.user.avatar
     });
   }
 );
