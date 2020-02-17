@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
-import TextFieldGroup from "../formInputs/TextFieldGroup";
-import TextAreaFieldGroup from "../formInputs/TextAreaFieldGroup";
+import TextFieldGroup from "../../formInputs/TextFieldGroup";
+import TextAreaFieldGroup from "../../formInputs/TextAreaFieldGroup";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { addExperience } from "../../store/actions/profile";
+import { addExperience } from "../../../store/actions/profile";
 
 class AddExperience extends Component {
   constructor(props) {

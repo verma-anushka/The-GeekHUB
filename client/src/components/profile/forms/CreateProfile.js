@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import TextFieldGroup from "../formInputs/TextFieldGroup";
-import TextAreaFieldGroup from "../formInputs/TextAreaFieldGroup";
-import InputGroup from "../formInputs/InputGroup";
-import SelectListGroup from "../formInputs/SelectListGroup";
-import { createProfile, getCurrentProfile } from "../../store/actions/profile";
-import isEmpty from "../../validation/isEmpty";
+import TextFieldGroup from "../../formInputs/TextFieldGroup";
+import TextAreaFieldGroup from "../../formInputs/TextAreaFieldGroup";
+import InputGroup from "../../formInputs/InputGroup";
+import SelectListGroup from "../../formInputs/SelectListGroup";
+import { createProfile } from "../../../store/actions/profile";
+import Uploader from "../display/Uploader";
 
 class CreateProfile extends Component {
   constructor(props) {
@@ -32,88 +32,22 @@ class CreateProfile extends Component {
       displaySocialInputs: false, // toggle option
       errors: {}
     };
-  }
 
-  componentDidMount() {
-    this.props.getCurrentProfile();
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
-      // console.log(nextProps.errors);
       this.setState({ errors: nextProps.errors });
-    }
-    if (nextProps.profile.profile) {
-      const profile = nextProps.profile.profile;
-
-      // array -> CSV
-      const skillsCSV = profile.skills.join(",");
-
-      // If profile field doesnt exist, make empty string
-      profile.organization = !isEmpty(profile.organization)
-        ? profile.organization
-        : "";
-      profile.websiteLink = !isEmpty(profile.websiteLink)
-        ? profile.websiteLink
-        : "";
-      profile.location = !isEmpty(profile.location) ? profile.location : "";
-      profile.githubUsername = !isEmpty(profile.githubUsername)
-        ? profile.githubUsername
-        : "";
-      profile.bio = !isEmpty(profile.bio) ? profile.bio : "";
-      profile.socialLinks = !isEmpty(profile.socialLinks)
-        ? profile.socialLinks
-        : {};
-      profile.linkedin = !isEmpty(profile.socialLinks.linkedin)
-        ? profile.socialLinks.linkedin
-        : "";
-      profile.medium = !isEmpty(profile.socialLinks.medium)
-        ? profile.socialLinks.medium
-        : "";
-      profile.behance = !isEmpty(profile.socialLinks.behance)
-        ? profile.socialLinks.behance
-        : "";
-      profile.github = !isEmpty(profile.socialLinks.github)
-        ? profile.socialLinks.github
-        : "";
-      profile.youtube = !isEmpty(profile.socialLinks.youtube)
-        ? profile.socialLinks.youtube
-        : "";
-      profile.twitter = !isEmpty(profile.socialLinks.twitter)
-        ? profile.socialLinks.twitter
-        : "";
-      profile.facebook = !isEmpty(profile.socialLinks.facebook)
-        ? profile.socialLinks.facebook
-        : "";
-      profile.instagram = !isEmpty(profile.socialLinks.instagram)
-        ? profile.socialLinks.instagram
-        : "";
-
-      // Set component fields state
-      this.setState({
-        handle: profile.handle,
-        organization: profile.organization,
-        websiteLink: profile.websiteLink,
-        location: profile.location,
-        status: profile.status,
-        skills: skillsCSV,
-        bio: profile.bio,
-        githubUsername: profile.githubUsername,
-        linkedin: profile.linkedin,
-        medium: profile.medium,
-        behance: profile.behance,
-        github: profile.github,
-        youtube: profile.youtube,
-        twitter: profile.twitter,
-        facebook: profile.facebook,
-        instagram: profile.instagram
-      });
     }
   }
 
-  onSubmit = event => {
+  onSubmit(event) {
     event.preventDefault();
-    // console.log(this.state);
+
+    const { user } = this.props.auth;
+    console.log(user);
     const profile = {
       handle: this.state.handle,
       organization: this.state.organization,
@@ -133,12 +67,12 @@ class CreateProfile extends Component {
       instagram: this.state.instagram
     };
 
-    this.props.createProfile(profile, this.props.history);
-  };
+    this.props.createProfile(profile, user, this.props.history);
+  }
 
-  onChange = event => {
+  onChange(event) {
     this.setState({ [event.target.name]: event.target.value });
-  };
+  }
 
   render() {
     const { errors, displaySocialInputs } = this.state;
@@ -236,12 +170,14 @@ class CreateProfile extends Component {
 
     return (
       <div className="create-profile">
-        <h1 style={{ marginTop: "20%" }} className="large text-primary">
-          Edit Profile
-        </h1>
-        <Link to="/dashboard" className="btn btn-light">
-          Go Back
-        </Link>
+        <h1 style={{ marginTop: "20%" }}>cp</h1>
+        <h1 className="large text-primary">Create Your Profile</h1>
+        <p className="lead">
+          <i className="fas fa-user" />
+          Add your profile info..
+        </p>
+        <Uploader />
+
         <small>* = required field</small>
         <form className="form" onSubmit={this.onSubmit}>
           <TextFieldGroup
@@ -277,7 +213,7 @@ class CreateProfile extends Component {
             value={this.state.websiteLink}
             onChange={this.onChange}
             error={errors.websiteLink}
-            moreInfo="Could be your own website or a organization one"
+            moreInfo="Could be your own website or a company one"
           />
 
           <TextFieldGroup
@@ -344,17 +280,16 @@ class CreateProfile extends Component {
 }
 
 CreateProfile.propTypes = {
-  createProfile: PropTypes.func.isRequired,
-  getCurrentProfile: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired
-  // errors: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   errors: state.errors,
-  profile: state.profile
+  profile: state.profile,
+  auth: state.auth
 });
 
-export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
+export default connect(mapStateToProps, { createProfile })(
   withRouter(CreateProfile)
 );
