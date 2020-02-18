@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import classnames from "classnames";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Link, withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
+import TextFieldGroup from "../formInputs/TextFieldGroup";
+import { Link } from "react-router-dom";
 import zxcvbn from "zxcvbn";
 import GoogleOAuth from "./GoogleOAuth";
 import FacebookAuth from "./FacebookAuth";
-import TextFieldGroup from "../formInputs/TextFieldGroup";
 
 import { signUpUser, signInUser } from "../../store/actions/auth";
 import "../../assets/styles/components/auth/signup.scss";
@@ -24,6 +25,7 @@ class SignUp extends Component {
       errors: {},
       type: "input",
       score: "null",
+      confirmscore: "null",
       form: "signin"
     };
     this.toggle = {
@@ -32,10 +34,11 @@ class SignUp extends Component {
     };
     this.showHide = this.showHide.bind(this);
     this.passwordStrength = this.passwordStrength.bind(this);
+    this.confirmpasswordStrength = this.confirmpasswordStrength.bind(this);
   }
 
   showHide(event) {
-    console.log(this.state.type);
+    // console.log(this.state.type);
     event.preventDefault();
     event.stopPropagation();
     this.setState({
@@ -54,6 +57,21 @@ class SignUp extends Component {
       var pw = zxcvbn(event.target.value);
       this.setState({
         score: pw.score
+      });
+    }
+  }
+
+  confirmpasswordStrength(event) {
+    this.setState({ [event.target.name]: event.target.value });
+
+    if (event.target.value === "") {
+      this.setState({
+        confirmscore: "null"
+      });
+    } else {
+      var pw = zxcvbn(event.target.value);
+      this.setState({
+        confirmscore: pw.score
       });
     }
   }
@@ -236,7 +254,7 @@ class SignUp extends Component {
                         name="password"
                         error={errors.password}
                         value={this.state.password}
-                        onChange={this.onChange}
+                        onChange={this.passwordStrength}
                       />
                       <span onClick={this.showHide}>
                         <i
@@ -260,7 +278,7 @@ class SignUp extends Component {
                         name="confirmpassword"
                         error={errors.confirmpassword}
                         value={this.state.confirmpassword}
-                        onChange={this.onChange}
+                        onChange={this.confirmpasswordStrength}
                       />
                       <span onClick={this.showHide}>
                         <i
@@ -274,7 +292,7 @@ class SignUp extends Component {
                       </span>
                       <span
                         className="password__strength"
-                        data-score={this.state.score}
+                        data-score={this.state.confirmscore}
                       />
                     </div>
                   </div>

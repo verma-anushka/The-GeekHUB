@@ -264,7 +264,7 @@ h2 {
     margin: -5px auto;
     position: absolute;
     height: 4px;
-    left: 190px;
+    left: 195px;
     width: 0%;
     height: 4px;
     background: transparent;
@@ -308,12 +308,10 @@ h2 {
   }
 
   .password__strength {
-    max-width: $inputW;
-    margin: -5px auto;
+    width: $inputW;
+    margin: 7px auto;
     position: absolute;
-    height: 4px;
-    left: 190px;
-    width: 0%;
+    left: 75px;
     height: 4px;
     background: transparent;
     transition: all 300ms ease-in-out;
@@ -476,53 +474,30 @@ input {
     }
   }
 
-  &__show {
-    cursor: pointer;
-    position: absolute;
-    left: 400px;
-    top: 360px;
-    background: $secondary;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-weight: 700;
-    font-size: 0.8em;
-  }
-
   &__strength {
-    max-width: $inputW;
-    margin: -5px auto;
-    position: absolute;
-    height: 4px;
-    left: 190px;
-    width: 0%;
-    height: 4px;
-    background: transparent;
-    transition: all 300ms ease-in-out;
-
     &[data-score="null"] {
       width: 0;
       background: red;
     }
 
     &[data-score="0"] {
-      width: 5%;
+      width: 10%;
       background: $scoreRed;
     }
     &[data-score="1"] {
-      width: 12%;
+      width: 25%;
       background: $scoreRed;
     }
     &[data-score="2"] {
-      width: 25%;
+      width: 50%;
       background: $scoreYellow;
     }
     &[data-score="3"] {
-      width: 37%;
+      width: 75%;
       background: $scoreGreen;
     }
     &[data-score="4"] {
-      width: 50%;
+      width: 100%;
       background: $scoreGreen;
     }
   }

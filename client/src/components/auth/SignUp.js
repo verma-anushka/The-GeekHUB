@@ -22,8 +22,58 @@ class SignUp extends Component {
       email: "",
       password: "",
       confirmpassword: "",
-      errors: {}
+      errors: {},
+      type: "input",
+      score: "null",
+      confirmscore: "null",
+      form: "signup"
     };
+    this.toggle = {
+      signin: "signup",
+      signup: "signin"
+    };
+    this.showHide = this.showHide.bind(this);
+    this.passwordStrength = this.passwordStrength.bind(this);
+    this.confirmpasswordStrength = this.confirmpasswordStrength.bind(this);
+  }
+
+  showHide(event) {
+    // console.log(this.state.type);
+    event.preventDefault();
+    event.stopPropagation();
+    this.setState({
+      type: this.state.type === "input" ? "password" : "input"
+    });
+  }
+
+  passwordStrength(event) {
+    this.setState({ [event.target.name]: event.target.value });
+
+    if (event.target.value === "") {
+      this.setState({
+        score: "null"
+      });
+    } else {
+      var pw = zxcvbn(event.target.value);
+      this.setState({
+        score: pw.score
+      });
+    }
+  }
+
+  confirmpasswordStrength(event) {
+    this.setState({ [event.target.name]: event.target.value });
+
+    if (event.target.value === "") {
+      this.setState({
+        confirmscore: "null"
+      });
+    } else {
+      var pw = zxcvbn(event.target.value);
+      this.setState({
+        confirmscore: pw.score
+      });
+    }
   }
 
   onSignupSubmit = event => {
@@ -99,6 +149,19 @@ class SignUp extends Component {
                   name="password"
                   error={errors.password}
                   value={this.state.password}
+                  onChange={this.passwordStrength}
+                />
+                <span onClick={this.showHide}>
+                  <i
+                    className={classnames(
+                      "password__show fas",
+                      this.state.type === "input" ? "fa-eye" : "fa-eye-slash"
+                    )}
+                  ></i>
+                </span>
+                <span
+                  className="password__strength"
+                  data-score={this.state.score}
                 />
                 <input type="submit" className="submit" value="Sign In" />
               </form>
@@ -122,6 +185,8 @@ class SignUp extends Component {
                 onClick={() => {
                   this.setState({
                     form: this.toggle[this.state.form],
+                    password: "",
+                    score: "null"
                   });
                 }}
               >
@@ -189,7 +254,21 @@ class SignUp extends Component {
                         name="password"
                         error={errors.password}
                         value={this.state.password}
-                        onChange={this.onChange}
+                        onChange={this.passwordStrength}
+                      />
+                      <span onClick={this.showHide}>
+                        <i
+                          className={classnames(
+                            "password__show fas",
+                            this.state.type === "input"
+                              ? "fa-eye"
+                              : "fa-eye-slash"
+                          )}
+                        ></i>
+                      </span>
+                      <span
+                        className="password__strength"
+                        data-score={this.state.score}
                       />
                     </div>
                     <div className="col-xl-3 offset-xl-3 col-md-3 offset-md-3 mb-30">
@@ -199,7 +278,21 @@ class SignUp extends Component {
                         name="confirmpassword"
                         error={errors.confirmpassword}
                         value={this.state.confirmpassword}
-                        onChange={this.onChange}
+                        onChange={this.confirmpasswordStrength}
+                      />
+                      <span onClick={this.showHide}>
+                        <i
+                          className={classnames(
+                            "password__show fas",
+                            this.state.type === "input"
+                              ? "fa-eye"
+                              : "fa-eye-slash"
+                          )}
+                        ></i>
+                      </span>
+                      <span
+                        className="password__strength"
+                        data-score={this.state.confirmscore}
                       />
                     </div>
                   </div>
