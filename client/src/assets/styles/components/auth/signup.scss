@@ -1,0 +1,529 @@
+$contW: 900px;
+$imgW: 260px;
+$formW: $contW - $imgW;
+$switchAT: 1.2s;
+
+$inputW: 250px;
+$btnH: 36px;
+
+$diffRatio: ($contW - $imgW) / $contW;
+
+$accent: #00bcd4;
+$primary: #212121;
+$secondary: #727272;
+
+$scoreRed: #f44336;
+$scoreYellow: #ffeb3b;
+$scoreGreen: #4caf50;
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.auth {
+  margin-top: 9%;
+}
+
+input,
+button {
+  border: none;
+  outline: none;
+  background: none;
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+}
+button:focus {
+  outline: none;
+}
+
+@mixin signUpActive {
+  .cont.s--signup & {
+    @content;
+  }
+}
+
+.cont {
+  overflow: hidden;
+  position: relative;
+  width: $contW;
+  height: 550px;
+  margin: 0 auto 100px;
+  background: #fff;
+}
+
+.form {
+  background-color: #efefef;
+  position: relative;
+  width: $formW;
+  height: 100%;
+  transition: transform $switchAT ease-in-out;
+  padding: 50px 30px 0;
+}
+.form.sign-in {
+  padding-top: 80px;
+}
+
+.sub-cont {
+  overflow: hidden;
+  position: absolute;
+  left: $formW;
+  top: 0;
+  width: $contW;
+  height: 100%;
+  padding-left: $imgW;
+  background: #fff;
+  transition: transform $switchAT ease-in-out;
+
+  @include signUpActive {
+    transform: translate3d($formW * -1, 0, 0);
+  }
+}
+
+button,
+input[type="submit"] {
+  display: block;
+  margin: 25px auto 0;
+  width: $inputW;
+  height: $btnH;
+  border-radius: 30px;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.img {
+  overflow: hidden;
+  z-index: 2;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: $imgW;
+  height: 100%;
+  padding-top: 360px;
+
+  &:before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: $contW;
+    height: 100%;
+    background-image: url("https://cdn.pixabay.com/photo/2016/11/29/06/18/home-office-1867761_960_720.jpg");
+    background-size: cover;
+    transition: transform $switchAT ease-in-out;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  @include signUpActive {
+    &:before {
+      transform: translate3d($formW, 0, 0);
+    }
+  }
+
+  &__text {
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    top: 50px;
+    width: 100%;
+    padding: 0 20px;
+    text-align: center;
+    color: #fff;
+    transition: transform $switchAT ease-in-out;
+
+    h2 {
+      color: #fff;
+      margin-bottom: 10px;
+      font-weight: normal;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    &.m--up {
+      outline: none;
+      @include signUpActive {
+        transform: translateX($imgW * 2);
+      }
+    }
+
+    &.m--in {
+      transform: translateX($imgW * -2);
+
+      @include signUpActive {
+        transform: translateX(0);
+      }
+    }
+  }
+
+  &__btn {
+    overflow: hidden;
+    z-index: 2;
+    position: relative;
+    width: 100px;
+    height: $btnH;
+    margin: 0 auto;
+    background: transparent;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 15px;
+    cursor: pointer;
+
+    &:after {
+      content: "";
+      z-index: 2;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      border: 2px solid #fff;
+      border-radius: 30px;
+    }
+
+    .span {
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      transition: transform $switchAT;
+
+      &.m--in {
+        transform: translateY($btnH * -2);
+
+        @include signUpActive {
+          transform: translateY(0);
+        }
+      }
+
+      &.m--up {
+        @include signUpActive {
+          transform: translateY($btnH * 2);
+        }
+      }
+    }
+  }
+}
+
+h2 {
+  color: #151414;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  width: 100%;
+  font-size: 26px;
+  text-align: center;
+}
+
+.sign-in {
+  label {
+    display: block;
+    width: $inputW;
+    margin: 15px auto 0;
+    text-align: center;
+
+    span {
+      font-size: 12px;
+      color: #cfcfcf;
+      text-transform: uppercase;
+    }
+  }
+
+  .password__show {
+    cursor: pointer;
+    position: absolute;
+    left: 400px;
+    top: 360px;
+    background: $secondary;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.8em;
+  }
+
+  .password__strength {
+    max-width: $inputW;
+    margin: -5px auto;
+    position: absolute;
+    height: 4px;
+    left: 190px;
+    width: 0%;
+    height: 4px;
+    background: transparent;
+    transition: all 300ms ease-in-out;
+  }
+  .svg-inline--fa.fa-w-18 {
+    color: #151414;
+    background: transparent;
+    width: 1.9em;
+    font-size: 31px;
+  }
+}
+
+.sign-up {
+  .form-group {
+    display: inline;
+  }
+  label {
+    display: block;
+    width: $inputW;
+    margin: 15px 15px 0;
+    text-align: center;
+
+    span {
+      font-size: 12px;
+      color: #cfcfcf;
+      text-transform: uppercase;
+    }
+  }
+  .password__show {
+    cursor: pointer;
+    position: absolute;
+    left: 400px;
+    top: 360px;
+    background: $secondary;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.8em;
+  }
+
+  .password__strength {
+    max-width: $inputW;
+    margin: -5px auto;
+    position: absolute;
+    height: 4px;
+    left: 190px;
+    width: 0%;
+    height: 4px;
+    background: transparent;
+    transition: all 300ms ease-in-out;
+  }
+  .svg-inline--fa.fa-w-18 {
+    position: absolute;
+    left: 240px;
+    top: 35px;
+    color: #151414;
+    background: transparent;
+    font-size: 40px;
+  }
+}
+
+input {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  padding-bottom: 5px;
+  font-size: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+.forgot {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 12px;
+  a {
+    color: #cfcfcf;
+  }
+}
+
+.submit {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  background: #151414;
+  text-transform: uppercase;
+}
+
+.fb-btn {
+  border: 2px solid #d3dae9;
+  color: darken(#d3dae9, 20%);
+
+  span {
+    font-weight: bold;
+    color: darken(#768cb6, 20%);
+  }
+}
+
+.sign-in {
+  transition-timing-function: ease-out;
+
+  @include signUpActive {
+    transition-timing-function: ease-in-out;
+    transition-duration: $switchAT;
+    transform: translate3d($formW, 0, 0);
+  }
+}
+
+.sign-up {
+  transform: translate3d($contW * -1, 0, 0);
+
+  @include signUpActive {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.btn {
+  transition: all 0.35s;
+  transition-timing-function: cubic-bezier(0.31, -0.105, 0.43, 1.59);
+  display: inline-block;
+  width: 90px;
+  height: 90px;
+  line-height: 90px;
+  margin: 0 10px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.51);
+  opacity: 0.99;
+  &:before {
+    transition: all 0.35s;
+    transition-timing-function: cubic-bezier(0.31, -0.105, 0.43, 1.59);
+    top: 90%;
+    left: -110%;
+    content: "";
+    width: 120%;
+    height: 120%;
+    position: absolute;
+    transform: rotate(45deg);
+  }
+  .fab {
+    transition: all 0.35s;
+    transition-timing-function: cubic-bezier(0.31, -0.105, 0.43, 1.59);
+    transform: scale(0.8);
+    font-size: 58px;
+    vertical-align: middle;
+  }
+  &:focus {
+    &:before {
+      top: -10%;
+      left: -10%;
+    }
+    .fab {
+      font-size: 40px;
+      transform: scale(1);
+    }
+  }
+  &:hover {
+    &:before {
+      top: -10%;
+      left: -10%;
+    }
+    .svg-inline--fa {
+      color: #fff;
+      transform: scale(1);
+    }
+  }
+}
+.btn.facebook {
+  font-size: 40px;
+  color: #3b5998;
+  &:before {
+    background-color: #3b5998;
+  }
+}
+.btn.google {
+  font-size: 40px;
+  color: #dc4a38;
+  &:before {
+    background-color: #dc4a38;
+  }
+}
+
+.password {
+  display: block;
+  position: relative;
+  text-transform: uppercase;
+  font-weight: 700;
+  width: 100%;
+  color: $secondary;
+
+  &__input {
+    display: block;
+    text-transform: none;
+    width: 100%;
+    height: 42px;
+    border-width: 0 0 1px;
+    border-style: solid;
+    border-color: #b6b6b6;
+    font-weight: 400;
+    color: $primary;
+
+    &:focus,
+    &:active {
+      border-color: $accent;
+      outline: 0;
+    }
+  }
+
+  &__show {
+    cursor: pointer;
+    position: absolute;
+    left: 400px;
+    top: 360px;
+    background: $secondary;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.8em;
+  }
+
+  &__strength {
+    max-width: $inputW;
+    margin: -5px auto;
+    position: absolute;
+    height: 4px;
+    left: 190px;
+    width: 0%;
+    height: 4px;
+    background: transparent;
+    transition: all 300ms ease-in-out;
+
+    &[data-score="null"] {
+      width: 0;
+      background: red;
+    }
+
+    &[data-score="0"] {
+      width: 5%;
+      background: $scoreRed;
+    }
+    &[data-score="1"] {
+      width: 12%;
+      background: $scoreRed;
+    }
+    &[data-score="2"] {
+      width: 25%;
+      background: $scoreYellow;
+    }
+    &[data-score="3"] {
+      width: 37%;
+      background: $scoreGreen;
+    }
+    &[data-score="4"] {
+      width: 50%;
+      background: $scoreGreen;
+    }
+  }
+}

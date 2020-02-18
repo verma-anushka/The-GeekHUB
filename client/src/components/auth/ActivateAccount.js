@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
 import { activateAccount } from "../../store/actions/auth";
 
 class ActivateAccount extends Component {
@@ -30,7 +30,7 @@ class ActivateAccount extends Component {
     const { token } = this.props.match.params;
 
     console.log(token);
-    const { firstname } = jwt.decode(token);
+    // const { firstname } = jwt.decode(token);
     if (token) {
       this.setState({ token: token });
     }
@@ -56,7 +56,7 @@ class ActivateAccount extends Component {
   );
 
   render() {
-    const { firstname, username, token, display } = this.state;
+    // const { firstname, username, token, display } = this.state;
     return (
       <div className="activate-account" style={{ marginTop: "10%" }}>
         <h4>ActivateAccount</h4>

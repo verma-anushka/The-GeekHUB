@@ -1,26 +1,34 @@
 import React, { Component } from "react";
-// import classnames from "classnames";
+import classnames from "classnames";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import TextFieldGroup from "../formInputs/TextFieldGroup";
+import { Link } from "react-router-dom";
+import zxcvbn from "zxcvbn";
+import GoogleOAuth from "./GoogleOAuth";
+import FacebookAuth from "./FacebookAuth";
 
-import { signUpUser } from "../../store/actions/auth";
+import { signUpUser, signInUser } from "../../store/actions/auth";
+import "../../assets/styles/components/auth/signup.scss";
 
 class SignUp extends Component {
-  state = {
-    firstname: "",
-    lastname: "",
-    username: "",
-    email: "",
-    password: "",
-    confirmpassword: "",
-    errors: {}
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      firstname: "",
+      lastname: "",
+      username: "",
+      email: "",
+      password: "",
+      confirmpassword: "",
+      errors: {}
+    };
+  }
 
-  onSubmit = event => {
+  onSignupSubmit = event => {
+    // console.log("onSignupSubmit");
     event.preventDefault();
-    // console.log(this.state);
     const newUser = {
       firstname: this.state.firstname,
       lastname: this.state.lastname,
@@ -30,6 +38,16 @@ class SignUp extends Component {
       confirmpassword: this.state.confirmpassword
     };
     this.props.signUpUser(newUser, this.props.history);
+  };
+
+  onSigninSubmit = event => {
+    // console.log("onSigninSubmit");
+    event.preventDefault();
+    const user = {
+      email: this.state.email,
+      password: this.state.password
+    };
+    this.props.signInUser(user);
   };
 
   onChange = event => {
@@ -51,69 +69,146 @@ class SignUp extends Component {
   render() {
     const { errors } = this.state;
     console.log(errors);
+
+    const { form } = this.state;
     return (
-      <div className="SignUp">
-        <div>SIGNUP</div>
-        <section className="container">
-          <h1 className="large text-primary">Sign Up</h1>
-          <p className="lead">
-            <i className="fas fa-user"></i> Create Your Account
-          </p>
-          <form noValidate className="form" onSubmit={this.onSubmit}>
-            <TextFieldGroup
-              type="text"
-              placeholder="Firstname"
-              name="firstname"
-              error={errors.firstname}
-              value={this.state.firstname}
-              onChange={this.onChange}
-            />
-            <TextFieldGroup
-              type="text"
-              placeholder="Lastname"
-              name="lastname"
-              error={errors.lastname}
-              value={this.state.lastname}
-              onChange={this.onChange}
-            />
-            <TextFieldGroup
-              type="text"
-              placeholder="Username"
-              name="username"
-              error={errors.username}
-              value={this.state.username}
-              onChange={this.onChange}
-            />
-            <TextFieldGroup
-              type="email"
-              placeholder="Email Address"
-              name="email"
-              error={errors.email}
-              value={this.state.email}
-              onChange={this.onChange}
-            />
-            <TextFieldGroup
-              type="password"
-              placeholder="Password"
-              name="password"
-              error={errors.password}
-              value={this.state.password}
-              onChange={this.onChange}
-            />
-            <TextFieldGroup
-              type="password"
-              placeholder="Confirm Password"
-              name="confirmpassword"
-              error={errors.confirmpassword}
-              value={this.state.confirmpassword}
-              onChange={this.onChange}
-            />
-            <input type="submit" className="btn btn-primary" value="signup" />
-          </form>
-          <p className="my-1">
-            Already have an account? <a href="signin.html">Sign In</a>
-          </p>
-        </section>
+      <div className="auth">
+        <div
+          className={classnames("cont", form === "signup" ? "s--signup" : "")}
+        >
+          {this.state.form === "signin" && (
+            <div className="form sign-in">
+              <h2>Sign In!</h2>
+              <div style={{ textAlign: "center", marginBottom: "35px" }}>
+                <GoogleOAuth />
+                <FacebookAuth />
+              </div>
+              <hr />
+              <form onSubmit={this.onSigninSubmit}>
+                <TextFieldGroup
+                  type="email"
+                  placeholder="Email Address"
+                  name="email"
+                  error={errors.email}
+                  value={this.state.email}
+                  onChange={this.onChange}
+                />
+                <TextFieldGroup
+                  type={this.state.type}
+                  placeholder="password"
+                  name="password"
+                  error={errors.password}
+                  value={this.state.password}
+                />
+                <input type="submit" className="submit" value="Sign In" />
+              </form>
+              <div className="forgot">
+                <Link to={"/forgot-password"}>Forgot Password</Link>
+              </div>
+            </div>
+          )}
+          <div className="sub-cont">
+            <div className="img">
+              <div className="img__text m--up">
+                <h2>New here?</h2>
+                <p>Sign up and find your fellow geeks!</p>
+              </div>
+              <div className="img__text m--in">
+                <h2>Already registered?</h2>
+                <p>If you already has an account, just sign in.!</p>
+              </div>
+              <button
+                className="span img__btn m--up"
+                onClick={() => {
+                  this.setState({
+                    form: this.toggle[this.state.form],
+                  });
+                }}
+              >
+                {this.toggle[this.state.form]}
+              </button>
+            </div>
+            {this.state.form === "signup" && (
+              <div className="form sign-up">
+                <h2>Sign Up!</h2>
+                <div style={{ textAlign: "center" }}>
+                  <GoogleOAuth />
+                  <FacebookAuth />
+                </div>
+                <hr />
+                <form noValidate onSubmit={this.onSignupSubmit}>
+                  <div className="row">
+                    <div className="col-xl-3 col-md-3 mb-30">
+                      <TextFieldGroup
+                        type="text"
+                        placeholder="Firstname"
+                        name="firstname"
+                        error={errors.firstname}
+                        value={this.state.firstname}
+                        onChange={this.onChange}
+                      />
+                    </div>
+                    <div className="col-xl-3 offset-xl-3 col-md-3 offset-md-3 mb-30">
+                      <TextFieldGroup
+                        type="text"
+                        placeholder="Lastname"
+                        name="lastname"
+                        error={errors.lastname}
+                        value={this.state.lastname}
+                        onChange={this.onChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-xl-3 col-md-3 mb-30">
+                      <TextFieldGroup
+                        type="text"
+                        placeholder="Username"
+                        name="username"
+                        error={errors.username}
+                        value={this.state.username}
+                        onChange={this.onChange}
+                      />
+                    </div>
+                    <div className="col-xl-3 offset-xl-3 col-md-3 offset-md-3 mb-30">
+                      <TextFieldGroup
+                        type="email"
+                        placeholder="Email Address"
+                        name="email"
+                        error={errors.email}
+                        value={this.state.email}
+                        onChange={this.onChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-xl-3 col-md-3 mb-30">
+                      <TextFieldGroup
+                        type="password"
+                        placeholder="Password"
+                        name="password"
+                        error={errors.password}
+                        value={this.state.password}
+                        onChange={this.onChange}
+                      />
+                    </div>
+                    <div className="col-xl-3 offset-xl-3 col-md-3 offset-md-3 mb-30">
+                      <TextFieldGroup
+                        type="password"
+                        placeholder="Confirm Password"
+                        name="confirmpassword"
+                        error={errors.confirmpassword}
+                        value={this.state.confirmpassword}
+                        onChange={this.onChange}
+                      />
+                    </div>
+                  </div>
+                  <input type="submit" className="submit" value="Sign Up" />
+                </form>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     );
   }
@@ -122,8 +217,8 @@ class SignUp extends Component {
 SignUp.propTypes = {
   errors: PropTypes.object.isRequired,
   signUpUser: PropTypes.func.isRequired,
+  signInUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
-  // isAuthenticated: PropTypes.bool
 };
 
 const mapStateToProps = state => ({
@@ -131,4 +226,6 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps, { signUpUser })(withRouter(SignUp));
+export default connect(mapStateToProps, { signUpUser, signInUser })(
+  withRouter(SignUp)
+);
