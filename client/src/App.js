@@ -16,10 +16,14 @@ import SignIn from "./components/auth/SignIn";
 import Dashboard from "./components/dashboard/Dashboard";
 import { setCurrentUser, logoutUser } from "./store/actions/auth";
 import { clearCurrentProfile } from "./store/actions/profile";
-import CreateProfile from "./components/profile/CreateProfile";
-import EditProfile from "./components/profile/EditProfile";
-import AddExperience from "./components/profile/AddExperience";
-import AddEducation from "./components/profile/AddEducation";
+import CreateProfile from "./components/profile/forms/CreateProfile";
+import EditProfile from "./components/profile/forms/EditProfile";
+import AddExperience from "./components/profile/forms/AddExperience";
+import AddEducation from "./components/profile/forms/AddEducation";
+import ProfileList from "./components/profiles/ProfileList";
+import Profile from "./components/profile/display/Profile";
+import Posts from "./components/post/display/Posts";
+import Post from "./components/post/display/Post";
 
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -55,6 +59,8 @@ class App extends Component {
             <div className="container">
               <Route exact path="/signup" component={SignUp} />
               <Route exact path="/signin" component={SignIn} />
+              <Route exact path="/profiles" component={ProfileList} />
+              <Route exact path="/profile/:handle" component={Profile} />
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
               </Switch>
@@ -85,6 +91,12 @@ class App extends Component {
                   path="/addeducation"
                   component={AddEducation}
                 />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/feed" component={Posts} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/post/:id" component={Post} />
               </Switch>
             </div>
             <Footer />
