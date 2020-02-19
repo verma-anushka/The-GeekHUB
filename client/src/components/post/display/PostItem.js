@@ -1,8 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import classnames from "classnames";
+import { deletePost } from "../../../store/actions/post";
 
 class PostItem extends Component {
+  onDeleteClick(id) {
+    this.props.deletePost(id);
+  }
+
   render() {
     const { post, auth } = this.props;
 
@@ -20,16 +26,13 @@ class PostItem extends Component {
             <br />
             <p className="text-center">{post.name}</p>
           </div>
-          <div className="col-md-10">
-            <p className="lead">{post.content}</p>
-          </div>
         </div>
       </div>
     );
   }
 }
-
 PostItem.propTypes = {
+  deletePost: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired
 };
@@ -38,4 +41,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps)(PostItem);
+export default connect(mapStateToProps, { deletePost })(PostItem);
