@@ -5,6 +5,36 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require("passport");
 
+const path = require("path");
+const multer = require("multer");
+var cloudinary = require("cloudinary");
+const keys = require("../../config/keys.js");
+const formData = require("express-form-data");
+
+const storage = multer.diskStorage({
+  filename: function(req, file, callback) {
+    // cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    console.log(
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+    callback(null, file.originalname);
+  }
+});
+const imageFilter = function(req, file, callback) {
+  // ACCEPT ONLY IMAGE FILES
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    return callback(new Error("Only image files are allowed!"), false);
+  }
+  callback(null, true);
+};
+const upload = multer({ storage: storage, fileFilter: imageFilter });
+cloudinary.config({
+  cloud_name: keys.CLOUDINARY_NAME,
+  api_key: keys.CLOUDINARY_API_KEY,
+  api_secret: keys.CLOUDINARY_API_SECRET
+});
+router.use(formData.parse());
+
 // MODELS
 const User = require("../../models/User");
 const Profile = require("../../models/Profile");
@@ -24,18 +54,27 @@ router.get(
   (req, res) => {
     const errors = {};
     // req.user -> current logged in user from token(payload)
-    Profile.findOne({ user: req.user.id })
-      .populate("user", ["username", "email", "avatar"]) // populate fields from users into the response
+    Profile.findOne({ user: req.query.id })
+      .populate("user", [
+        "username",
+        "firstname",
+        "lastname",
+        "email",
+        "avatar"
+      ]) // populate fields from users into the response
       .then(profile => {
         if (!profile) {
           // profile not found
+          // console.log("no profile");
           errors.noprofile = "The current user doesn't have a profile!";
           return res.status(404).json(errors);
         }
         res.json(profile); // return the profile found
       })
       .catch(err => {
-        res.status(404).json(err);
+        console.log(err);
+        errors.noprofile = "The current user doesn't have a profile!";
+        return res.status(404).json(errors);
       });
   }
 );
@@ -46,22 +85,22 @@ router.get(
 // @description : route to show the current user's profile using their username
 router.get("/handle/:handle", (req, res) => {
   const errors = {};
-
   Profile.findOne({ handle: req.params.handle }) // find a userhandle in the db matching the userhandle provided in the url
-    .populate("user", ["name", "email", "avatar"]) // populate fields from users into the response
+    .populate("user", ["username", "firstname", "lastname", "email", "avatar"]) // populate fields from users into the response
     .then(profile => {
       if (!profile) {
         // profile not found
+        // console.log("no profile");
         errors.noprofile = "The current user doesn't have a profile!";
         return res.status(404).json(errors);
       }
       res.json(profile); // return the profile found
     })
-    .catch(err =>
-      res
-        .status(404)
-        .json({ profile: "The current user doesn't have a profile!!" })
-    );
+    .catch(err => {
+      console.log(err);
+      errors.noprofile = "The current user doesn't have a profile!";
+      return res.status(404).json(errors);
+    });
 });
 
 // @route       : /api/profile/user/:user_id (Backend Route)
@@ -72,20 +111,21 @@ router.get("/user/:user_id", (req, res) => {
   const errors = {};
 
   Profile.findOne({ user: req.params.user_id }) // find a userhandle in the db matching the userhandle provided in the url
-    .populate("user", ["name", "email", "avatar"]) // populate fields from users into the response
+    .populate("user", ["username", "firstname", "lastname", "email", "avatar"]) // populate fields from users into the response
     .then(profile => {
       if (!profile) {
         // profile not found
+        // console.log("no profile");
         errors.noprofile = "The current user doesn't have a profile!";
         return res.status(404).json(errors);
       }
       res.json(profile); // return the profile found
     })
-    .catch(err =>
-      res
-        .status(404)
-        .json({ profile: "The current user doesn't have a profile!!" })
-    );
+    .catch(err => {
+      console.log(err);
+      errors.noprofile = "The current user doesn't have a profile!";
+      return res.status(404).json(errors);
+    });
 });
 
 // @route       : /api/profile/allprofiles
@@ -96,19 +136,21 @@ router.get("/allprofiles", (req, res) => {
   const errors = {};
 
   Profile.find() // find all the available profiles
-    .populate("user", ["name", "email", "avatar"]) // populate fields from users into the response
+    .populate("user", ["username", "firstname", "lastname", "email", "avatar"]) // populate fields from users into the response
     .then(profiles => {
       if (!profiles) {
         // no profiles found
+        // console.log("no profiles");
         errors.noprofile = "There are no profiles to display!";
         return res.status(404).json(errors);
       }
-      // console.log(profiles);
       res.json(profiles); // return the profile found
     })
-    .catch(err =>
-      res.status(404).json({ profile: "There are no profiles to display!" })
-    );
+    .catch(err => {
+      console.log(err);
+      errors.noprofile = "There are no profiles to display!";
+      return res.status(404).json(errors);
+    });
 });
 
 // @route       : /api/profile
@@ -201,33 +243,98 @@ router.post(
     }
 
     // Creating/Updating the profile
-    Profile.findOne({ user: req.user.id }).then(profile => {
-      // find user by id
-      if (profile) {
-        // if user profile exists - Update
-        Profile.findOneAndUpdate(
-          { user: req.user.id }, // the user to be updated
-          { $set: profileFields }, // update all respective profile fields
-          { new: true }
-        ).then(profile => {
-          res.json(profile); // return the profile after updating
+    Profile.findOne({ user: req.user.id }) // find user by id
+      .then(profile => {
+        if (profile) {
+          // if user profile exists - Update
+          Profile.findOneAndUpdate(
+            { user: req.user.id }, // the user to be updated
+            { $set: profileFields }, // update all respective profile fields
+            { new: true }
+          )
+            .then(profile => {
+              res.json(profile); // return the profile after updating
+            })
+            .catch(err => {
+              console.log(err);
+              errors.message = "Profile update unsuccessful";
+              return res.status(404).json(errors);
+            });
+        } else {
+          // if user profile does not exist - Create
+          Profile.findOne({ handle: profileFields.handle }) // check for a unique userhandle
+            .then(profile => {
+              if (profile) {
+                // profile with the given user handle
+                errors.handle = "The given userhandle already exists!";
+                res.status(400).json(errors);
+              }
+              // unique user handle
+              new Profile(profileFields) // create the new user profile
+                .save()
+                .then(profile => {
+                  res.json(profile); // return the profile after creation
+                })
+                .catch(err => {
+                  console.log(err);
+                  errors.message = "Profile save in db unsuccessful";
+                  return res.status(404).json(errors);
+                });
+            })
+            .catch(err => {
+              console.log(err);
+              errors.message = "Profile creation unsuccessful";
+              return res.status(404).json(errors);
+            });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        errors.message = "User not found!";
+        return res.status(404).json(errors);
+      });
+  }
+);
+
+// @route       : /api/profile/uploadImg
+// @method      : POST
+// @access      : private
+// @description : route to create user profile
+router.post(
+  "/uploadImg",
+  // passport.authenticate("jwt", { session: false }),
+  upload.single("photo"),
+  (req, res) => {
+    User.findOne({ user: req.params.id }).then(async user => {
+      try {
+        const values = Object.values(req.files);
+        const promises = values.map(image =>
+          cloudinary.uploader.upload(image.path)
+        );
+
+        Promise.all(promises).then(results => {
+          user.avatarId = results[0].public_id;
+          user.avatar = results[0].secure_url;
+          user.save();
+          Profile.findOne({ profile: req.params.id })
+            .populate("user", [
+              "username",
+              "firstname",
+              "lastname",
+              "email",
+              "avatar"
+            ]) // find user using user id
+            .then(profile => {
+              return res.json(profile);
+            })
+            .catch(err => {
+              console.log(err);
+              res.status(404).json({ message: "Idk some error occurred!" });
+            });
         });
-      } else {
-        // if user profile does not exist - Create
-        Profile.findOne({ handle: profileFields.handle }) // check for a unique userhandle
-          .then(profile => {
-            if (profile) {
-              // profile with the given user handle
-              errors.handle = "The given userhandle already exists!";
-              res.status(400).json(errors);
-            }
-            // unique user handle
-            new Profile(profileFields) // create the new user profile
-              .save()
-              .then(profile => {
-                res.json(profile); // return the profile after creation
-              });
-          });
+      } catch (err) {
+        console.log(err);
+        return res.status(400).json({ message: "Idk some error again!" });
       }
     });
   }
@@ -267,7 +374,17 @@ router.post(
           .then(profile => {
             // returns profile with the new education
             res.json(profile);
+          })
+          .catch(err => {
+            console.log(err);
+            errors.message = "Education update failed.";
+            return res.status(400).json(errors);
           });
+      })
+      .catch(err => {
+        console.log(err);
+        errors.noprofile = "The current user doesn't have a profile!";
+        return res.status(404).json(errors);
       });
   }
 );
@@ -288,12 +405,22 @@ router.delete(
           .indexOf(req.params.edu_id);
         // splice the education to be deleted out of the array
         profile.education.splice(idx, 1);
-        profile.save().then(profile => {
-          res.json(profile);
-        });
+        profile
+          .save()
+          .then(profile => {
+            res.json(profile);
+          })
+          .catch(err => {
+            console.log(err);
+            errors.message =
+              "Failed to delete education field from user profile!";
+            return res.status(400).json(errors);
+          });
       })
       .catch(err => {
-        res.status(404).json(err);
+        console.log(err);
+        errors.noprofile = "The current user doesn't have a profile!";
+        return res.status(404).json(errors);
       });
   }
 );
@@ -332,7 +459,17 @@ router.post(
           .then(profile => {
             // returns profile with the new experience
             res.json(profile);
+          })
+          .catch(err => {
+            console.log(err);
+            errors.message = "Experience update unsuccesful!";
+            return res.status(400).json(errors);
           });
+      })
+      .catch(err => {
+        console.log(err);
+        errors.noprofile = "The current user doesn't have a profile!";
+        return res.status(404).json(errors);
       });
   }
 );
@@ -353,12 +490,22 @@ router.delete(
           .indexOf(req.params.exp_id);
         // splice the experience to be deleted out of the array
         profile.experience.splice(idx, 1);
-        profile.save().then(profile => {
-          res.json(profile);
-        });
+        profile
+          .save()
+          .then(profile => {
+            res.json(profile);
+          })
+          .catch(err => {
+            console.log(err);
+            errors.noprofile =
+              "Failed to delete education field from user profile!";
+            return res.status(400).json(errors);
+          });
       })
       .catch(err => {
-        res.status(404).json(err);
+        console.log(err);
+        errors.noprofile = "The current user doesn't have a profile!";
+        return res.status(404).json(errors);
       });
   }
 );
@@ -376,8 +523,19 @@ router.delete(
         User.findOneAndRemove({ _id: req.user.id }) // to delete the user
           .then(() => {
             res.json({ success: true });
+          })
+          .catch(err => {
+            console.log(err);
+            errors.noprofile = "User not found!";
+            return res.status(404).json(errors);
           });
+      })
+      .catch(err => {
+        console.log(err);
+        errors.noprofile = "Profile not found!";
+        return res.status(404).json(errors);
       });
   }
 );
+
 module.exports = router;

@@ -6,6 +6,26 @@ const ProfileSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
   },
+  // avatar: {
+  //   type: String,
+  //   default:
+  //     "https://cdn.pixabay.com/photo/2014/04/02/16/26/figure-307268_960_720.png"
+  // },
+  // avatarId: {
+  //   type: String,
+  //   default: "https://cdn.pixabay.com/photo/2014/04/02/16/26/figure-307268_960_720.png"
+  //     .public_id
+  // },
+  // bannerImg: {
+  //   type: String,
+  //   default:
+  //     "https://cdn.pixabay.com/photo/2014/04/02/16/26/figure-307268_960_720.png"
+  // },
+  // bannerImgId: {
+  //   type: String,
+  //   default: "https://cdn.pixabay.com/photo/2014/04/02/16/26/figure-307268_960_720.png"
+  //     .public_id
+  // },
   // SEO friendly URL for user profile
   handle: {
     type: String,
@@ -209,6 +229,34 @@ const ProfileSchema = new mongoose.Schema({
       type: String
     }
   },
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //   c20
+
+  // # followers of a user
+  followers: [
+    // array of objects
+    {
+      // Reference to User Schema
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users"
+      }
+    }
+  ],
   // Date of account creation
   date: {
     type: Date,

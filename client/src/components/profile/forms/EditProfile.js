@@ -12,7 +12,7 @@ import {
 } from "../../../store/actions/profile";
 import isEmpty from "../../../validation/isEmpty";
 
-import Uploader from "../display/Uploader";
+import ImageUpload from "../../imageUpload/ImageUpload";
 
 class CreateProfile extends Component {
   constructor(props) {
@@ -39,25 +39,6 @@ class CreateProfile extends Component {
       selectedFile: null
     };
   }
-
-  // fileChangedHandler = event => {
-  //   this.setState({ selectedFile: event.target.files[0] });
-  // };
-
-  // uploadHandler = () => {
-  //   console.log(this.state.selectedFile);
-  //   const formData = new FormData();
-  //   formData.append(
-  //     "myFile",
-  //     this.state.selectedFile,
-  //     this.state.selectedFile.name
-  //   );
-  //   axios.post("/file-upload", formData, {
-  //     onUploadProgress: progressEvent => {
-  //       console.log(progressEvent.loaded / progressEvent.total);
-  //     }
-  //   });
-  // };
 
   componentDidMount() {
     // console.log(this.props.profile);
@@ -173,7 +154,7 @@ class CreateProfile extends Component {
     const { errors, displaySocialInputs } = this.state;
 
     let socialInputs;
-    console.log(this.props.auth);
+    // console.log(this.props.auth);
     if (displaySocialInputs) {
       socialInputs = (
         <div>
@@ -268,20 +249,13 @@ class CreateProfile extends Component {
         <h1 style={{ marginTop: "20%" }} className="large text-primary">
           Edit Profile
         </h1>
+        <ImageUpload />
+
         <Link to="/dashboard" className="btn btn-light">
           Go Back
         </Link>
 
-        <img
-          src={this.props.auth.user.avatar}
-          alt={this.props.auth.user.username}
-          style={{ width: "180px", height: "180px" }}
-        />
-
-        <Uploader />
-        {/* <input type="file" onChange={this.fileChangedHandler} />
-        <button onClick={this.uploadHandler}>Upload!</button> */}
-
+        <ImageUpload />
         <small>* = required field</small>
         <form className="form" onSubmit={this.onSubmit}>
           <TextFieldGroup
@@ -390,11 +364,13 @@ CreateProfile.propTypes = {
   errors: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-  errors: state.errors,
-  profile: state.profile,
-  auth: state.auth
-});
+const mapStateToProps = state => {
+  return {
+    errors: state.errors,
+    profile: state.profile,
+    auth: state.auth
+  };
+};
 
 export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
   withRouter(CreateProfile)

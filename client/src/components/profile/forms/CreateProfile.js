@@ -7,7 +7,7 @@ import TextAreaFieldGroup from "../../formInputs/TextAreaFieldGroup";
 import InputGroup from "../../formInputs/InputGroup";
 import SelectListGroup from "../../formInputs/SelectListGroup";
 import { createProfile } from "../../../store/actions/profile";
-import Uploader from "../display/Uploader";
+import ImageUpload from "../../imageUpload/ImageUpload";
 
 class CreateProfile extends Component {
   constructor(props) {
@@ -67,7 +67,7 @@ class CreateProfile extends Component {
       instagram: this.state.instagram
     };
 
-    this.props.createProfile(profile, user, this.props.history);
+    this.props.createProfile(profile, this.props.history);
   }
 
   onChange(event) {
@@ -170,13 +170,15 @@ class CreateProfile extends Component {
 
     return (
       <div className="create-profile">
-        <h1 style={{ marginTop: "20%" }}>cp</h1>
-        <h1 className="large text-primary">Create Your Profile</h1>
+        <h1 className="large text-primary" style={{ marginTop: "20%" }}>
+          Create Your Profile
+        </h1>
         <p className="lead">
           <i className="fas fa-user" />
           Add your profile info..
         </p>
-        <Uploader />
+
+        <ImageUpload />
 
         <small>* = required field</small>
         <form className="form" onSubmit={this.onSubmit}>
