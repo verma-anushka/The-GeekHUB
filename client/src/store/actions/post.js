@@ -114,3 +114,23 @@ export const getPost = id => dispatch => {
       })
     );
 };
+
+export const addComment = (postId, comment) => dispatch => {
+  // dispatch(clearErrors());
+  axios
+    .post(`/api/posts/comment/${postId}`, comment)
+    .then(res => {
+      // console.log(res);
+      dispatch({
+        type: GET_POST,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      // console.log(err);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
