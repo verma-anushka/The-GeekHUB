@@ -14,7 +14,7 @@
   "devDependencies": {},
   "scripts": {
     "client-install": "npm install --prefix client",
-    "start": "node app.js",
+    "start": "node server/app.js",
     "server": "nodemon server/app.js",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
