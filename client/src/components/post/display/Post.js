@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import PostItem from "./PostItem";
 import CreateComment from "../forms/CreateComment";
+import CommentList from "./CommentList";
 import Spinner from "../../Spinner";
 import { getPost } from "../../../store/actions/post";
 
@@ -23,12 +24,13 @@ class Post extends Component {
         <div>
           <PostItem post={post} showActions={false} />
           <CreateComment postId={post._id} />
+          <CommentList postId={post._id} comments={post.comments} />
         </div>
       );
     }
 
     return (
-      <div className="post">
+      <div className="post" style={{ marginTop: "10%" }}>
         <div className="container">
           <div className="row">
             <div className="col-md-12">
