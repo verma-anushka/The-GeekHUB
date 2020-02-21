@@ -6,13 +6,10 @@ import { deleteExperience } from "../../store/actions/profile";
 
 class Experience extends Component {
   onDeleteClick(id) {
-    console.log("haan?");
     this.props.deleteExperience(id);
   }
 
   render() {
-    // console.log("Experience Render");
-
     const experience = this.props.experience.map(exp => (
       <tr key={exp._id}>
         <td>{exp.organization}</td>

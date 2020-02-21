@@ -10,20 +10,17 @@ import ProfileLinks from "./ProfileLinks";
 
 class Dashboard extends Component {
   componentDidMount() {
-    // console.log("Dashboard CDM");
-    this.props.getCurrentProfile();
+    // console.log(this.props.auth);
+    this.props.getCurrentProfile(this.props.auth.user.id);
   }
 
   onDeleteClick = () => {
-    console.log("yahan toh nhi?");
     this.props.deleteAccount();
   };
 
   render() {
     const { user } = this.props.auth;
     const { profile, loading } = this.props.profile;
-
-    // console.log(profile);
     let content;
 
     if (profile === null || loading) {
@@ -31,22 +28,23 @@ class Dashboard extends Component {
     } else {
       // Check empty object
       if (Object.keys(profile).length > 0) {
-        console.log(profile.experience);
-
         content = (
-          <div>
-            <h5>
-              {/* {" "} */}
-              Welcome
-              <Link to={`/profile/${profile.handle}`}>{user.username}</Link>
-            </h5>
+          <div className="row">
+            <div className="col-md-12">
+              <div>
+                <h5>
+                  Welcome{" "}
+                  <Link to={`/profile/${profile.handle}`}>{user.username}</Link>
+                </h5>
 
-            <ProfileLinks />
-            <Experience experience={profile.experience} />
-            <Education education={profile.education} />
-            <button onClick={this.onDeleteClick} className="btn btn-danger">
-              Delete Account
-            </button>
+                <ProfileLinks />
+                <Experience experience={profile.experience} />
+                <Education education={profile.education} />
+                <button onClick={this.onDeleteClick} className="btn btn-danger">
+                  Delete Account
+                </button>
+              </div>
+            </div>
           </div>
         );
       } else {
@@ -64,10 +62,7 @@ class Dashboard extends Component {
       <div className="dashboard">
         <div className="container" style={{ marginTop: "10%" }}>
           <div className="row">
-            <div className="col-md-12">
-              <h1 className="display-4">Dashboard</h1>
-              {content}
-            </div>
+            <div className="col-md-12">{content}</div>
           </div>
         </div>
       </div>
@@ -84,7 +79,6 @@ Dashboard.propTypes = {
 
 const mapStateToProps = state => {
   // console.log(state.profile);
-
   return {
     auth: state.auth,
     profile: state.profile

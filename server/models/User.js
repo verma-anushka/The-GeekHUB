@@ -30,14 +30,40 @@ var UserSchema = new mongoose.Schema({
     // minlength: 5
   },
   // User's profile image
-  avatar: {
-    type: String
+  // avatar: {
+  //   type: String
+  // },
+  // Forget Password Token
+  resetPasswordToken: {
+    data: String,
+    default: ""
   },
   // User's signup date
   date: {
     type: Date,
     default: Date.now
+  },
+
+  avatar: {
+    type: String,
+    default:
+      "https://cdn.pixabay.com/photo/2014/04/02/16/26/figure-307268_960_720.png"
+  },
+  avatarId: {
+    type: String,
+    default: "https://cdn.pixabay.com/photo/2014/04/02/16/26/figure-307268_960_720.png"
+      .public_id
   }
+  // bannerImg: {
+  //   type: String,
+  //   default:
+  //     "https://cdn.pixabay.com/photo/2014/04/02/16/26/figure-307268_960_720.png"
+  // },
+  // bannerImgId: {
+  //   type: String,
+  //   default: "https://cdn.pixabay.com/photo/2014/04/02/16/26/figure-307268_960_720.png"
+  //     .public_id
+  // },
 });
 
 module.exports = mongoose.model("User", UserSchema);

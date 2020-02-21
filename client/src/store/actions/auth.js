@@ -5,13 +5,13 @@ import { GET_ERRORS, SET_CURRENT_USER } from "./types";
 
 // Register User
 export const signUpUser = (newUser, history) => dispatch => {
-  // console.log(newUser);
   axios
     .post("/api/users/signup", newUser)
     .then(res => {
-      history.push("/signup");
+      history.push("/signin");
     })
     .catch(err => {
+      console.log(err);
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
@@ -21,14 +21,14 @@ export const signUpUser = (newUser, history) => dispatch => {
 
 // Activate account
 export const activateAccount = (token, history) => dispatch => {
-  // console.log(token);
   axios
     .post("/api/users/activate-account", token)
     .then(res => {
+      // console.log(res);
       history.push("/signin");
     })
     .catch(err => {
-      // console.log(err);
+      console.log(err);
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
@@ -38,7 +38,6 @@ export const activateAccount = (token, history) => dispatch => {
 
 // google auth login
 export const googleOAuth = (token, history) => dispatch => {
-  // console.log(token);
   axios
     .post("/api/users/google-login", token)
     .then(res => {
@@ -52,13 +51,11 @@ export const googleOAuth = (token, history) => dispatch => {
       const decodedUser = jwtDecode(token);
       // console.log(decodedUser);
       // Set current user
-      dispatch(setCurrentUser(res.data.user));
-      // console.log("google oauth");
-      // console.log(res);
-      // history.push("/dashboard");
+      dispatch(setCurrentUser(decodedUser));
+      history.push("/dashboard");
     })
     .catch(err => {
-      // console.log(err);
+      console.log(err);
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
@@ -68,7 +65,6 @@ export const googleOAuth = (token, history) => dispatch => {
 
 // facebook auth login
 export const facebookAuth = (token, history) => dispatch => {
-  // console.log(token);
   axios
     .post("/api/users/facebook-login", token)
     .then(res => {
@@ -82,9 +78,7 @@ export const facebookAuth = (token, history) => dispatch => {
       const decodedUser = jwtDecode(token);
       // console.log(decodedUser);
       // Set current user
-      dispatch(setCurrentUser(res.data.user));
-      // console.log("google oauth");
-      // console.log(res);
+      dispatch(setCurrentUser(decodedUser));
       // history.push("/dashboard");
     })
     .catch(err => {
@@ -98,15 +92,14 @@ export const facebookAuth = (token, history) => dispatch => {
 
 // forgot password
 export const forgotPassword = (email, history) => dispatch => {
-  // console.log(token);
   axios
     .post("/api/users/forgot-password", email)
     .then(res => {
-      console.log("forgot password" + res);
+      // console.log(res);
       history.push("/forgot-password");
     })
     .catch(err => {
-      // console.log(err.response);
+      console.log(err.response);
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
@@ -124,7 +117,7 @@ export const resetPassword = (reset, history) => dispatch => {
       history.push("/signin");
     })
     .catch(err => {
-      // console.log(err);
+      console.log(err);
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data

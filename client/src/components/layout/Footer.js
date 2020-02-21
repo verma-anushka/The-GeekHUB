@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import "../../assets/styles/components/layout/Footer.scss";
 
 export default function Footer() {
@@ -134,7 +134,7 @@ export default function Footer() {
       <section className="footer-social-section flex-rw">
         <span className="footer-social-overlap footer-social-icons-wrapper">
           <a
-            href=""
+            href="https://github.com/verma-anushka"
             className="generic-anchor"
             target="_blank"
             rel="noopener noreferrer"
@@ -144,7 +144,7 @@ export default function Footer() {
             <i className="fab fa-pinterest"></i>
           </a>
           <a
-            href=""
+            href="https://github.com/verma-anushka"
             className="generic-anchor"
             target="_blank"
             rel="noopener noreferrer"
@@ -154,7 +154,7 @@ export default function Footer() {
             <i className="fab fa-facebook"></i>
           </a>
           <a
-            href=""
+            href="https://github.com/verma-anushka"
             className="generic-anchor"
             target="_blank"
             title="Twitter"
@@ -164,7 +164,7 @@ export default function Footer() {
             <i className="fab fa-twitter"></i>
           </a>
           <a
-            href=""
+            href="https://github.com/verma-anushka"
             className="generic-anchor"
             target="_blank"
             rel="noopener noreferrer"
@@ -174,7 +174,7 @@ export default function Footer() {
             <i className="fab fa-instagram"></i>
           </a>
           <a
-            href=""
+            href="https://github.com/verma-anushka"
             className="generic-anchor"
             target="_blank"
             rel="noopener noreferrer"
@@ -184,7 +184,7 @@ export default function Footer() {
             <i className="fab fa-youtube"></i>
           </a>
           <a
-            href=""
+            href="https://github.com/verma-anushka"
             className="generic-anchor"
             target="_blank"
             rel="noopener noreferrer"
@@ -210,19 +210,19 @@ export default function Footer() {
               <div className="footer-menu">
                 <ul>
                   <li>
-                    <a href="#">Home</a>
+                    <a href="https://github.com/verma-anushka">Home</a>
                   </li>
                   <li>
-                    <a href="#">Terms</a>
+                    <a href="https://github.com/verma-anushka">Terms</a>
                   </li>
                   <li>
-                    <a href="#">Privacy</a>
+                    <a href="https://github.com/verma-anushka">Privacy</a>
                   </li>
                   <li>
-                    <a href="#">Policy</a>
+                    <a href="https://github.com/verma-anushka">Policy</a>
                   </li>
                   <li>
-                    <a href="#">Contact</a>
+                    <a href="https://github.com/verma-anushka">Contact</a>
                   </li>
                 </ul>
               </div>

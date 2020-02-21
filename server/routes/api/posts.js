@@ -126,6 +126,7 @@ router.post(
             // else -> add user id to the likes array
             post.likes.unshift({ user: req.user.id });
 
+            // console.log(post.likes);
             // save user's like in the db
             post.save().then(post => {
               res.json(post);
@@ -187,6 +188,9 @@ router.post(
   "/comment/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    // console
+    console.log("aaya?");
+
     // Destructuring the errors and validations
     const { errors, isValid } = validatePostInputs(req.body);
 

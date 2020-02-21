@@ -26,9 +26,13 @@ import Posts from "./components/post/display/Posts";
 import Post from "./components/post/display/Post";
 
 import PrivateRoute from "./components/PrivateRoute";
+import ActivateAccount from "./components/auth/ActivateAccount";
+import ForgotPassword from "./components/auth/ForgotPassword";
+import ResetPassword from "./components/auth/ResetPassword";
 
 // Check for token
 if (localStorage.jwtToken) {
+  // console.log("aaja");
   // Set auth token header
   setAuthToken(localStorage.jwtToken);
   // Decode token to get user data
@@ -53,54 +57,55 @@ class App extends Component {
     return (
       <Provider store={store}>
         <BrowserRouter>
-          <div>
-            <NavBar />
-            <Route exact path="/" component={HomePage} />
-            <div className="container">
-              <Route exact path="/signup" component={SignUp} />
-              <Route exact path="/signin" component={SignIn} />
-              <Route exact path="/profiles" component={ProfileList} />
-              <Route exact path="/profile/:handle" component={Profile} />
-              <Switch>
-                <PrivateRoute exact path="/dashboard" component={Dashboard} />
-              </Switch>
-              <Switch>
-                <PrivateRoute
-                  exact
-                  path="/createprofile"
-                  component={CreateProfile}
-                />
-              </Switch>
-              <Switch>
-                <PrivateRoute
-                  exact
-                  path="/editprofile"
-                  component={EditProfile}
-                />
-              </Switch>
-              <Switch>
-                <PrivateRoute
-                  exact
-                  path="/addexperience"
-                  component={AddExperience}
-                />
-              </Switch>
-              <Switch>
-                <PrivateRoute
-                  exact
-                  path="/addeducation"
-                  component={AddEducation}
-                />
-              </Switch>
-              <Switch>
-                <PrivateRoute exact path="/feed" component={Posts} />
-              </Switch>
-              <Switch>
-                <PrivateRoute exact path="/post/:id" component={Post} />
-              </Switch>
-            </div>
-            <Footer />
+          <NavBar />
+          <Route path="/" exact component={HomePage} />
+          <div className="container">
+            <Route exact path="/signup" component={SignUp} />
+            <Route exact path="/signin" component={SignIn} />
+            <Route exact path="/activate/:token" component={ActivateAccount} />
+            <Route exact path="/forgot-password" component={ForgotPassword} />
+            <Route
+              exact
+              path="/password/reset/:token"
+              component={ResetPassword}
+            />
+            <Route exact path="/profiles" component={ProfileList} />
+            <Route exact path="/profile/:handle" component={Profile} />
+            <Switch>
+              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+            </Switch>
+            <Switch>
+              <PrivateRoute
+                exact
+                path="/createprofile"
+                component={CreateProfile}
+              />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/editprofile" component={EditProfile} />
+            </Switch>
+            <Switch>
+              <PrivateRoute
+                exact
+                path="/addexperience"
+                component={AddExperience}
+              />
+            </Switch>
+            <Switch>
+              <PrivateRoute
+                exact
+                path="/addeducation"
+                component={AddEducation}
+              />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/feed" component={Posts} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/post/:id" component={Post} />
+            </Switch>
           </div>
+          <Footer />
         </BrowserRouter>
       </Provider>
     );

@@ -24,9 +24,7 @@ class NavBar extends Component {
   };
 
   render() {
-    const { isAuthenticated, user } = this.props.auth;
-
-    console.log(isAuthenticated);
+    const { isAuthenticated } = this.props.auth;
 
     const authLinks = (
       <div className="collapse navbar-collapse" id="navbarSupportedContent">

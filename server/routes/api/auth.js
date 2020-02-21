@@ -115,7 +115,7 @@ router.post("/signup", (req, res) => {
 // @access      : public
 // @description : route to register new user (SIGNUP)
 router.post("/activate-account", (req, res) => {
-  const errors = {}
+  const errors = {};
   const token = req.body.token;
   if (token) {
     jwt.verify(token, keys.JWT_ACCOUNT_ACTIVATION, function(err, decodedToken) {
@@ -412,7 +412,7 @@ router.put("/reset-password", (req, res) => {
 // @description : route to register new user using Google Authentication
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 router.post("/google-login", (req, res) => {
-  const errors = {}
+  const errors = {};
   const { idToken } = req.body;
   client
     .verifyIdToken({ idToken, audience: process.env.GOOGLE_CLIENT_ID })
