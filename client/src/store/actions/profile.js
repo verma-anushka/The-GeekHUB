@@ -10,14 +10,15 @@ import {
 } from "./types";
 
 // ACTION CREATOR TO GET THE CURRENT LOGGED IN USER'S PROFILE
-export const getCurrentProfile = () => dispatch => {
+export const getCurrentProfile = id => dispatch => {
   // dispatch the loading spinner while the profile is being fetched
   dispatch(setProfileLoading());
   // try {
   // api request to server to fetch the user profile
   axios
-    .get("/api/profile")
+    .get(`/api/profile?id=${id}`)
     .then(res => {
+      // console.log(res);
       // request successful
       dispatch({
         type: GET_PROFILE,
@@ -25,6 +26,7 @@ export const getCurrentProfile = () => dispatch => {
       });
     })
     .catch(err => {
+      console.log(err);
       dispatch({
         // request successful - no profile exists
         type: GET_PROFILE,
@@ -39,19 +41,17 @@ export const getCurrentProfile = () => dispatch => {
 // ACTION CREATOR TO CREATE THE USER PROFILE
 export const createProfile = (profile, history) => dispatch => {
   // api request to server to create the user profile
-  // request successful
-  // request unsuccessful
-  // console.log(profile);
+
   axios
     .post("/api/profile", profile)
     .then(res => {
       history.push("/dashboard");
     })
     .catch(err => {
-      // console.log(err);
+      console.log(err);
       dispatch({
         type: GET_ERRORS,
-        payload: err.response.data // error msgs
+        payload: err // error msgs
       });
     });
 };
@@ -130,15 +130,15 @@ export const addEducation = (education, history) => dispatch => {
 };
 
 // ACTION CREATOR TO DELETE THE EDUCATION SECTION OF THE USER PROFILE
-
 export const deleteExperience = id => dispatch => {
   axios
     .delete(`/api/profile/experience/${id}`)
     .then(res => {
-      dispatch({
-        type: GET_PROFILE,
-        payload: res.data // profile with deleted exp
-      });
+      console.log(res);
+      // dispatch({
+      //   type: GET_PROFILE,
+      //   payload: res.data // profile with deleted exp
+      // });
     })
     .catch(err =>
       dispatch({
@@ -149,7 +149,6 @@ export const deleteExperience = id => dispatch => {
 };
 
 // ACTION CREATOR TO DELETE THE EDUCATION SECTION OF THE USER PROFILE
-
 export const deleteEducation = id => dispatch => {
   axios
     .delete(`/api/profile/education/${id}`)
@@ -191,16 +190,75 @@ export const getProfileByHandle = handle => dispatch => {
   dispatch(setProfileLoading());
   axios
     .get(`/api/profile/handle/${handle}`)
-    .then(res =>
+    .then(res => {
+      // console.log(res);
       dispatch({
         type: GET_PROFILE,
         payload: res.data
-      })
-    )
-    .catch(err =>
+      });
+    })
+    .catch(err => {
+      console.log(err);
       dispatch({
         type: GET_PROFILE,
         payload: null
-      })
-    );
+      });
+    });
+};
+
+// ACTION CREATOR TO FOLLOW A USER
+export const follow = id => dispatch => {
+  // console.log(id);
+  axios
+    .post(`/api/profile/follow/${id}`)
+    .then(res => {
+      // console.log(res);
+      dispatch(getCurrentProfile(id));
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+// ACTION CREATOR TO UNFOLLOW A USER
+export const unfollow = id => dispatch => {
+  axios
+    .post(`/api/profile/unfollow/${id}`)
+    .then(res => {
+      // console.log(res);
+      dispatch(getCurrentProfile(id));
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+// ACTION CREATOR TO UPLOAD THE USER IMAGE
+export const uploadImg = () => dispatch => {
+  dispatch(setProfileLoading());
+  axios
+    .post("/api/profile/uploadImg")
+    .then(res => {
+      // console.log(res);
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      console.log(err);
+
+      dispatch({
+        type: GET_PROFILE,
+        payload: null
+      });
+    });
 };

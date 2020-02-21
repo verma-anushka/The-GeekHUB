@@ -538,4 +538,81 @@ router.delete(
   }
 );
 
+// @route       : /api/profile/follow/:id
+// @method      : POST
+// @access      : private
+// @description : route to like a single post
+router.post(
+  "/follow/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.params.id }) // find the user profile
+      .then(profile => {
+        if (
+          // if the current user has already liked the post (user id present in the likes array)
+          profile.followers.filter(
+            follow => follow.user.toString() === req.user.id
+          ).length > 0
+        ) {
+          errors.message = "User has already followed this user!";
+          return res.status(400).json(errors);
+        }
+
+        // else -> add user id to the followers array
+        profile.followers.unshift({ user: req.user.id });
+
+        // save user's follow in the db
+        profile.save().then(profile => {
+          return res.json(profile);
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        errors.profilenotfound = "No profile found!";
+        return res.status(404).json(errors);
+      });
+  }
+);
+
+// @route       : /api/profile/unfollow/:id
+// @method      : POST
+// @access      : private
+// @description : route to unlike a single post
+router.post(
+  "/unfollow/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.params.id }) // find the user profile
+      .then(profile => {
+        if (
+          // if the current user hasn't already followed the user (user id not present in the followers array)
+          profile.followers.filter(
+            follow => follow.user.toString() === req.user.id
+          ).length === 0
+        ) {
+          errors.message = "User has not followed this profile yet!!";
+          return res.status(400).json(errors);
+        }
+
+        // the index of the like to be reversed
+        const idx = profile.followers
+          .map(item => item.user.toString())
+          .indexOf(req.user.id);
+        // splice the experience to be deleted out of the array
+        profile.followers.splice(idx, 1);
+
+        // save user's un-like in the db
+        profile.save().then(profile => {
+          // console.log(profile);
+          return res.json(profile);
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        errors.profilenotfound = "No profile found!";
+        return res.status(404).json(errors);
+      });
+  }
+);
+
 module.exports = router;
