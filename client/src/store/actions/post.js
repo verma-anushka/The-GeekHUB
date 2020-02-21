@@ -11,7 +11,7 @@ import {
 } from "./types";
 
 export const addPost = post => dispatch => {
-  // dispatch(clearErrors());
+  dispatch(clearErrors());
   axios
     .post("/api/posts", post)
     .then(res =>
@@ -116,7 +116,7 @@ export const getPost = id => dispatch => {
 };
 
 export const addComment = (postId, comment) => dispatch => {
-  // dispatch(clearErrors());
+  dispatch(clearErrors());
   axios
     .post(`/api/posts/comment/${postId}`, comment)
     .then(res => {
@@ -150,4 +150,10 @@ export const deleteComment = (postId, commentId) => dispatch => {
         payload: err.response.data
       })
     );
+};
+
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
+  };
 };
