@@ -13,12 +13,10 @@
   },
   "devDependencies": {},
   "scripts": {
-    "client-install": "npm install --prefix client",
     "start": "cd server && npm install && node app.js",
     "server": "cd server && npm install && nodemon app.js",
-    "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "repository": {
     "type": "git",
