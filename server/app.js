@@ -52,5 +52,5 @@ app.listen(app.get("port"), () => {
 // "server": "nodemon app.js" // npm run server
 // "client-install": "npm install --prefix client",
 // "client": "npm start --prefix client",
-
+// "heroku-postbuild": "cd client && npm install && npm run build"
 // "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
