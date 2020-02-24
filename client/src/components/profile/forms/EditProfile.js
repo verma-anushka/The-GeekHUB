@@ -249,13 +249,15 @@ class CreateProfile extends Component {
         <h1 style={{ marginTop: "20%" }} className="large text-primary">
           Edit Profile
         </h1>
-        <ImageUpload />
+
+        <ImageUpload type="banner" />
 
         <Link to="/dashboard" className="btn btn-light">
           Go Back
         </Link>
 
-        <ImageUpload />
+        <ImageUpload type="avatar" />
+
         <small>* = required field</small>
         <form className="form" onSubmit={this.onSubmit}>
           <TextFieldGroup

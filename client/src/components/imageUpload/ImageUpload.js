@@ -14,15 +14,14 @@ export default class App extends Component {
     const files = Array.from(e.target.files);
     // const file = Array.from(e.target.files[0]);
 
+    const { type } = this.props;
     this.setState({ uploading: true });
-
     const formData = new FormData();
 
     files.forEach((file, i) => {
       this.setState({ imgPreview: file });
-      formData.append(i, file);
+      formData.append(type, file, file.name);
     });
-    // formData.append("file", file);
 
     fetch("/api/profile/uploadImg", {
       method: "POST",
@@ -45,6 +44,8 @@ export default class App extends Component {
   // };
 
   render() {
+    // console.log(this.props);
+
     const { uploading, imgPreview, images } = this.state;
 
     const content = () => {

@@ -59,6 +59,8 @@ class App extends Component {
         <BrowserRouter>
           <NavBar />
           <Route path="/" exact component={HomePage} />
+          <Route exact path="/profile/:handle" component={Profile} />
+
           <div className="container">
             <Route exact path="/signup" component={SignUp} />
             <Route exact path="/signin" component={SignIn} />
@@ -70,7 +72,6 @@ class App extends Component {
               component={ResetPassword}
             />
             <Route exact path="/profiles" component={ProfileList} />
-            <Route exact path="/profile/:handle" component={Profile} />
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
             </Switch>

@@ -60,7 +60,8 @@ router.get(
         "firstname",
         "lastname",
         "email",
-        "avatar"
+        "avatar",
+        "bannerImg"
       ]) // populate fields from users into the response
       .then(profile => {
         if (!profile) {
@@ -86,7 +87,14 @@ router.get(
 router.get("/handle/:handle", (req, res) => {
   const errors = {};
   Profile.findOne({ handle: req.params.handle }) // find a userhandle in the db matching the userhandle provided in the url
-    .populate("user", ["username", "firstname", "lastname", "email", "avatar"]) // populate fields from users into the response
+    .populate("user", [
+      "username",
+      "firstname",
+      "lastname",
+      "email",
+      "avatar",
+      "bannerImg"
+    ]) // populate fields from users into the response
     .then(profile => {
       if (!profile) {
         // profile not found
@@ -111,7 +119,14 @@ router.get("/user/:user_id", (req, res) => {
   const errors = {};
 
   Profile.findOne({ user: req.params.user_id }) // find a userhandle in the db matching the userhandle provided in the url
-    .populate("user", ["username", "firstname", "lastname", "email", "avatar"]) // populate fields from users into the response
+    .populate("user", [
+      "username",
+      "firstname",
+      "lastname",
+      "email",
+      "avatar",
+      "bannerImg"
+    ]) // populate fields from users into the response
     .then(profile => {
       if (!profile) {
         // profile not found
@@ -136,7 +151,14 @@ router.get("/allprofiles", (req, res) => {
   const errors = {};
 
   Profile.find() // find all the available profiles
-    .populate("user", ["username", "firstname", "lastname", "email", "avatar"]) // populate fields from users into the response
+    .populate("user", [
+      "username",
+      "firstname",
+      "lastname",
+      "email",
+      "avatar",
+      "bannerImg"
+    ]) // populate fields from users into the response
     .then(profiles => {
       if (!profiles) {
         // no profiles found
@@ -313,8 +335,17 @@ router.post(
         );
 
         Promise.all(promises).then(results => {
-          user.avatarId = results[0].public_id;
-          user.avatar = results[0].secure_url;
+          if (req.files.banner) {
+            // console.log("banner");
+            user.bannerImgId = results[0].public_id;
+            user.bannerImg = results[0].secure_url;
+            console.log(user.bannerImg);
+          } else {
+            // console.log("avatar");
+            user.avatarId = results[0].public_id;
+            user.avatar = results[0].secure_url;
+          }
+
           user.save();
           Profile.findOne({ profile: req.params.id })
             .populate("user", [
@@ -322,7 +353,8 @@ router.post(
               "firstname",
               "lastname",
               "email",
-              "avatar"
+              "avatar",
+              "bannerImg"
             ]) // find user using user id
             .then(profile => {
               return res.json(profile);

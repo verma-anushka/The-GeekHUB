@@ -43,7 +43,7 @@ var UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-
+  // User's profile image
   avatar: {
     type: String,
     default:
@@ -53,17 +53,18 @@ var UserSchema = new mongoose.Schema({
     type: String,
     default: "https://cdn.pixabay.com/photo/2014/04/02/16/26/figure-307268_960_720.png"
       .public_id
+  },
+  // User's banner image
+  bannerImg: {
+    type: String,
+    default:
+      "https://cdn.pixabay.com/photo/2014/04/02/16/26/figure-307268_960_720.png"
+  },
+  bannerImgId: {
+    type: String,
+    default: "https://cdn.pixabay.com/photo/2014/04/02/16/26/figure-307268_960_720.png"
+      .public_id
   }
-  // bannerImg: {
-  //   type: String,
-  //   default:
-  //     "https://cdn.pixabay.com/photo/2014/04/02/16/26/figure-307268_960_720.png"
-  // },
-  // bannerImgId: {
-  //   type: String,
-  //   default: "https://cdn.pixabay.com/photo/2014/04/02/16/26/figure-307268_960_720.png"
-  //     .public_id
-  // },
 });
 
 module.exports = mongoose.model("User", UserSchema);

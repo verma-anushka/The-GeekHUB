@@ -47,7 +47,7 @@ class CreateProfile extends Component {
     event.preventDefault();
 
     const { user } = this.props.auth;
-    console.log(user);
+    // console.log(user);
     const profile = {
       handle: this.state.handle,
       organization: this.state.organization,

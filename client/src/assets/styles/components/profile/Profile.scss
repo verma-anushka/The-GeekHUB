@@ -1,0 +1,237 @@
+@import url("https://fonts.googleapis.com/css?family=Oswald:400,700");
+
+* {
+  font-family: "Oswald";
+  transition: 100ms all ease-in-out;
+  box-sizing: border-box;
+}
+
+.app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.card {
+  width: 100%;
+}
+
+.card-bg:before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 60vh;
+  background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/435311/photo__mountains.jpg")
+    no-repeat center;
+  filter: saturate(35%);
+  background-size: cover;
+}
+.card-header {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  top: -75px;
+  flex-direction: column;
+  background-color: transparent;
+}
+
+@media (min-width: 601px) {
+  .card-header {
+    max-width: 960px;
+    flex-direction: row;
+  }
+}
+
+.card-main {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: white;
+  padding: 20px 10px;
+  flex-direction: column;
+}
+
+@media (min-width: 601px) {
+  .card-main {
+    width: 100%;
+    max-width: 960px;
+    flex-direction: row;
+    position: relative;
+    top: -50px;
+    padding: 10px 30px;
+  }
+}
+
+.hello {
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 600px) {
+  .hello {
+    margin-left: 5%;
+  }
+}
+
+img {
+  border-radius: 50%;
+  width: 150px;
+  height: auto;
+}
+
+.heading-box {
+  width: 100%;
+  min-width: 270px;
+  padding-left: 2%;
+
+  h1 {
+    font-size: 3em;
+    top: -50px;
+    margin: 0;
+    margin-bottom: 5px;
+    color: black;
+  }
+
+  h3 {
+    font-weight: 2em;
+    color: #666666;
+    top: -30px;
+    font-weight: normal;
+    margin: 0;
+    margin-top: 5%;
+
+    span {
+      color: #999999;
+      margin-left: 2%;
+    }
+  }
+}
+
+@media (min-width: 601px) {
+  .heading-box {
+    padding-left: 10%;
+  }
+}
+
+.button-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 5%;
+  flex-direction: row;
+
+  a {
+    display: block;
+    background-color: white;
+    border-radius: 50%;
+  }
+
+  i {
+    border-radius: 50%;
+    font-size: 54px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+  }
+}
+
+@media (min-width: 601px) {
+  .button-box {
+    width: 30%;
+    justify-content: flex-end;
+    padding-right: 5%;
+    padding-top: 0;
+  }
+}
+
+.activity {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding: 10px 0;
+  text-align: center;
+  border: 2px solid black;
+  border-radius: 4px;
+  margin: 5px;
+  width: 100%;
+
+  * {
+    display: block;
+  }
+
+  &:hover {
+    background-color: black;
+    border: 2px solid white;
+    color: white;
+    cursor: pointer;
+  }
+
+  .activity-name {
+    text-transform: uppercase;
+  }
+
+  .index {
+    width: 30px;
+  }
+
+  i,
+  span {
+    font-size: 24px;
+    margin: 10px 0;
+  }
+}
+
+@media (min-width: 601px) {
+  .activity {
+    flex-direction: row;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-around;
+
+    * {
+      display: inline;
+      margin: 0 auto;
+    }
+  }
+}
+
+@media (min-width: 601px) {
+  .activity .activity-name {
+    margin: 0;
+  }
+}
+
+@media (min-width: 601px) {
+  .activity {
+    i,
+    span {
+      font-size: 18px;
+      margin: 0;
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(90deg);
+  }
+}
+
+@keyframes spinBack {
+  0% {
+    transform: rotate(90deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
