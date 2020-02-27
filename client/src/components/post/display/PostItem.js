@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import { Link } from "react-router-dom";
+import moment from "moment";
+
+import "../../../assets/styles/components/post/PostItem.scss";
 import { deletePost, addLike, removeLike } from "../../../store/actions/post";
 
 class PostItem extends Component {
@@ -29,62 +32,83 @@ class PostItem extends Component {
 
   render() {
     const { post, auth, showActions } = this.props;
+    var time = moment(post.date).format("DD-MM-YYYY h:mm:ss");
 
+    console.log(post);
     return (
-      <div className="card card-body mb-3">
-        <div className="row">
-          <div className="col-md-2">
-            <a href="profile.html">
-              <img
-                className="rounded-circle d-none d-md-block"
-                src={post.avatar}
-                alt=""
-              />
-            </a>
-            <br />
-            <p className="text-center">{post.name}</p>
+      // <div className="card card-body mb-3">
+      <div className="row">
+        <div className="col-md-2">
+          <a href="profile.html">
+            <img
+              style={{ height: "120px", width: "120px" }}
+              className="rounded-circle d-none d-md-block"
+              src={post.avatar}
+              alt=""
+            />
+          </a>
+        </div>
+        <div className="col-md-10">
+          <div className="row">
+            <div className="col-md-4">
+              <p className="text-left">{post.name}</p>
+            </div>
+            <div className="offset-md-4 col-md-4">
+              <p className="text-right">{time}</p>
+            </div>
           </div>
-          <div className="col-md-10">
-            <p className="lead">{post.content}</p>
+          {/* <br /> */}
 
-            {showActions ? (
-              <span>
-                <button
-                  onClick={this.onLikeClick.bind(this, post._id)}
-                  type="button"
-                  className="btn btn-light mr-1"
-                >
-                  <i
-                    className={classnames("fas fa-thumbs-up", {
-                      "text-info": this.findUserLike(post.likes)
-                    })}
-                  />
-                  <span className="badge badge-light">{post.likes.length}</span>
-                </button>
-                <button
-                  onClick={this.onUnlikeClick.bind(this, post._id)}
-                  type="button"
-                  className="btn btn-light mr-1"
-                >
-                  <i className="text-secondary fas fa-thumbs-down" />
-                </button>
-                <Link to={`/post/${post._id}`} className="btn btn-info mr-1">
-                  Comments
-                </Link>
-                {post.user === auth.user.id ? (
+          <p className="lead">{post.content}</p>
+
+          {showActions ? (
+            <div className="row">
+              <div className="offset-md-9 col-md-3">
+                <span className="text-right">
                   <button
-                    onClick={this.onDeleteClick.bind(this, post._id)}
+                    onClick={this.onLikeClick.bind(this, post._id)}
                     type="button"
-                    className="btn btn-danger mr-1"
+                    className="btn btn-light mr-1"
                   >
-                    <i className="fas fa-times" />
+                    <i
+                      className={classnames("fas fa-thumbs-up", {
+                        green: this.findUserLike(post.likes)
+                      })}
+                    />
+                    <span className="badge badge-light">
+                      {post.likes.length}
+                    </span>
                   </button>
-                ) : null}
-              </span>
-            ) : null}
-          </div>
+                  <button
+                    onClick={this.onUnlikeClick.bind(this, post._id)}
+                    type="button"
+                    className="btn btn-light mr-1"
+                  >
+                    <i
+                      className={classnames("fas fa-thumbs-down", {
+                        red: !this.findUserLike(post.likes)
+                      })}
+                    />
+                  </button>
+                  <Link to={`/post/${post._id}`} className="btn btn-info mr-1">
+                    Comments
+                  </Link>
+                  {post.user === auth.user.id ? (
+                    <button
+                      onClick={this.onDeleteClick.bind(this, post._id)}
+                      type="button"
+                      className="btn btn-danger mr-1"
+                    >
+                      <i className="fas fa-times" />
+                    </button>
+                  ) : null}
+                </span>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
+      // </div>
     );
   }
 }

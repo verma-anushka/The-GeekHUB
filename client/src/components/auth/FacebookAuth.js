@@ -27,7 +27,10 @@ class FacebookAuth extends Component {
         autoLoad={false}
         callback={this.responseFacebook}
         render={renderProps => (
-          <button onClick={renderProps.onClick} className="btn facebook">
+          <button
+            onClick={renderProps.onClick}
+            className="auth-btn btn facebook"
+          >
             <i className="fab fa-facebook-f"></i>
           </button>
         )}

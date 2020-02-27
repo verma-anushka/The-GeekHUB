@@ -29,13 +29,13 @@ $scoreGreen: #4caf50;
 }
 
 input,
-button {
+.auth-btn {
   border: none;
   outline: none;
   background: none;
   font-family: "Open Sans", Helvetica, Arial, sans-serif;
 }
-button:focus {
+.auth-btn:focus {
   outline: none;
 }
 
@@ -82,7 +82,7 @@ button:focus {
   }
 }
 
-button,
+.auth-btn,
 input[type="submit"] {
   display: block;
   margin: 25px auto 0;
@@ -380,7 +380,7 @@ input {
   }
 }
 
-.btn {
+.auth-btn {
   transition: all 0.35s;
   transition-timing-function: cubic-bezier(0.31, -0.105, 0.43, 1.59);
   display: inline-block;

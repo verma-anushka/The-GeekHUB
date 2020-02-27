@@ -25,7 +25,10 @@ export default class App extends Component {
 
     fetch("/api/profile/uploadImg", {
       method: "POST",
-      body: formData
+      body: formData,
+      onUploadProgress: progressEvent => {
+        console.log(progressEvent.loaded / progressEvent.total);
+      }
     })
       .then(res => res.json())
       .then(res => {

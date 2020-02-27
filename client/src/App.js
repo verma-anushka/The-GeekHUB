@@ -60,7 +60,9 @@ class App extends Component {
           <NavBar />
           <Route path="/" exact component={HomePage} />
           <Route exact path="/profile/:handle" component={Profile} />
-
+          <Switch>
+            <PrivateRoute exact path="/feed" component={Posts} />
+          </Switch>
           <div className="container">
             <Route exact path="/signup" component={SignUp} />
             <Route exact path="/signin" component={SignIn} />
@@ -99,9 +101,7 @@ class App extends Component {
                 component={AddEducation}
               />
             </Switch>
-            <Switch>
-              <PrivateRoute exact path="/feed" component={Posts} />
-            </Switch>
+
             <Switch>
               <PrivateRoute exact path="/post/:id" component={Post} />
             </Switch>

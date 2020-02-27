@@ -7,6 +7,7 @@ import CreateComment from "../forms/CreateComment";
 import CommentList from "./CommentList";
 import Spinner from "../../Spinner";
 import { getPost } from "../../../store/actions/post";
+// import CurrentUser from "../../layout/CurrentUser";
 
 class Post extends Component {
   componentDidMount() {

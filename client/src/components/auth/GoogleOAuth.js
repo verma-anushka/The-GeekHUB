@@ -20,7 +20,7 @@ class GoogleOAuth extends Component {
           <button
             onClick={renderProps.onClick}
             disabled={renderProps.disabled}
-            className="btn google"
+            className="btn google auth-btn"
           >
             <i className="fab fa-google"></i>
           </button>
