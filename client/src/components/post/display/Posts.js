@@ -5,7 +5,7 @@ import CreatePost from "../forms/CreatePost";
 import PostList from "./PostList";
 import Spinner from "../../Spinner";
 import { getPosts } from "../../../store/actions/post";
-import CurrentUser from "../../layout/CurrentUser";
+// import CurrentUser from "../../layout/CurrentUser";
 import classnames from "classnames";
 
 import "../../../assets/styles/components/layout/CurrentUser.scss";
@@ -21,6 +21,8 @@ class Posts extends Component {
 
   render() {
     const { posts, loading } = this.props.post;
+    const { auth } = this.props;
+    console.log(this.props.profile);
     let content;
 
     if (posts === null || loading) {
@@ -30,25 +32,22 @@ class Posts extends Component {
     }
 
     return (
-      <div className="feed">
+      <div className="feed" style={{ minHeight: "auto" }}>
         <div className="main-container">
           <div
             className={classnames("left-sidebar", {
               minimize: !this.state.show
             })}
+            style={{ marginTop: "70px" }}
           >
             <div className="inner">
               <div className="user-profile">
                 <div className="user-background"></div>
                 <div className="user-image">
-                  <img src="https://gravatar.com/avatar/de84db04b0c7b43efdc840391ffe56ff" />
+                  <img src={auth.user.avatar} />
                 </div>
                 <div className="user-info">
-                  <p className="user-name">Name</p>
-                  <p className="user-title">Status</p>
-                  <p className="user-location">
-                    <i className="icon ion-md-locate"></i> Location
-                  </p>
+                  <p className="user-name">{auth.user.username}</p>
                 </div>
               </div>
               <div className="main-menu"></div>
@@ -77,16 +76,11 @@ class Posts extends Component {
               <i className="icon ion-md-arrow-dropleft"></i>
             </button>
           </div>
-          <div className="main-content">
-            {/* <div className="row"> */}
-            {/* <div className="col-md-12"> */}
-            {/* <CreatePost /> */}
+          <div className="main-content" style={{ minHeight: "auto" }}>
+            <CreatePost />
             {content}
-            {/* </div> */}
-            {/* </div> */}
           </div>
         </div>
-        {/* <CurrentUser /> */}
       </div>
     );
   }
@@ -98,7 +92,9 @@ Posts.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  post: state.post
+  post: state.post,
+  auth: state.auth,
+  profile: state.profile
 });
 
 export default connect(mapStateToProps, { getPosts })(Posts);

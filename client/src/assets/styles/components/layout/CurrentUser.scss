@@ -2,264 +2,258 @@
 $border-color: #1a233d;
 $animation-duration: 0.5s;
 
-// * {
-//   box-sizing: border-box;
-// }
+.feed {
+  .main-container {
+    width: 100vw;
+    // height: 100vh;
+    display: flex;
+    overflow: hidden;
 
-// body {
-//   background: #0a1022;
-//   padding: 0;
-//   margin: 0;
-//   color: #fff;
-//   overflow: hidden;
-//   font-family: "Maven Pro";
-// }
+    .left-sidebar {
+      flex-grow: 20;
+      max-width: 320px;
+      border-right: 1px solid $border-color;
+      position: relative;
+      transition: all $animation-duration;
+      box-shadow: 2px 0px 5px #03050a;
+      //background: #0e121f;
 
-.main-container {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  overflow: hidden;
-
-  .left-sidebar {
-    flex-grow: 2;
-    max-width: 320px;
-    border-right: 1px solid $border-color;
-    position: relative;
-    transition: all $animation-duration;
-    box-shadow: 2px 0px 5px #03050a;
-    //background: #0e121f;
-
-    .inner {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-
-      .user-profile {
-        flex-grow: 2;
-        max-height: 345px;
+      .inner {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        transition: all $animation-duration;
-        border: $border-color;
-        position: relative;
-        overflow: hidden;
+        height: 100%;
 
-        .user-background {
-          position: absolute;
-          background: url("https://gravatar.com/avatar/de84db04b0c7b43efdc840391ffe56ff");
-          background-size: cover;
-          width: 100%;
-          height: 100%;
-          filter: blur(25px);
-          z-index: -1;
-
-          &::after {
-            display: block;
-            position: relative;
-            background-image: linear-gradient(
-              to bottom,
-              rgba(23, 32, 61, 0.3) 0,
-              #0a1022 95%
-            );
-            height: 100%;
-            width: 100%;
-            content: "";
-          }
-        }
-
-        .user-image {
-          margin: 50px 0 25px 0;
-          border-color: $border-color;
+        .user-profile {
+          flex-grow: 2;
+          max-height: 345px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
           transition: all $animation-duration;
-          img {
-            width: 90px;
-            border-radius: 50%;
-            border: 6px solid rgba(255, 255, 255, 0.1);
+          border: $border-color;
+          position: relative;
+          overflow: hidden;
+
+          .user-background {
+            position: absolute;
+            background: url("https://gravatar.com/avatar/de84db04b0c7b43efdc840391ffe56ff");
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+            filter: blur(25px);
+            z-index: -1;
+
+            &::after {
+              display: block;
+              position: relative;
+              background-image: linear-gradient(
+                to bottom,
+                rgba(23, 32, 61, 0.3) 0,
+                #0a1022 95%
+              );
+              height: 100%;
+              width: 100%;
+              content: "";
+            }
+          }
+
+          .user-image {
+            margin: 50px 0 25px 0;
+            border-color: $border-color;
             transition: all $animation-duration;
+            img {
+              width: 90px;
+              border-radius: 50%;
+              border: 6px solid rgba(255, 255, 255, 0.1);
+              transition: all $animation-duration;
+            }
+          }
+
+          .user-info {
+            text-align: center;
+
+            .user-name {
+              font-family: "Oswald";
+              font-weight: 400;
+              text-transform: uppercase;
+            }
+
+            .user-location {
+              color: #d1d3da;
+              i::before {
+                transform: rotate(180deg);
+                color: #556798;
+              }
+            }
           }
         }
 
-        .user-info {
-          text-align: center;
+        .main-menu {
+          flex-grow: 5;
+        }
 
-          .user-name {
+        .social-links {
+          flex-grow: 1;
+          max-height: 50px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+
+          a {
+            padding: 0 10px;
+            color: #fff;
+            font-size: 1.3rem;
+          }
+        }
+      }
+
+      &.minimize {
+        max-width: 100px;
+
+        .inner {
+          .user-profile {
+            border-bottom: 1px solid #1a233d;
+            max-height: 130px;
+
+            .user-image {
+              margin: 25px 0;
+              img {
+                width: 75px;
+              }
+            }
+            .user-info {
+              height: 0px;
+              transition-delay: 0s;
+              animation: animate-sidebar-text $animation-duration;
+            }
+          }
+
+          .social-links {
+            max-height: 200px;
+            flex-direction: column;
+            a {
+              padding: 10px 0;
+            }
+          }
+        }
+
+        .toggle-button i::before {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    .main-content {
+      flex-grow: 10;
+      // display: flex;
+      justify-content: center;
+
+      > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+
+        /*> div {
+        margin-bottom: 20px;
+      }*/
+      }
+
+      .modal {
+        border: 1px solid $border-color;
+        padding: 0 20px;
+        width: 50%;
+        border-radius: 25px;
+        display: none;
+
+        &.show {
+          display: inherit;
+        }
+
+        .heading {
+          h2 {
+            font-size: 1.3rem;
+            padding: 10px 0;
+            letter-spacing: 0.1rem;
+            font-weight: 400;
+          }
+          h3 {
+            letter-spacing: -0.03rem;
             font-family: "Oswald";
             font-weight: 400;
             text-transform: uppercase;
           }
-
-          .user-location {
-            color: #d1d3da;
-            i::before {
-              transform: rotate(180deg);
-              color: #556798;
-            }
-          }
-        }
-      }
-
-      .main-menu {
-        flex-grow: 5;
-      }
-
-      .social-links {
-        flex-grow: 1;
-        max-height: 50px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-
-        a {
-          padding: 0 10px;
-          color: #fff;
-          font-size: 1.3rem;
         }
       }
     }
 
-    &.minimize {
+    .right-sidebar {
+      flex-grow: 1;
       max-width: 100px;
+      border-left: 1px solid $border-color;
 
-      .inner {
-        .user-profile {
-          border-bottom: 1px solid #1a233d;
-          max-height: 130px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
 
-          .user-image {
-            margin: 25px 0;
-            img {
-              width: 75px;
-            }
-          }
-          .user-info {
-            height: 0px;
-            transition-delay: 0s;
-            animation: animate-sidebar-text $animation-duration;
-          }
-        }
+      .btn {
+        border-top: 1px solid $border-color;
+        height: 50px;
+        line-height: 50px;
+        width: 100%;
+        text-align: center;
+        cursor: pointer;
 
-        .social-links {
-          max-height: 200px;
-          flex-direction: column;
-          a {
-            padding: 10px 0;
-          }
+        &:hover {
+          background: $border-color;
         }
       }
+    }
+  }
 
-      .toggle-button i::before {
-        transform: rotate(180deg);
-      }
+  .toggle-button {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    border: 1px solid #1a233d;
+    width: 25px;
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+    outline: none;
+    border-radius: 0 50% 50% 0;
+    cursor: pointer;
+    transform: translate(0, -50%);
+    box-shadow: 2px 0px 5px #03050a;
+    background: #0a1022;
+    z-index: 1;
+
+    &:hover {
+      background: $border-color;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    i::before {
+      transition: all $animation-duration / 2;
+    }
+  }
+
+  @keyframes animate-sidebar-text {
+    0% {
+    }
+    100% {
+      opacity: 0;
+      margin-top: -5px;
     }
   }
 
   .main-content {
-    flex-grow: 10;
-    display: flex;
-    justify-content: center;
-
-    > div {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-
-      /*> div {
-        margin-bottom: 20px;
-      }*/
-    }
-
-    .modal {
-      border: 1px solid $border-color;
-      padding: 0 20px;
-      width: 50%;
-      border-radius: 25px;
-      display: none;
-
-      &.show {
-        display: inherit;
-      }
-
-      .heading {
-        h2 {
-          font-size: 1.3rem;
-          padding: 10px 0;
-          letter-spacing: 0.1rem;
-          font-weight: 400;
-        }
-        h3 {
-          letter-spacing: -0.03rem;
-          font-family: "Oswald";
-          font-weight: 400;
-          text-transform: uppercase;
-        }
-      }
-    }
+    padding: 50px;
+    position: relative;
   }
-
-  .right-sidebar {
-    flex-grow: 1;
-    max-width: 100px;
-    border-left: 1px solid $border-color;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-
-    .btn {
-      border-top: 1px solid $border-color;
-      height: 50px;
-      line-height: 50px;
-      width: 100%;
-      text-align: center;
-      cursor: pointer;
-
-      &:hover {
-        background: $border-color;
-      }
-    }
-  }
-}
-
-.toggle-button {
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  border: 1px solid #1a233d;
-  width: 25px;
-  height: 100px;
-  text-align: center;
-  line-height: 100px;
-  border-radius: 0 50% 50% 0;
-  cursor: pointer;
-  transform: translate(0, -50%);
-  box-shadow: 2px 0px 5px #03050a;
-  background: #0a1022;
-  z-index: 1;
-
-  &:hover {
-    background: $border-color;
-  }
-
-  i::before {
-    transition: all $animation-duration / 2;
-  }
-}
-
-@keyframes animate-sidebar-text {
-  0% {
-  }
-  100% {
-    opacity: 0;
-    margin-top: -5px;
-  }
-}
-
-.main-content {
-  padding: 50px;
-  position: relative;
 }

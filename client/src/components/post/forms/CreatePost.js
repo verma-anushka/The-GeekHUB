@@ -39,29 +39,41 @@ class CreatePost extends Component {
   };
 
   render() {
+    // console.log(this.props.auth);
     const { errors } = this.state;
 
     return (
-      <div className="post-form mb-3" style={{ marginTop: "10%" }}>
-        <div className="card card-info">
-          <div className="card-header bg-info content-white">
-            Say Something...
-          </div>
-          <div className="card-body">
-            <form onSubmit={this.onSubmit}>
-              <div className="form-group">
-                <TextAreaFieldGroup
-                  placeholder="Create a post"
-                  name="content"
-                  value={this.state.content}
-                  onChange={this.onChange}
-                  error={errors.content}
-                />
+      <div className="content" style={{ marginTop: "50px" }}>
+        <div className="card">
+          <div className="firstinfo">
+            <div className="row">
+              <div className="col-md-2">
+                <img src={this.props.auth.user.avatar} alt="" />
               </div>
-              <button type="submit" className="btn btn-dark">
-                Submit
-              </button>
-            </form>
+              <div className="col-md-10">
+                <div className="profileinfo">
+                  <h1 style={{ color: "#222" }}>What's on your mind?!</h1>
+                  <div className="card-body" style={{ padding: "0" }}>
+                    <form onSubmit={this.onSubmit}>
+                      <TextAreaFieldGroup
+                        placeholder="Create a post"
+                        name="content"
+                        value={this.state.content}
+                        onChange={this.onChange}
+                        error={errors.content}
+                      />
+                      <button
+                        type="submit"
+                        className="btn btn-dark"
+                        style={{ margin: "0 auto", display: "block" }}
+                      >
+                        Submit
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

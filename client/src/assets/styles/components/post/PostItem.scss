@@ -1,7 +1,123 @@
-.green {
-  color: green;
+@import "https://fonts.googleapis.com/css?family=Open+Sans:300,400";
+
+%reset {
+  margin: 0;
+  padding: 0;
+}
+%flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
-.red {
-  color: red;
+@mixin animated($timein: null, $delay: null) {
+  transition: all $timein ease-in-out;
+  transition-delay: $delay;
+}
+
+@mixin dimensions($width: null, $height: null) {
+  width: $width;
+  min-height: $height;
+}
+
+$maincolor: #8167a9;
+
+.feed {
+  .content {
+    position: relative;
+    // animation: animatop 0.9s  cubic-bezier(0.425, 1.140, 0.470, 1.125) forwards ;
+  }
+
+  .card {
+    @include dimensions(750px, 100px);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 3px;
+    background-color: white;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    &:after {
+      content: "";
+      display: block;
+      width: 190px;
+      height: 300px;
+      background: #8167a9;
+      position: absolute;
+      animation: rotatemagic 0.75s cubic-bezier(0.425, 1.04, 0.47, 1.105) 1s
+        both;
+    }
+  }
+
+  .firstinfo {
+    @extend %flex;
+    // flex-direction: column;
+    text-align: left;
+    z-index: 2;
+    position: relative;
+    img {
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+    }
+    .profileinfo {
+      // width: 80%;
+      padding: 0px 20px;
+      h1 {
+        font-size: 1.8em;
+      }
+      h3 {
+        font-size: 1.2em;
+        color: $maincolor;
+        font-style: italic;
+      }
+      p.bio {
+        padding: 10px 0px;
+        color: #5a5a5a;
+        line-height: 1.2;
+        font-style: initial;
+      }
+    }
+  }
+
+  @keyframes animatop {
+    0% {
+      opacity: 0;
+      bottom: -500px;
+    }
+    100% {
+      opacity: 1;
+      bottom: 0px;
+    }
+  }
+
+  @keyframes animainfos {
+    0% {
+      bottom: 10px;
+    }
+    100% {
+      bottom: -42px;
+    }
+  }
+
+  @keyframes rotatemagic {
+    0% {
+      opacity: 0;
+      transform: rotate(-0deg);
+      top: -24px;
+      left: -253px;
+    }
+    100% {
+      transform: rotate(-30deg);
+      top: -24px;
+      left: -78px;
+    }
+  }
+  .green {
+    color: green;
+  }
+
+  .red {
+    color: red;
+  }
 }
