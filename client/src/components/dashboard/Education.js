@@ -27,7 +27,7 @@ class Education extends Component {
             onClick={this.onDeleteClick.bind(this, edu._id)}
             className="btn btn-danger"
           >
-            Delete
+            <i className="fas fa-trash-alt"></i>
           </button>
         </td>
       </tr>
@@ -39,9 +39,9 @@ class Education extends Component {
         <table className="table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Degree</th>
-              <th>Years</th>
+              <th style={{ width: "35%" }}>Name</th>
+              <th style={{ width: "25%" }}>Degree</th>
+              <th style={{ width: "25%" }}>Years</th>
               <th />
             </tr>
             {education}
