@@ -44,24 +44,24 @@ class Posts extends Component {
               <div className="user-profile">
                 <div className="user-background"></div>
                 <div className="user-image">
-                  <img src={auth.user.avatar} />
+                  <img src={auth.user.avatar} alt="" />
                 </div>
                 <div className="user-info">
                   <p className="user-name">{auth.user.username}</p>
                 </div>
               </div>
               <div className="main-menu"></div>
-              <div className="social-links">
-                <a href="#">
+              {/* <div className="social-links">
+                <a href="">
                   <i className="icon ion-logo-facebook"></i>
                 </a>
-                <a href="#">
+                <a href="">
                   <i className="icon ion-logo-twitter"></i>
                 </a>
-                <a href="#">
+                <a href="">
                   <i className="icon ion-logo-instagram"></i>
                 </a>
-              </div>
+              </div> */}
             </div>
             <button
               type="button"

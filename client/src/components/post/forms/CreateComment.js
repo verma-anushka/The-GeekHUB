@@ -44,9 +44,40 @@ class CreateComment extends Component {
     console.log(errors);
 
     return (
-      <div className="post-form mb-3">
+      <div className="comment-form mb-3">
         <div className="card card-info">
-          <div className="card-header bg-info text-white">
+          <div className="firstinfo">
+            <div className="row">
+              <div className="col-md-2">
+                <img src={this.props.auth.user.avatar} alt="" />
+              </div>
+              <div className="col-md-10">
+                <div className="profileinfo">
+                  <h1 style={{ color: "#222" }}>Make a comment...</h1>
+                  <div className="card-body" style={{ padding: "0" }}>
+                    <form onSubmit={this.onSubmit}>
+                      <TextAreaFieldGroup
+                        placeholder="Reply to post"
+                        name="content"
+                        value={this.state.content}
+                        onChange={this.onChange}
+                        error={errors.content}
+                      />
+                      <button
+                        type="submit"
+                        className="btn btn-dark"
+                        style={{ margin: "0 auto", display: "block" }}
+                      >
+                        Submit
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* <div className="card-header bg-info text-white">
             Make a comment...
           </div>
           <div className="card-body">
@@ -64,7 +95,7 @@ class CreateComment extends Component {
                 Submit
               </button>
             </form>
-          </div>
+          </div> */}
         </div>
       </div>
     );
