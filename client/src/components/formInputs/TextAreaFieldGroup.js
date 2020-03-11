@@ -5,8 +5,11 @@ import PropTypes from "prop-types";
 const TextAreaFieldGroup = props => {
   const { name, placeholder, value, error, moreInfo, onChange } = props;
   return (
-    <div className="form-group">
+    <div className="form-group" style={{ marginBottom: "0" }}>
       <textarea
+        rows="3"
+        cols="80"
+        style={{ border: "none", outline: "none", background: "transparent" }}
         placeholder={placeholder}
         name={name}
         className={classnames({ "is-invalid": error })}

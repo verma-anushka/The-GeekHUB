@@ -47,8 +47,6 @@ export default class App extends Component {
   // };
 
   render() {
-    // console.log(this.props);
-
     const { uploading, imgPreview, images } = this.state;
 
     const content = () => {
@@ -60,7 +58,9 @@ export default class App extends Component {
             <Images images={images.avatar} removeImage={this.removeImage} />
           );
         default:
-          return <Button onChange={this.onChange} />;
+          return (
+            <Button style={{ textAlign: "right" }} onChange={this.onChange} />
+          );
       }
     };
 

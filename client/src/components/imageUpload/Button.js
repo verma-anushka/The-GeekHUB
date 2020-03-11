@@ -7,9 +7,19 @@ export default props => (
   <div className="buttons fadein">
     <div className="button">
       <label htmlFor="single">
-        <FontAwesomeIcon icon={faImage} color="#3B5998" size="10x" />
+        <FontAwesomeIcon
+          icon={faImage}
+          color="#8167a9"
+          size="5x"
+          onChange={props.onChange}
+        />
+        <input
+          type="file"
+          id="single"
+          onChange={props.onChange}
+          style={{ display: "none" }}
+        />
       </label>
-      <input type="file" id="single" onChange={props.onChange} />
     </div>
 
     {/* <div className="button">

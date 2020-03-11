@@ -11,8 +11,10 @@ const SelectListGroup = props => {
     </option>
   ));
   return (
-    <div className="form-group">
+    <div className="form-group select">
       <select
+        name="format"
+        id="format"
         name={name}
         className={classnames({ "is-invalid": error })}
         value={value}
