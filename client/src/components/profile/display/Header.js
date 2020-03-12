@@ -1,43 +1,113 @@
 import React, { Component } from "react";
-import isEmpty from "../../../validation/isEmpty";
+import classnames from "classnames";
+// import isEmpty from "../../../validation/isEmpty";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { follow, unfollow } from "../../../store/actions/profile";
 
 class Header extends Component {
+  onFollowClick(id) {
+    this.props.follow(id);
+  }
+
+  onUnfollowClick(id) {
+    this.props.unfollow(id);
+  }
+
+  findUserFollow(followers) {
+    const { auth } = this.props;
+    if (
+      followers.filter(follower => follower.user === auth.user.id).length > 0
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   render() {
     const { profile } = this.props.profile;
     // console.log(profile);
 
     return (
-      <header className="card-header">
-        <div className="hello">
+      <div className="card-bg">
+        <img
+          className="card-bg"
+          src={profile.user.bannerImg}
+          alt={profile.user.bannerImg}
+        />
+        <figure className="profile-picture">
           <img
+            className="card-bg"
             src={profile.user.avatar}
-            alt=""
-            style={{ height: "180px", width: "180px" }}
+            alt={profile.user.avatar}
+            style={{ height: "120px", width: "120px" }}
           />
-          <div className="heading-box">
-            <h1>{profile.user.username}</h1>
-            <h3>
-              {profile.status}
-              <span>
-                <i className="material-icons">
-                  {" "}
-                  {isEmpty(profile.organization) ? null : (
-                    <span>at {profile.organization}</span>
-                  )}
-                </i>{" "}
-                Warsaw, PL
-              </span>
-            </h3>
-          </div>
+        </figure>
+        <div className="profile-stats">
+          <ul>
+            <li>
+              <h1 className="display-6">{profile.user.username}</h1>
+            </li>
+            <li className="pull-right" style={{ verticalAlign: "middle" }}>
+              <button
+                // style={{ borderRadius: "50%", width: "80px" }}
+                onClick={this.onFollowClick.bind(this, profile.user._id)}
+                type="button"
+                className="btn btn-light mr-1"
+              >
+                <i
+                  // style={{ float: "left" }}
+                  className={classnames("fas fa-thumbs-up", {
+                    "text-info": this.findUserFollow(profile.followers)
+                  })}
+                />
+                <span className="badge badge-light">
+                  {profile.followers.length}
+                </span>
+              </button>
+            </li>
+            <li className="pull-right">
+              <button
+                // style={{ borderRadius: "50%" }}
+                onClick={this.onUnfollowClick.bind(this, profile.user._id)}
+                type="button"
+                className="btn btn-light mr-1"
+              >
+                <i className="text-secondary fas fa-thumbs-down" />
+              </button>
+            </li>
+          </ul>
         </div>
-        <div className="button-box">
-          <a className="follow-btn" href="#">
-            <i className="material-icons"></i>
-          </a>
-        </div>
-      </header>
+      </div>
+      // <header className="card-header">
+      //   <div className="hello">
+      //     {/* <img
+      //       src={profile.user.avatar}
+      //       alt=""
+      //       style={{ height: "180px", width: "180px" }}
+      //     /> */}
+      //     <div className="heading-box">
+      //       <h1>{profile.user.username}</h1>
+      //       <h3>
+      //         {profile.status}
+      //         <span>
+      //           <i className="material-icons">
+      //             {" "}
+      //             {isEmpty(profile.organization) ? null : (
+      //               <span>at {profile.organization}</span>
+      //             )}
+      //           </i>{" "}
+      //           Warsaw, PL
+      //         </span>
+      //       </h3>
+      //     </div>
+      //   </div>
+      //   <div className="button-box">
+      //     <a className="follow-btn" href="#">
+      //       <i className="material-icons"></i>
+      //     </a>
+      //   </div>
+      // </header>
       // <div className="row">
       //   <div className="col-md-12">
       //     <div className="card card-body bg-info text-white mb-3">
@@ -197,4 +267,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, { follow, unfollow })(Header);

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import TextFieldGroup from "../../formInputs/TextFieldGroup";
 import TextAreaFieldGroup from "../../formInputs/TextAreaFieldGroup";
 import { connect } from "react-redux";
@@ -60,86 +60,96 @@ class AddExperience extends Component {
 
     // console.log(errors);
     return (
-      <div className="add-experience">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-8 m-auto">
-              <Link to="/dashboard" className="btn btn-light">
+      <div style={{ marginTop: "10%" }} className="add-experience">
+        <div className="row">
+          <div className="col-md-8 m-auto">
+            {/* <Link to="/dashboard" className="btn btn-light">
                 Go Back
-              </Link>
-              <h1 className="display-4 text-center">Add Experience</h1>
-              <p className="lead text-center">
-                Add any job or position that you have had in the past or current
-              </p>
-              <small className="d-block pb-3">* = required fields</small>
-              <form onSubmit={this.onSubmit}>
-                <TextFieldGroup
-                  placeholder="* organization"
-                  name="organization"
-                  value={this.state.organization}
-                  onChange={this.onChange}
-                  error={errors.organization}
-                />
-                <TextFieldGroup
-                  placeholder="* Job Title"
-                  name="title"
-                  value={this.state.title}
-                  onChange={this.onChange}
-                  error={errors.title}
-                />
-                <TextFieldGroup
-                  placeholder="Location"
-                  name="location"
-                  value={this.state.location}
-                  onChange={this.onChange}
-                  error={errors.location}
-                />
-                <h6>From Date</h6>
-                <TextFieldGroup
-                  name="from"
-                  type="date"
-                  value={this.state.from}
-                  onChange={this.onChange}
-                  error={errors.from}
-                />
-                <h6>To Date</h6>
-                <TextFieldGroup
-                  name="to"
-                  type="date"
-                  value={this.state.to}
-                  onChange={this.onChange}
-                  error={errors.to}
-                  disabled={this.state.disabled ? "disabled" : ""}
-                />
-                <div className="form-check mb-4">
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    name="current"
-                    value={this.state.current}
-                    checked={this.state.current}
-                    onChange={this.onCheck}
-                    id="current"
+              </Link> */}
+            <h3 className="display-4 text-center">Add Experience</h3>
+
+            <form onSubmit={this.onSubmit}>
+              <div className="row">
+                <div className="col-xl-12 col-md-12 mb-30">
+                  <TextFieldGroup
+                    placeholder="Organization*"
+                    name="organization"
+                    value={this.state.organization}
+                    onChange={this.onChange}
+                    error={errors.organization}
                   />
-                  <label htmlFor="current" className="form-check-label">
-                    Current
-                  </label>
                 </div>
-                <TextAreaFieldGroup
-                  placeholder="Description"
-                  name="description"
-                  value={this.state.description}
-                  onChange={this.onChange}
-                  error={errors.description}
-                  info="Tell us about the the position"
-                />
-                <input
-                  type="submit"
-                  value="Submit"
-                  className="btn btn-info btn-block mt-4"
-                />
-              </form>
-            </div>
+                <div className="col-xl-6 col-md-6 mb-30">
+                  <TextFieldGroup
+                    placeholder="Job Title*"
+                    name="title"
+                    value={this.state.title}
+                    onChange={this.onChange}
+                    error={errors.title}
+                  />
+                </div>
+                <div className="col-xl-6 col-md-6 mb-30">
+                  <TextFieldGroup
+                    placeholder="Location"
+                    name="location"
+                    value={this.state.location}
+                    onChange={this.onChange}
+                    error={errors.location}
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-xl-6 col-md-6 mb-30">
+                  <h6>From Date</h6>
+                  <TextFieldGroup
+                    name="from"
+                    type="date"
+                    value={this.state.from}
+                    onChange={this.onChange}
+                    error={errors.from}
+                  />
+                </div>
+                <div className="col-xl-6 col-md-6 mb-30">
+                  <h6>To Date</h6>
+                  <TextFieldGroup
+                    name="to"
+                    type="date"
+                    value={this.state.to}
+                    onChange={this.onChange}
+                    error={errors.to}
+                    disabled={this.state.disabled ? "disabled" : ""}
+                  />
+                  <div className="form-check mb-4">
+                    <input
+                      style={{ marginLeft: "40px" }}
+                      type="checkbox"
+                      className="form-check-input mt-2"
+                      name="current"
+                      value={this.state.current}
+                      checked={this.state.current}
+                      onChange={this.onCheck}
+                      id="current"
+                    />
+                    <label htmlFor="current" className="form-check-label">
+                      Current
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <TextAreaFieldGroup
+                placeholder="Description"
+                name="description"
+                value={this.state.description}
+                onChange={this.onChange}
+                error={errors.description}
+                info="Tell us about the the position"
+              />
+              <input
+                type="submit"
+                value="Submit"
+                className="btn btn-info mt-4"
+              />
+            </form>
           </div>
         </div>
       </div>

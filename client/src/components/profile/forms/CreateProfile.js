@@ -8,6 +8,7 @@ import InputGroup from "../../formInputs/InputGroup";
 import SelectListGroup from "../../formInputs/SelectListGroup";
 import { createProfile } from "../../../store/actions/profile";
 import ImageUpload from "../../imageUpload/ImageUpload";
+import "../../../assets/styles/components/profile/Form.scss";
 
 class CreateProfile extends Component {
   constructor(props) {
@@ -47,7 +48,7 @@ class CreateProfile extends Component {
     event.preventDefault();
 
     const { user } = this.props.auth;
-    // console.log(user);
+    console.log(user);
     const profile = {
       handle: this.state.handle,
       organization: this.state.organization,
@@ -75,7 +76,9 @@ class CreateProfile extends Component {
   }
 
   render() {
+    const { user } = this.props.auth;
     const { errors, displaySocialInputs } = this.state;
+    // console.log(this.props.auth.user);
 
     let socialInputs;
 
@@ -169,112 +172,139 @@ class CreateProfile extends Component {
     ];
 
     return (
-      <div className="create-profile">
-        <h1 className="large text-primary" style={{ marginTop: "20%" }}>
-          Create Your Profile
-        </h1>
+      <div className="create-profile" style={{ marginTop: "10%" }}>
+        <h3 style={{ textAlign: "center" }}>
+          Welcome to <span style={{ color: "#8167a9" }}>The GeekHUB</span>{" "}
+          {user.username}
+        </h3>
+        {/* <h1 className="large" style={{ marginTop: "12%" }}>
+          Welcome to The GeekHUB
+        </h1> */}
         <p className="lead">
-          <i className="fas fa-user" />
-          Add your profile info..
+          {/* <i className="fas fa-user" /> */}
+          Start adding your profile info and help other geeks to find you!
         </p>
 
-        <ImageUpload />
-
-        <small>* = required field</small>
         <form className="form" onSubmit={this.onSubmit}>
-          <TextFieldGroup
-            placeholder="User handle"
-            name="handle"
-            value={this.state.handle}
-            onChange={this.onChange}
-            error={errors.handle}
-            moreInfo="..."
-          />
-          <SelectListGroup
-            placeholder="Status"
-            name="status"
-            value={this.state.status}
-            onChange={this.onChange}
-            options={options}
-            error={errors.status}
-            moreInfo="Give us an idea of where you are at in your career"
-          />
+          <div className="row">
+            <div className="col-xl-6 col-md-6 mb-30">
+              <span>Upload banner image</span>
+              <ImageUpload type="banner" />
+            </div>
+            <div className="col-xl-6 col-md-6 mb-30">
+              <span>Upload profile image</span>
 
-          <TextFieldGroup
-            placeholder="Org"
-            name="organization"
-            value={this.state.organization}
-            onChange={this.onChange}
-            error={errors.organization}
-            moreInfo="Could be your own organization or one you work for"
-          />
+              <ImageUpload type="avatar" />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-xl-6 col-md-6 mb-30">
+              <TextFieldGroup
+                placeholder="User handle"
+                name="handle"
+                value={this.state.handle}
+                onChange={this.onChange}
+                error={errors.handle}
+              />
+            </div>
+            <div className="col-xl-6 col-md-6 mb-30">
+              <TextFieldGroup
+                placeholder="Location"
+                name="location"
+                value={this.state.location}
+                onChange={this.onChange}
+                error={errors.location}
+              />
+            </div>
+          </div>
 
-          <TextFieldGroup
-            placeholder="Website URL"
-            name="websiteLink"
-            value={this.state.websiteLink}
-            onChange={this.onChange}
-            error={errors.websiteLink}
-            moreInfo="Could be your own website or a company one"
-          />
+          <div className="row">
+            <div className="col-xl-6 col-md-6 mb-30">
+              <TextFieldGroup
+                placeholder="Organization"
+                name="organization"
+                value={this.state.organization}
+                onChange={this.onChange}
+                error={errors.organization}
+              />
+            </div>
+            <div className="col-xl-6 col-md-6 mb-30">
+              <TextFieldGroup
+                placeholder="Website URL"
+                name="websiteLink"
+                value={this.state.websiteLink}
+                onChange={this.onChange}
+                error={errors.websiteLink}
+              />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-xl-6 col-md-6 mb-30">
+              <TextFieldGroup
+                placeholder="* Skills"
+                name="skills"
+                value={this.state.skills}
+                onChange={this.onChange}
+                error={errors.skills}
+                moreInfo="Please use comma separated values"
+              />
+            </div>
+            <div className="col-xl-6 col-md-6 mb-30">
+              <TextFieldGroup
+                placeholder="Github Username"
+                name="githubUsername"
+                value={this.state.githubUsername}
+                onChange={this.onChange}
+                error={errors.githubUsername}
+              />
+            </div>
+          </div>
 
-          <TextFieldGroup
-            placeholder="Location"
-            name="location"
-            value={this.state.location}
-            onChange={this.onChange}
-            error={errors.location}
-            moreInfo="City or city & state suggested (eg. Boston, MA)"
-          />
-
-          <TextFieldGroup
-            placeholder="* Skills"
-            name="skills"
-            value={this.state.skills}
-            onChange={this.onChange}
-            error={errors.skills}
-            moreInfo="Please use comma separated values (eg.
-                    HTML,CSS,JavaScript,PHP"
-          />
-          <TextFieldGroup
-            placeholder="Github Username"
-            name="githubUsername"
-            value={this.state.githubUsername}
-            onChange={this.onChange}
-            error={errors.githubUsername}
-            moreInfo="If you want your latest repos and a Github link, include your username"
-          />
+          <span style={{ textAlign: "left" }}>About</span>
 
           <TextAreaFieldGroup
-            placeholder="Short Bio"
+            className="bio"
+            placeholder=""
             name="bio"
+            style={{ marginBottom: "1rem" }}
             value={this.state.bio}
             onChange={this.onChange}
             error={errors.bio}
-            moreInfo="Tell us a little about yourself"
           />
 
-          <div className="mb-3">
-            <button
-              type="button"
-              onClick={() => {
-                // Toggle feature
-                this.setState(prevState => ({
-                  displaySocialInputs: !prevState.displaySocialInputs
-                }));
-              }}
-              className="btn btn-light"
-            >
-              Add Social Network Links
-            </button>
-            <span className="text-muted">Optional</span>
+          <div className="row">
+            <div className="col-xl-6 col-md-6 mb-30">
+              <SelectListGroup
+                placeholder="Status"
+                name="status"
+                value={this.state.status}
+                onChange={this.onChange}
+                options={options}
+                error={errors.status}
+              />
+            </div>
+
+            <div className="col-xl-6 col-md-6 mb-30">
+              <div className="mb-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    // Toggle feature
+                    this.setState(prevState => ({
+                      displaySocialInputs: !prevState.displaySocialInputs
+                    }));
+                  }}
+                  className="select"
+                >
+                  Add Social Network Links
+                </button>
+                {/* <span className="text-muted">Optional</span> */}
+              </div>
+              {socialInputs}
+            </div>
           </div>
-          {socialInputs}
-          <input
-            type="submit"
-            value="Submit"
-            className="btn btn-info btn-block mt-4"
-          />
+
+          <input type="submit" value="Submit" className="btn btn-info mt-4" />
         </form>
       </div>
     );
@@ -283,6 +313,7 @@ class CreateProfile extends Component {
 
 CreateProfile.propTypes = {
   profile: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
 

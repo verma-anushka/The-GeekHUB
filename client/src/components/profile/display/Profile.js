@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import Header from "./Header";
-import classnames from "classnames";
-
+// import classnames from "classnames";
 import About from "./About";
 import Credentials from "./Credentials";
 import GithubProjects from "./projects/github/ProjectList";
@@ -45,10 +44,8 @@ class Profile extends Component {
   }
   render() {
     const { profile, loading } = this.props.profile;
-    const { user } = this.props;
 
     let content;
-    // console.log(profile);
 
     if (profile === null || loading) {
       content = <Spinner />;
@@ -117,7 +114,10 @@ class Profile extends Component {
           {profile.githubUsername ? (
             <GithubProjects username={profile.githubUsername} />
           ) : null}
-          <MediumPosts />
+          {profile.socialLinks.medium ? (
+            <MediumPosts username={profile.socialLinks.medium} />
+          ) : null}
+          {/* <MediumPosts /> */}
           {/* <main className="card-main">
             <div className="activity">
               <i className="material-icons">group</i>

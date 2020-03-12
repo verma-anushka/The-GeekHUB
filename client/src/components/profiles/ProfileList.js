@@ -11,10 +11,8 @@ class Profiles extends Component {
   }
 
   render() {
-    // console.log(this.props.profile);
     const { profiles, loading } = this.props.profile;
     let profileItems;
-    // console.log(profiles);
 
     if (profiles === null || loading) {
       profileItems = <Spinner />;
@@ -29,19 +27,24 @@ class Profiles extends Component {
     }
 
     return (
-      <div className="profiles">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-12">
-              <h1 className="display-4 text-center">Developer Profiles</h1>
-              <p className="lead text-center">
+      <div className="profiles" style={{ marginTop: "10%" }}>
+        {/* <div className="container"> */}
+        {/* <div className="row"> */}
+        {/* <div className="col-md-12"> */}
+        <h1
+          className="display-4 text-center"
+          style={{ textTransform: "uppercase" }}
+        >
+          Developer Profiles
+        </h1>
+        {/* <p className="lead text-center">
                 Browse and connect with developers
-              </p>
-              {profileItems}
-            </div>
-          </div>
-        </div>
+              </p> */}
+        {profileItems}
       </div>
+      // </div>
+      // </div>
+      // </div>
     );
   }
 }

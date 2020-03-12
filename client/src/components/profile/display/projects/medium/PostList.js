@@ -6,6 +6,8 @@ import axios from "axios";
 class MediumPosts extends Component {
   constructor(props) {
     super(props);
+    // console.log(props);
+
     this.state = {
       posts: []
     };
@@ -13,7 +15,8 @@ class MediumPosts extends Component {
 
   getMediumFeed = async () => {
     try {
-      const mediumRssFeed = "https://medium.com/feed/@dannyrb";
+      const username = this.props.username.split("https://medium.com/@")[1];
+      const mediumRssFeed = "https://medium.com/feed/@" + username;
       const rssToJsonApi =
         "https://cors-anywhere.herokuapp.com/https://api.rss2json.com/v1/api.json";
       const data = { params: { rss_url: mediumRssFeed } };
