@@ -3,7 +3,7 @@ import classnames from "classnames";
 import PropTypes from "prop-types";
 
 const TextAreaFieldGroup = props => {
-  const { name, placeholder, value, error, moreInfo, onChange } = props;
+  const { name, placeholder, value, error, onChange } = props;
   return (
     <div className="form-group" style={{ marginBottom: "0" }}>
       <textarea
@@ -16,8 +16,8 @@ const TextAreaFieldGroup = props => {
         value={value}
         onChange={onChange}
       />
-      {moreInfo && <small className="form-text text-muted">{moreInfo}</small>}
       {error && <div className="invalid-feedback">{error}</div>}
+      {/* {moreInfo && <small className="form-text text-muted">{moreInfo}</small>} */}
     </div>
   );
 };
@@ -27,7 +27,7 @@ TextAreaFieldGroup.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
   error: PropTypes.string,
-  moreInfo: PropTypes.string,
+  // moreInfo: PropTypes.string,
   onChange: PropTypes.func.isRequired
 };
 

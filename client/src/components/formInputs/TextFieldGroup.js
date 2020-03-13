@@ -8,11 +8,13 @@ const TextFieldGroup = props => {
     placeholder,
     value,
     error,
-    moreInfo,
+    // moreInfo,
     type,
     onChange,
     disabled
   } = props;
+  // console.log(error);
+
   return (
     <div className="form-group">
       <label className={placeholder}>
@@ -25,10 +27,9 @@ const TextFieldGroup = props => {
           onChange={onChange}
           disabled={disabled}
         />
+        {error && <div className="invalid-feedback">{error}</div>}
       </label>
-
-      {moreInfo && <small className="form-text text-muted">{moreInfo}</small>}
-      {error && <div className="invalid-feedback">{error}</div>}
+      {/* {moreInfo && <small className="form-text text-muted">{moreInfo}</small>} */}
     </div>
   );
 };
@@ -38,7 +39,7 @@ TextFieldGroup.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
   error: PropTypes.string,
-  moreInfo: PropTypes.string,
+  // moreInfo: PropTypes.string,
   type: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.string
