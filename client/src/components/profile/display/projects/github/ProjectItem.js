@@ -1,27 +1,33 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import Moment from "react-moment";
 
 class PostItem extends Component {
   render() {
     const { repo } = this.props;
-    console.log(repo);
+    // console.log(repo);
 
     return (
       <div className="card card-body">
         <div className="row">
-          <div className="col-md-8">
-            <h4>
-              <a
-                style={{ color: "#8167a9" }}
-                href={repo.html_url}
-                className=""
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {repo.name}
-              </a>
-            </h4>
-            <p>{repo.description}</p>
+          <div className="offset-md-1 col-md-7">
+            <h4>{repo.name}</h4>
+            <p
+              className="text-muted"
+              style={{ textAlign: "left", paddingTop: "0" }}
+            >
+              <Moment format="YYYY/MM/DD">{repo.created_at}</Moment>
+            </p>
+            <a
+              href={repo.html_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "#8167a9" }}
+            >
+              View Post
+            </a>
+            <p style={{ textAlign: "left", paddingTop: "0" }}>
+              {repo.description}
+            </p>
           </div>
           <div className="col-md-4">
             <span className="badge badge-info mr-1">
@@ -33,7 +39,10 @@ class PostItem extends Component {
             <span className="badge badge-success mr-1">
               Forks: {repo.forks_count}
             </span>
-            <span className="badge badge-info mr-1">
+            <span
+              className="badge badge-info mr-1"
+              style={{ backgroundColor: "#8167a9" }}
+            >
               Language: {repo.language}
             </span>
           </div>

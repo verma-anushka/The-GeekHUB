@@ -6,7 +6,6 @@ import axios from "axios";
 class MediumPosts extends Component {
   constructor(props) {
     super(props);
-    // console.log(props);
 
     this.state = {
       posts: []
@@ -42,7 +41,16 @@ class MediumPosts extends Component {
     return (
       <div ref="myRef">
         <hr />
-        <h3 className="mb-4">Latest Medium Posts:</h3>
+        <h3
+          className="mb-4"
+          style={{
+            textAlign: "center",
+            color: "#8167a9",
+            textTransform: "uppercase"
+          }}
+        >
+          Latest Medium Posts
+        </h3>
         {postItems}
       </div>
     );

@@ -23,10 +23,8 @@ class ProjectList extends Component {
     )
       .then(res => res.json())
       .then(data => {
-        // console.log(data);
         if (this.refs.myRef) {
           this.setState({ repos: data });
-          // console.log(this.state.repos);
         }
       })
       .catch(err => console.log(err));
@@ -42,7 +40,16 @@ class ProjectList extends Component {
     return (
       <div ref="myRef">
         <hr />
-        <h3 className="mb-4">Latest Github Repos:</h3>
+        <h3
+          className="mb-4"
+          style={{
+            textAlign: "center",
+            color: "#8167a9",
+            textTransform: "uppercase"
+          }}
+        >
+          Latest Github Repos
+        </h3>
         {repoItems}
       </div>
     );
