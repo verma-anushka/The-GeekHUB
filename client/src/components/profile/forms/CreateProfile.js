@@ -47,8 +47,8 @@ class CreateProfile extends Component {
   onSubmit(event) {
     event.preventDefault();
 
-    const { user } = this.props.auth;
-    console.log(user);
+    // const { user } = this.props.auth;
+    // console.log(user);
     const profile = {
       handle: this.state.handle,
       organization: this.state.organization,
@@ -79,7 +79,6 @@ class CreateProfile extends Component {
     const { user } = this.props.auth;
     const { errors, displaySocialInputs } = this.state;
     // console.log(this.props.auth.user);
-
     let socialInputs;
 
     if (displaySocialInputs) {
@@ -94,7 +93,7 @@ class CreateProfile extends Component {
             error={errors.linkedin}
           />
           <InputGroup
-            placeholder="medium Profile URL"
+            placeholder="Medium Profile URL"
             name="medium"
             icon="fab fa-medium"
             value={this.state.medium}
@@ -102,7 +101,7 @@ class CreateProfile extends Component {
             error={errors.medium}
           />
           <InputGroup
-            placeholder="behance Profile URL"
+            placeholder="Behance Profile URL"
             name="behance"
             icon="fab fa-behance"
             value={this.state.behance}
@@ -111,7 +110,7 @@ class CreateProfile extends Component {
           />
 
           <InputGroup
-            placeholder="github Channel URL"
+            placeholder="Github Channel URL"
             name="github"
             icon="fab fa-github"
             value={this.state.github}
@@ -177,9 +176,6 @@ class CreateProfile extends Component {
           Welcome to <span style={{ color: "#8167a9" }}>The GeekHUB</span>{" "}
           {user.username}
         </h3>
-        {/* <h1 className="large" style={{ marginTop: "12%" }}>
-          Welcome to The GeekHUB
-        </h1> */}
         <p className="lead">
           {/* <i className="fas fa-user" /> */}
           Start adding your profile info and help other geeks to find you!
@@ -193,7 +189,6 @@ class CreateProfile extends Component {
             </div>
             <div className="col-xl-6 col-md-6 mb-30">
               <span>Upload profile image</span>
-
               <ImageUpload type="avatar" />
             </div>
           </div>

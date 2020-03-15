@@ -52,8 +52,6 @@ class CreateProfile extends Component {
     if (nextProps.profile.profile) {
       const profile = nextProps.profile.profile;
 
-      // console.log(nextProps.profile);
-      // console.log(nextProps.profile.profile);
       // array -> CSV
       const skillsCSV = profile.skills.join(",");
 
@@ -122,6 +120,7 @@ class CreateProfile extends Component {
   onSubmit = event => {
     event.preventDefault();
     // console.log(this.state);
+
     const profile = {
       handle: this.state.handle,
       organization: this.state.organization,
@@ -152,7 +151,6 @@ class CreateProfile extends Component {
     const { errors, displaySocialInputs } = this.state;
 
     let socialInputs;
-    // console.log(this.props.auth);
     if (displaySocialInputs) {
       socialInputs = (
         <div>
@@ -165,7 +163,7 @@ class CreateProfile extends Component {
             error={errors.linkedin}
           />
           <InputGroup
-            placeholder="medium Profile URL"
+            placeholder="Medium Profile URL"
             name="medium"
             icon="fab fa-medium"
             value={this.state.medium}
@@ -173,7 +171,7 @@ class CreateProfile extends Component {
             error={errors.medium}
           />
           <InputGroup
-            placeholder="behance Profile URL"
+            placeholder="Behance Profile URL"
             name="behance"
             icon="fab fa-behance"
             value={this.state.behance}
@@ -182,7 +180,7 @@ class CreateProfile extends Component {
           />
 
           <InputGroup
-            placeholder="github Channel URL"
+            placeholder="Github Channel URL"
             name="github"
             icon="fab fa-github"
             value={this.state.github}
@@ -231,14 +229,16 @@ class CreateProfile extends Component {
 
     // Select options for status
     const options = [
-      { label: "* Select Professional Status", value: 0 },
-      { label: "Developer", value: "Developer" },
+      { label: "Select Professional Status*", value: 0 },
+      { label: "Student", value: "Student" },
+      { label: "Intern", value: "Intern" },
+      { label: "Software Developer", value: "Developer" },
       { label: "Junior Developer", value: "Junior Developer" },
       { label: "Senior Developer", value: "Senior Developer" },
       { label: "Manager", value: "Manager" },
-      { label: "Student", value: "Student" },
+      { label: "Professor", value: "Professor" },
+      { label: "Lecturer", value: "Lecturer" },
       { label: "Instructor", value: "Instructor" },
-      { label: "Intern", value: "Intern" },
       { label: "Other", value: "Other" }
     ];
 
@@ -258,7 +258,6 @@ class CreateProfile extends Component {
             </div>
             <div className="col-xl-6 col-md-6 mb-30">
               <span>Upload profile image</span>
-
               <ImageUpload type="avatar" />
             </div>
           </div>

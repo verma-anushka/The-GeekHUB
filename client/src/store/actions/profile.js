@@ -41,17 +41,16 @@ export const getCurrentProfile = id => dispatch => {
 // ACTION CREATOR TO CREATE THE USER PROFILE
 export const createProfile = (profile, history) => dispatch => {
   // api request to server to create the user profile
-
   axios
     .post("/api/profile", profile)
     .then(res => {
       history.push("/dashboard");
     })
     .catch(err => {
-      console.log(err);
+      // console.log(err.response.data);
       dispatch({
         type: GET_ERRORS,
-        payload: err // error msgs
+        payload: err.response.data // error msgs
       });
     });
 };
@@ -241,24 +240,24 @@ export const unfollow = id => dispatch => {
     });
 };
 
-// ACTION CREATOR TO UPLOAD THE USER IMAGE
-export const uploadImg = () => dispatch => {
-  dispatch(setProfileLoading());
-  axios
-    .post("/api/profile/uploadImg")
-    .then(res => {
-      // console.log(res);
-      dispatch({
-        type: GET_PROFILE,
-        payload: res.data
-      });
-    })
-    .catch(err => {
-      console.log(err);
+// // ACTION CREATOR TO UPLOAD THE USER IMAGE
+// export const uploadImg = () => dispatch => {
+//   // dispatch(setProfileLoading());
+//   axios
+//     .post("/api/profile/uploadImg")
+//     .then(res => {
+//       // console.log(res);
+//       dispatch({
+//         type: GET_PROFILE,
+//         payload: res.data
+//       });
+//     })
+//     .catch(err => {
+//       console.log(err);
 
-      dispatch({
-        type: GET_PROFILE,
-        payload: null
-      });
-    });
-};
+//       dispatch({
+//         type: GET_PROFILE,
+//         payload: null
+//       });
+//     });
+// };

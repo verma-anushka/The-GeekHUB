@@ -7,7 +7,6 @@
   width: 100%;
   min-height: 100vh;
 }
-
 .card {
   width: 100%;
 }
@@ -40,7 +39,7 @@ div.profile-stats {
   bottom: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.5);
   left: 0;
-  padding: 15px 15px 15px 350px;
+  padding: 15px 15px 15px 315px;
   position: absolute;
   right: 0;
   z-index: 2;
@@ -376,5 +375,19 @@ div.card {
 
   100% {
     transform: rotate(0deg);
+  }
+}
+
+.credentials {
+  .list-group-item {
+    background-color: transparent;
+  }
+  h3,
+  h4 {
+    color: #8167a9;
+    text-transform: uppercase;
+  }
+  p {
+    text-align: left;
   }
 }

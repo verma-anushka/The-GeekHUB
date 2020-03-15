@@ -6,28 +6,8 @@ import { connect } from "react-redux";
 import { follow, unfollow } from "../../../store/actions/profile";
 
 class About extends Component {
-  // onFollowClick(id) {
-  //   this.props.follow(id);
-  // }
-
-  // onUnfollowClick(id) {
-  //   this.props.unfollow(id);
-  // }
-
-  // findUserFollow(followers) {
-  //   const { auth } = this.props;
-  //   if (
-  //     followers.filter(follower => follower.user === auth.user.id).length > 0
-  //   ) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
   render() {
     const { profile } = this.props;
-    // console.log(this.props);
 
     // Skill List
     const skills = profile.profile.skills.map((skill, index) => (
@@ -46,6 +26,7 @@ class About extends Component {
             <hr />
           </div>
         )}
+        {isEmpty(profile.location) ? null : <p>{profile.location}</p>}
         {/* <h3 className="text-center text-info">Skill Set</h3> */}
         <div className="d-flex flex-wrap justify-content-center align-items-center">
           {skills}

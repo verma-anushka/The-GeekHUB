@@ -53,6 +53,8 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const errors = {};
+    console.log(req.query.id);
+
     // req.user -> current logged in user from token(payload)
     Profile.findOne({ user: req.query.id })
       .populate("user", [
@@ -185,6 +187,7 @@ router.post(
   (req, res) => {
     // Destructuring the errors and validations
     const { errors, isValid } = validateProfileInputs(req.body);
+    // console.log(errors);
 
     // Check validation
     if (!isValid) {
@@ -324,51 +327,69 @@ router.post(
 // @description : route to create user profile
 router.post(
   "/uploadImg",
-  // passport.authenticate("jwt", { session: false }),
-  upload.single("photo"),
+  // upload.single("photo"),
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    User.findOne({ user: req.params.id }).then(async user => {
-      try {
-        const values = Object.values(req.files);
-        const promises = values.map(image =>
-          cloudinary.uploader.upload(image.path)
-        );
+    const email = req.user.email;
 
-        Promise.all(promises).then(results => {
-          if (req.files.banner) {
-            // console.log("banner");
-            user.bannerImgId = results[0].public_id;
-            user.bannerImg = results[0].secure_url;
-            console.log(user.bannerImg);
-          } else {
-            // console.log("avatar");
-            user.avatarId = results[0].public_id;
-            user.avatar = results[0].secure_url;
-          }
+    // const errors = {};
+    User.findOne({ email })
+      .then(user => {
+        console.log(user);
 
-          user.save();
-          Profile.findOne({ profile: req.params.id })
-            .populate("user", [
-              "username",
-              "firstname",
-              "lastname",
-              "email",
-              "avatar",
-              "bannerImg"
-            ]) // find user using user id
-            .then(profile => {
-              return res.json(profile);
+        try {
+          const values = Object.values(req.files);
+          const promises = values.map(image =>
+            cloudinary.uploader.upload(image.path)
+          );
+
+          Promise.all(promises)
+            .then(results => {
+              if (req.files.banner) {
+                // console.log("banner");
+                user.bannerImgId = results[0].public_id;
+                user.bannerImg = results[0].secure_url;
+              } else {
+                // console.log("avatar");
+                user.avatarId = results[0].public_id;
+                user.avatar = results[0].secure_url;
+              }
+
+              user.save(user._id);
+
+              Profile.findOne({ user: user._id })
+                .populate("user", [
+                  "username",
+                  "firstname",
+                  "lastname",
+                  "email",
+                  "avatar",
+                  "bannerImg"
+                ]) // find user using user id
+                .then(profile => {
+                  console.log(profile);
+                  return res.json(profile);
+                })
+                .catch(err => {
+                  console.log(err);
+                  res.status(404).json({ message: "Idk some error occurred!" });
+                });
             })
             .catch(err => {
               console.log(err);
               res.status(404).json({ message: "Idk some error occurred!" });
             });
-        });
-      } catch (err) {
+        } catch (err) {
+          console.log(err);
+          return res
+            .status(400)
+            .json({ message: "Some error again occurred!" });
+        }
+      })
+      .catch(err => {
         console.log(err);
-        return res.status(400).json({ message: "Idk some error again!" });
-      }
-    });
+        res.status(404).json({ message: "Idk some error occurred!" });
+      });
   }
 );
 
@@ -429,6 +450,7 @@ router.delete(
   "/education/:edu_id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    const errors = {};
     Profile.findOne({ user: req.user.id })
       .then(profile => {
         // the index of the user education to be deleted
@@ -514,6 +536,7 @@ router.delete(
   "/experience/:exp_id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    const errors = {};
     Profile.findOne({ user: req.user.id })
       .then(profile => {
         // the index of the user experience to be deleted
@@ -550,6 +573,7 @@ router.delete(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    const errors = {};
     Profile.findOneAndRemove({ user: req.user.id }) // to delete the profile
       .then(() => {
         User.findOneAndRemove({ _id: req.user.id }) // to delete the user
@@ -578,6 +602,7 @@ router.post(
   "/follow/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    const errors = {};
     Profile.findOne({ user: req.params.id }) // find the user profile
       .then(profile => {
         if (
@@ -614,6 +639,7 @@ router.post(
   "/unfollow/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    const errors = {};
     Profile.findOne({ user: req.params.id }) // find the user profile
       .then(profile => {
         if (
