@@ -38,7 +38,10 @@ class PostItem extends Component {
     // console.log(auth);
     return (
       <div className="content post-item">
-        <div className="card" style={{ marginBottom: "20px" }}>
+        <div
+          className="card"
+          style={{ marginBottom: "20px", backgroundColor: "#fff" }}
+        >
           <div className="firstinfo">
             <div className="row">
               <div className="col-md-2">

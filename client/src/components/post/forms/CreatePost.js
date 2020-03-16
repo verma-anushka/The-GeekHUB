@@ -44,7 +44,7 @@ class CreatePost extends Component {
 
     return (
       <div className="content" style={{ marginTop: "50px" }}>
-        <div className="card">
+        <div className="card" style={{ backgroundColor: "#fff" }}>
           <div className="firstinfo">
             <div className="row">
               <div className="col-md-2">

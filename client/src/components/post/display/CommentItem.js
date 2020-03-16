@@ -16,7 +16,7 @@ class CommentItem extends Component {
         className="comment-item mb-3"
         // style={{ marginTop: "10%" }}
       >
-        <div className="card card-body">
+        <div className="card card-body" style={{ backgroundColor: "#fff" }}>
           <div className="firstinfo">
             <div className="row">
               <div className="col-md-2">

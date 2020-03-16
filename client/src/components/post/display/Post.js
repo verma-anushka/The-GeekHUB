@@ -47,7 +47,7 @@ class Post extends Component {
                   <p className="user-name">{auth.user.username}</p>
                 </div>
               </div>
-              <div className="main-menu"></div>
+              {/* <div className="main-menu"></div> */}
               {/* <div className="social-links">
                 <a href="">
                   <i className="icon ion-logo-facebook"></i>
@@ -88,7 +88,7 @@ class Post extends Component {
     }
 
     return (
-      <div className="feed" style={{ minHeight: "auto", marginTop: "" }}>
+      <div className="feed" style={{ minHeight: "auto" }}>
         {/* <Link to="/feed" className="btn btn-light mb-3">
               Back To Feed
             </Link> */}

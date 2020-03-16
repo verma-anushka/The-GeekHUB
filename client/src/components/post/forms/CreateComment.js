@@ -45,7 +45,7 @@ class CreateComment extends Component {
 
     return (
       <div className="comment-form mb-3">
-        <div className="card card-info">
+        <div className="card card-info" style={{ backgroundColor: "#fff" }}>
           <div className="firstinfo">
             <div className="row">
               <div className="col-md-2">
