@@ -42,28 +42,28 @@ class ForgotPassword extends Component {
   render() {
     const { errors } = this.state;
     return (
-      <div className="forgot-password">
-        <section className="container">
-          <h1 className="large text-primary">ForgotPassword</h1>
-          <p className="lead">
+      <div style={{ marginTop: "10%" }} className="forgot-password">
+        <h4 style={{ color: "#fff" }} className="large">
+          Forgot your account password?! Reset it with just a click!
+        </h4>
+        <form className="form" onSubmit={this.onSubmit}>
+          {/* <p className="lead">
             <i className="fas fa-user"></i> Enter your email address
-          </p>
-          <form className="form" onSubmit={this.onSubmit}>
-            <TextFieldGroup
-              type="email"
-              placeholder="Email Address"
-              name="email"
-              error={errors.email}
-              value={this.state.email}
-              onChange={this.onChange}
-            />
-            <input
-              type="submit"
-              className="btn btn-primary"
-              value="Send Link"
-            />
-          </form>
-        </section>
+          </p> */}
+          <TextFieldGroup
+            type="email"
+            placeholder="Email Address"
+            name="email"
+            error={errors.email}
+            value={this.state.email}
+            onChange={this.onChange}
+          />
+          <input
+            className="btn btn-outline-primary"
+            type="submit"
+            value="Send Link"
+          />
+        </form>
       </div>
     );
   }
@@ -73,7 +73,6 @@ ForgotPassword.propTypes = {
   errors: PropTypes.object.isRequired,
   forgotPassword: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
-  // isAuthenticated: PropTypes.bool
 };
 
 const mapStateToProps = state => ({

@@ -19,7 +19,6 @@ class ActivateAccount extends Component {
 
   onSubmit = event => {
     event.preventDefault();
-    // console.log(this.state);
     const jwtToken = {
       token: this.state.token
     };
@@ -27,17 +26,13 @@ class ActivateAccount extends Component {
   };
 
   componentDidMount = () => {
+    console.log(this.state);
+
     const { token } = this.props.match.params;
 
-    console.log(token);
-    // const { firstname } = jwt.decode(token);
     if (token) {
       this.setState({ token: token });
     }
-    console.log(token);
-    // if (this.props.auth.isAuthenticated) {
-    //   this.props.history.push("/dashboard");
-    // }
   };
 
   //   componentWillReceiveProps = nextProps => {
@@ -48,7 +43,7 @@ class ActivateAccount extends Component {
 
   activationLink = () => (
     <div>
-      <h4>Hey {this.state.firstname}, Ready to activate your account?</h4>
+      <h4>Click on the following link to activate your account.</h4>
       <button className="btn btn-outline-primary" onClick={this.onSubmit}>
         Activate my account!
       </button>
@@ -58,8 +53,10 @@ class ActivateAccount extends Component {
   render() {
     // const { firstname, username, token, display } = this.state;
     return (
-      <div className="activate-account" style={{ marginTop: "10%" }}>
-        <h4>ActivateAccount</h4>
+      <div className="activate-account">
+        <h1 style={{ color: "#fff", textAlign: "center" }}>
+          Activate your account
+        </h1>
         {this.activationLink()}
       </div>
     );
@@ -70,7 +67,6 @@ ActivateAccount.propTypes = {
   errors: PropTypes.object.isRequired,
   activateAccount: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
-  // isAuthenticated: PropTypes.bool
 };
 
 const mapStateToProps = state => ({

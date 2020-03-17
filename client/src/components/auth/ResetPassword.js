@@ -38,7 +38,6 @@ class ResetPassword extends Component {
     const { token } = this.props.match.params;
 
     // console.log(token);
-    // const { firstname } = jwt.decode(token);
     if (token) {
       this.setState({ token: token });
     }
@@ -54,32 +53,36 @@ class ResetPassword extends Component {
     const { errors } = this.state;
     // console.log(errors);
     return (
-      <div className="SignUp">
-        <section className="container">
-          <h1 className="large text-primary">ResetPassword</h1>
-          <p className="lead">
-            <i className="fas fa-user"></i> Reset
-          </p>
-          <form noValidate className="form" onSubmit={this.onSubmit}>
-            <TextFieldGroup
-              type="password"
-              placeholder="Password"
-              name="password"
-              error={errors.password}
-              value={this.state.password}
-              onChange={this.onChange}
-            />
-            <TextFieldGroup
-              type="password"
-              placeholder="Confirm Password"
-              name="confirmpassword"
-              error={errors.confirmpassword}
-              value={this.state.confirmpassword}
-              onChange={this.onChange}
-            />
-            <input type="submit" className="btn btn-primary" value="reset" />
-          </form>
-        </section>
+      <div style={{ marginTop: "10%" }} className="reset-password">
+        <h3 style={{ color: "#fff" }} className="large">
+          Reset your account password
+        </h3>
+        {/* <p className="lead">
+          <i className="fas fa-user"></i> Reset
+        </p> */}
+        <form noValidate className="form" onSubmit={this.onSubmit}>
+          <TextFieldGroup
+            type="password"
+            placeholder="Password"
+            name="password"
+            error={errors.password}
+            value={this.state.password}
+            onChange={this.onChange}
+          />
+          <TextFieldGroup
+            type="password"
+            placeholder="Confirm Password"
+            name="confirmpassword"
+            error={errors.confirmpassword}
+            value={this.state.confirmpassword}
+            onChange={this.onChange}
+          />
+          <input
+            type="submit"
+            className="btn btn-outline-primary"
+            value="Reset Password"
+          />
+        </form>
       </div>
     );
   }

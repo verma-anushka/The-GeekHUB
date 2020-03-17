@@ -181,7 +181,14 @@ class SignUp extends Component {
                 <p>If you already has an account, just sign in.!</p>
               </div>
               <button
-                className="auth-btn span img__btn m--up"
+                style={{
+                  display: "block",
+                  margin: "0 auto",
+                  outline: "none",
+                  focus: "none",
+                  border: "none"
+                }}
+                className="span img__btn m--up"
                 onClick={() => {
                   this.setState({
                     form: this.toggle[this.state.form],
