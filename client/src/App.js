@@ -32,7 +32,6 @@ import ResetPassword from "./components/auth/ResetPassword";
 
 // Check for token
 if (localStorage.jwtToken) {
-  // console.log("aaja");
   // Set auth token header
   setAuthToken(localStorage.jwtToken);
   // Decode token to get user data
@@ -62,6 +61,9 @@ class App extends Component {
           <Route exact path="/profile/:handle" component={Profile} />
           <Switch>
             <PrivateRoute exact path="/feed" component={Posts} />
+          </Switch>
+          <Switch>
+            <PrivateRoute exact path="/post/:id" component={Post} />
           </Switch>
           <div className="container">
             <Route exact path="/signup" component={SignUp} />
@@ -100,10 +102,6 @@ class App extends Component {
                 path="/addeducation"
                 component={AddEducation}
               />
-            </Switch>
-
-            <Switch>
-              <PrivateRoute exact path="/post/:id" component={Post} />
             </Switch>
           </div>
           <Footer />

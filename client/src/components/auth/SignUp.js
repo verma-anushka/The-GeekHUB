@@ -194,13 +194,13 @@ class SignUp extends Component {
               </button>
             </div>
             {this.state.form === "signup" && (
-              <div className="form sign-up">
-                <h2>Sign Up!</h2>
+              <div className="form sign-up" style={{ padding: "20px" }}>
+                <h2 style={{ marginBottom: "0" }}>Sign Up!</h2>
                 <div style={{ textAlign: "center" }}>
                   <GoogleOAuth />
                   <FacebookAuth />
                 </div>
-                <hr />
+                <hr style={{ margin: "0" }} />
                 <form noValidate onSubmit={this.onSignupSubmit}>
                   <div className="row">
                     <div className="col-xl-3 col-md-3 mb-30">

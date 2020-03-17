@@ -7,7 +7,9 @@ export default class App extends Component {
   state = {
     uploading: false,
     images: [],
-    imgPreview: null
+    imgPreview: null,
+    avatar: false,
+    banner: false
   };
 
   onChange = e => {
@@ -25,18 +27,35 @@ export default class App extends Component {
 
     fetch("/api/profile/uploadImg", {
       method: "POST",
-      body: formData,
-      onUploadProgress: progressEvent => {
-        console.log(progressEvent.loaded / progressEvent.total);
-      }
+      withCredentials: true,
+      credentials: "include",
+      headers: {
+        Authorization: localStorage.jwtToken
+        // "Content-Type": "application/json"
+      },
+      body: formData
+      // onUploadProgress: progressEvent => {
+      //   console.log(progressEvent.loaded / progressEvent.total);
+      // }
     })
       .then(res => res.json())
       .then(res => {
-        // console.log(res.user);
+        console.log(res.user);
         this.setState({
           uploading: false,
           images: res.user
         });
+
+        if (this.state.images.avatar) {
+          this.setState({
+            avatar: true
+          });
+        }
+        if (this.state.images.bannerImg) {
+          this.setState({
+            banner: true
+          });
+        }
       });
   };
 
@@ -47,15 +66,20 @@ export default class App extends Component {
   // };
 
   render() {
-    const { uploading, imgPreview, images } = this.state;
+    const { uploading, imgPreview, images, avatar, banner } = this.state;
 
+    console.log(images.bannerImg);
     const content = () => {
       switch (true) {
         case uploading:
           return <Spinner />;
-        case imgPreview !== null:
+        case imgPreview !== null && avatar:
           return (
             <Images images={images.avatar} removeImage={this.removeImage} />
+          );
+        case imgPreview !== null && banner:
+          return (
+            <Images images={images.bannerImg} removeImage={this.removeImage} />
           );
         default:
           return (
@@ -71,3 +95,8 @@ export default class App extends Component {
     );
   }
 }
+
+// Loop through all elements x in the first array and check all elements u in the second array for any elements with abs(x-y) <= d.
+// For the rows with no reserved seats, the answer is 2. For the other rows, we will try to use 4 seats starting at columns 2, 4, and 6 (in this order).
+// Calculate the power for each element, create the pairs (power, element), then sort the pairs lexicographically and find the kth element.
+// Find the maximum non-adjacent subsequence sum of length n/3. This can be done with dp[i][j] = max sum of j elements from first i elements.

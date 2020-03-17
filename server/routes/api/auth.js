@@ -263,25 +263,11 @@ router.post("/forgot-password", (req, res) => {
         errors
       );
     }
-    const payload = {
-      id: user._id,
-      username: user.username,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      avatar: user.avatar
-    };
-    jwt.sign(
-      payload,
-      keys.JWT_SECRET,
+    const jwtToken = jwt.sign(
+      { id: user._id, firstname: user.firstname },
+      keys.JWT_RESET_PASSWORD,
       {
-        expiresIn: 12 * 3600
-      },
-      (err, token) => {
-        res.json({
-          success: true,
-          payload,
-          token: "Bearer " + token
-        });
+        expiresIn: "1h" //  1 hour
       }
     );
 
@@ -298,11 +284,10 @@ router.post("/forgot-password", (req, res) => {
               <p>This email contains sensitive information. Please do not share it with anyone.</p>
             `
     };
-
     const msgToAdmin = {
       to: keys.EMAIL_TO,
       from: keys.EMAIL_FROM,
-      subject: `Password reset request from ${user.firstname} ${user.lastname}`,
+      subject: "Sign Up request at Go Geeks!",
       text: "...",
       html: `<h4> Hello Admin </h4>
       <p>some text</p>
@@ -311,9 +296,11 @@ router.post("/forgot-password", (req, res) => {
 
     return user.updateOne({ resetPasswordToken: jwtToken }, (err, success) => {
       if (err) {
-        errors.message =
-          "Database connection error on reset password request by user.";
-        return res.status(400).json(errors);
+        // console.log('Reset password error', err);
+        return res.status(400).json({
+          error:
+            "userDatabase connection error on reset password request bby user."
+        });
       } else {
         // console.log(user.resetPasswordToken);
         sgMail
@@ -326,8 +313,9 @@ router.post("/forgot-password", (req, res) => {
           })
           .catch(err => {
             // console.log(err);
-            errors.message = err.message;
-            return res.status(400).json(errors);
+            return res.status(400).json({
+              message: err.message
+            });
           });
       }
     });
@@ -348,63 +336,310 @@ router.put("/reset-password", (req, res) => {
   }
 
   // Destructuring the required properties
-  const { resetPasswordToken, password } = req.body;
+  const { resetPasswordToken, password, confirmPassword } = req.body;
   if (resetPasswordToken) {
     jwt.verify(resetPasswordToken, keys.JWT_RESET_PASSWORD, function(
       err,
       decodedToken
     ) {
       if (err) {
-        errors.message = "Link has expired. Try again!";
-        return res.status(400).json(errors);
+        return res.status(400).json({
+          error: "Link has expired. Try again!"
+        });
       }
+
+      // console.log(resetPasswordToken);
+
       User.findOne({ resetPasswordToken }, (err, user) => {
+        // console.log(user);
         if (err || !user) {
-          errors.message = "Something went wrong. Try again!";
-          return res.status(400).json(errors);
+          // console.log(user);
+          // console.log(err);
+
+          return res.status(400).json({
+            error: "Something went wrong. Try again!"
+          });
         }
+
+        let updatedFields = {};
         // Password encryption
         bcrypt.genSalt(SALTROUNDS, (err, salt) => {
-          if (err) {
-            // console.log(err);
-            errors.message = "Something went wrong. Try again!";
-            return res.status(401).json(errors);
-          }
+          // if (err) {
+          //   throw err;
+          // }
           // Password hashing
           bcrypt.hash(password, salt, (err, hash) => {
             if (err) {
               // console.log("Save User in DB error");
-              errors.message = "Error occurred! Please try again.";
-              return res.status(401).json(errors);
+              return res.status(401).json({
+                error: "Error occurred! Please try again."
+              });
+              // throw err;
             }
 
-            const updatedFields = {
+            updatedFields = {
               password: hash,
               resetPasswordToken: ""
             };
-
-            user = _.extend(user, updatedFields);
-
-            user.save(err => {
-              if (err) {
-                // console.log(err);
-                errors.message = "Error resetting user password!";
-                return res.status(400).json(errors);
-              } else {
-                return res.status(200).json({
-                  message: `Password has been changed. You can now login with your new password.`
-                });
-              }
-            });
+            // password = hash;
+            // newUser
+            //   .save()
+            //   .then(user => res.json(user)) // registration successful
+            //   .catch(err => console.log(`Error: ${err}`)); // registration unsuccessful
           });
+        });
+
+        user = _.extend(user, updatedFields);
+
+        user.save(err => {
+          if (err) {
+            // console.log(err);
+            return res.status(400).json({
+              error: "Error resetting user password!"
+            });
+          } else {
+            return res.status(200).json({
+              message: `Great! Now you can login with your new password`
+            });
+          }
         });
       });
     });
-  } else {
-    errors.message = "Invalid Token. Please try again!";
-    return res.status(401).json(errors);
   }
 });
+
+// // @route       : /api/users/forgot-password
+// // @method      : PUT
+// // @access      : public
+// // @description : route for forgot password
+// router.post("/forgot-password", (req, res) => {
+//   // Destructuring the errors and validations
+//   const { errors, isValid } = validateForgotPasswordInputs(req.body);
+
+//   // Check validation
+//   if (!isValid) {
+//     return res.status(400).json(errors); // error
+//   }
+//   // Destructuring the required properties
+//   const { email } = req.body;
+
+//   // Find the user (email)
+//   User.findOne({ email }).then(user => {
+//     // console.log(user);
+
+//     if (!user) {
+//       errors.email = "User with the given email id does not exist!";
+//       // the user is not registred
+//       return res.status(404).json(
+//         // 404 error -> not found
+//         errors
+//       );
+//     }
+
+//     const msgToUser = {
+//       to: email,
+//       from: keys.EMAIL_FROM,
+//       subject: "Password Reset Request",
+//       text: "Mail from Go Geeks for password reset!",
+//       html: `
+//               <h4> Hello ${user.firstname} ${user.lastname} </h4>
+//               <p>Please use the following link to reset your password.</p>
+//               <p>http://localhost:3000/password/reset/${jwtToken}</p>
+//               <hr />
+//               <p>This email contains sensitive information. Please do not share it with anyone.</p>
+//             `
+//     };
+//     const msgToAdmin = {
+//       to: keys.EMAIL_TO,
+//       from: keys.EMAIL_FROM,
+//       subject: "Sign Up request at Go Geeks!",
+//       text: "...",
+//       html: `<h4> Hello Admin </h4>
+//       <p>some text</p>
+//       `
+//     };
+
+//     return user.updateOne({ resetPasswordToken: jwtToken }, (err, success) => {
+//       if (err) {
+//         // console.log('Reset password error', err);
+//         return res.status(400).json({
+//           error:
+//             "userDatabase connection error on reset password request bby user."
+//         });
+//       } else {
+//         // console.log(user.resetPasswordToken);
+//         sgMail
+//           .send(msgToUser)
+//           .then(sentMail => {
+//             // console.log(sentMail);
+//             return res.json({
+//               message: `Email has been sent to ${email}. Follow the instructions provided in the mail to reset your account password.`
+//             });
+//           })
+//           .catch(err => {
+//             // console.log(err);
+//             return res.status(400).json({
+//               message: err.message
+//             });
+//           });
+//       }
+//     });
+//     // const payload = {
+//     //   id: user._id,
+//     //   username: user.username,
+//     //   firstname: user.firstname,
+//     //   lastname: user.lastname,
+//     //   avatar: user.avatar
+//     // };
+
+//     // var msgToUser;
+
+//     // const jwtToken = jwt.sign(
+//     //   payload,
+//     //   keys.JWT_SECRET,
+//     //   {
+//     //     expiresIn: 12 * 3600
+//     //   },
+//     //   (err, token) => {
+//     //     console.log("token");
+//     //     console.log(token);
+
+//     //     msgToUser = {
+//     //       to: email,
+//     //       from: keys.EMAIL_FROM,
+//     //       subject: "Password Reset Request",
+//     //       text: "Mail from Go Geeks for password reset!",
+//     //       html: `
+//     //               <h4> Hello ${user.firstname} ${user.lastname} </h4>
+//     //               <p>Please use the following link to reset your password.</p>
+//     //               <p>http://localhost:3000/password/reset/${token}</p>
+//     //               <hr />
+//     //               <p>This email contains sensitive information. Please do not share it with anyone.</p>
+//     //             `
+//     //     };
+
+//     //     //   const msgToAdmin = {
+//     //     //     to: keys.EMAIL_TO,
+//     //     //     from: keys.EMAIL_FROM,
+//     //     //     subject: `Password reset request from ${user.firstname} ${user.lastname}`,
+//     //     //     text: "...",
+//     //     //     html: `<h4> Hello Admin </h4>
+//     //     // <p>some text</p>
+//     //     // `
+//     //     //   };
+
+//     //     return user.updateOne(
+//     //       { resetPasswordToken: jwtToken },
+//     //       (err, success) => {
+//     //         if (err) {
+//     //           errors.message =
+//     //             "Database connection error on reset password request by user.";
+//     //           return res.status(400).json(errors);
+//     //         } else {
+//     //           // console.log(user.resetPasswordToken);
+//     //           sgMail
+//     //             .send(msgToUser)
+//     //             .then(sentMail => {
+//     //               // console.log(sentMail);
+//     //               // res.json({
+//     //               //   success: true,
+//     //               //   payload,
+//     //               //   token: "Bearer " + token
+//     //               // });
+//     //               return res.json({
+//     //                 success: true,
+//     //                 payload,
+//     //                 token: "Bearer " + token,
+//     //                 message: `Email has been sent to ${email}. Follow the instructions provided in the mail to reset your account password.`
+//     //               });
+//     //             })
+//     //             .catch(err => {
+//     //               // console.log(err);
+//     //               errors.message = err.message;
+//     //               return res.status(400).json(errors);
+//     //             });
+//     //         }
+//     //       }
+//     //     );
+//     //   }
+//     // );
+//   });
+// });
+
+// // @route       : /api/users/reset-password
+// // @method      : PUT
+// // @access      : public
+// // @description : route for reset password
+// router.put("/reset-password", (req, res) => {
+//   // console.log("aaya");
+//   // Destructuring the errors and validations
+//   const { errors, isValid } = validateResetPasswordInputs(req.body);
+
+//   // Check validation
+//   if (!isValid) {
+//     return res.status(400).json(errors); // error
+//   }
+
+//   // Destructuring the required properties
+//   const { resetPasswordToken, password } = req.body;
+//   if (resetPasswordToken) {
+//     jwt.verify(resetPasswordToken, keys.JWT_RESET_PASSWORD, function(
+//       err,
+//       decodedToken
+//     ) {
+//       if (err) {
+//         console.log(err);
+//         errors.message = "Link has expired. Try again!";
+//         return res.status(400).json(errors);
+//       }
+//       // console.log(resetPasswordToken);
+//       User.findOne({ resetPasswordToken }, (err, user) => {
+//         if (err || !user) {
+//           errors.message = "Something went wrong. Try again!";
+//           return res.status(400).json(errors);
+//         }
+//         // Password encryption
+//         bcrypt.genSalt(SALTROUNDS, (err, salt) => {
+//           if (err) {
+//             // console.log(err);
+//             errors.message = "Something went wrong. Try again!";
+//             return res.status(401).json(errors);
+//           }
+//           // Password hashing
+//           bcrypt.hash(password, salt, (err, hash) => {
+//             if (err) {
+//               // console.log("Save User in DB error");
+//               errors.message = "Error occurred! Please try again.";
+//               return res.status(401).json(errors);
+//             }
+
+//             const updatedFields = {
+//               password: hash,
+//               resetPasswordToken: ""
+//             };
+
+//             user = _.extend(user, updatedFields);
+
+//             user.save(err => {
+//               if (err) {
+//                 // console.log(err);
+//                 errors.message = "Error resetting user password!";
+//                 return res.status(400).json(errors);
+//               } else {
+//                 return res.status(200).json({
+//                   message: `Password has been changed. You can now login with your new password.`
+//                 });
+//               }
+//             });
+//           });
+//         });
+//       });
+//     });
+//   } else {
+//     errors.message = "Invalid Token. Please try again!";
+//     return res.status(401).json(errors);
+//   }
+// });
 
 // @route       : /api/users/google-login
 // @method      : POST
@@ -417,6 +652,7 @@ router.post("/google-login", (req, res) => {
   client
     .verifyIdToken({ idToken, audience: process.env.GOOGLE_CLIENT_ID })
     .then(response => {
+      // console.log(response);
       const { email_verified, email } = response.payload;
       const firstname = response.payload.given_name;
       const lastname = response.payload.family_name;
@@ -572,7 +808,7 @@ router.post("/google-login", (req, res) => {
       }
     })
     .catch(err => {
-      // console.log(err);
+      console.log(err);
       errors.message = err.message;
       return res.status(400).json(errors);
     });

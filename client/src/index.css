@@ -11,7 +11,7 @@ body {
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-  min-height: 100%;
+  /* min-height: 100%; */
   color: #212112;
   background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat-back.svg");
   background-position: center;

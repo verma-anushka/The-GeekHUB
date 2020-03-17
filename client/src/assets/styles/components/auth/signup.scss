@@ -542,3 +542,13 @@ input {
     }
   }
 }
+
+.invalid-feedback {
+  display: block;
+  text-transform: none;
+  font-weight: normal;
+  // width: 100%;
+  // margin-top: .25rem;
+  // font-size: 80%;
+  // color: #dc3545;
+}
