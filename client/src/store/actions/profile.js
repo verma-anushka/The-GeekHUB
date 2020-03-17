@@ -18,7 +18,6 @@ export const getCurrentProfile = id => dispatch => {
   axios
     .get(`/api/profile?id=${id}`)
     .then(res => {
-      // console.log(res);
       // request successful
       dispatch({
         type: GET_PROFILE,
@@ -98,7 +97,6 @@ export const addExperience = (experience, history) => dispatch => {
   axios
     .post("/api/profile/experience", experience)
     .then(res => {
-      // console.log(res.data);
       // request successful
       history.push("/dashboard");
     })
@@ -133,11 +131,10 @@ export const deleteExperience = id => dispatch => {
   axios
     .delete(`/api/profile/experience/${id}`)
     .then(res => {
-      console.log(res);
-      // dispatch({
-      //   type: GET_PROFILE,
-      //   payload: res.data // profile with deleted exp
-      // });
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data // profile with deleted exp
+      });
     })
     .catch(err =>
       dispatch({
@@ -190,7 +187,6 @@ export const getProfileByHandle = handle => dispatch => {
   axios
     .get(`/api/profile/handle/${handle}`)
     .then(res => {
-      // console.log(res);
       dispatch({
         type: GET_PROFILE,
         payload: res.data
@@ -207,11 +203,9 @@ export const getProfileByHandle = handle => dispatch => {
 
 // ACTION CREATOR TO FOLLOW A USER
 export const follow = id => dispatch => {
-  // console.log(id);
   axios
     .post(`/api/profile/follow/${id}`)
     .then(res => {
-      // console.log(res);
       dispatch(getCurrentProfile(id));
     })
     .catch(err => {
@@ -228,7 +222,6 @@ export const unfollow = id => dispatch => {
   axios
     .post(`/api/profile/unfollow/${id}`)
     .then(res => {
-      // console.log(res);
       dispatch(getCurrentProfile(id));
     })
     .catch(err => {

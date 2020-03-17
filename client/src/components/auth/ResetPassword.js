@@ -1,17 +1,13 @@
 import React, { Component } from "react";
-// import classnames from "classnames";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import TextFieldGroup from "../formInputs/TextFieldGroup";
-// import jwt from "jsonwebtoken";
-
 import { resetPassword } from "../../store/actions/auth";
 
 class ResetPassword extends Component {
   state = {
     firstname: "",
-    // lastname: "",
     username: "",
     token: "",
     password: "",
@@ -21,7 +17,6 @@ class ResetPassword extends Component {
 
   onSubmit = event => {
     event.preventDefault();
-    // console.log(this.state);
     const reset = {
       resetPasswordToken: this.state.token,
       password: this.state.password,
@@ -36,8 +31,6 @@ class ResetPassword extends Component {
 
   componentDidMount = () => {
     const { token } = this.props.match.params;
-
-    // console.log(token);
     if (token) {
       this.setState({ token: token });
     }
@@ -51,15 +44,11 @@ class ResetPassword extends Component {
 
   render() {
     const { errors } = this.state;
-    // console.log(errors);
     return (
       <div style={{ marginTop: "10%" }} className="reset-password">
         <h3 style={{ color: "#fff" }} className="large">
           Reset your account password
         </h3>
-        {/* <p className="lead">
-          <i className="fas fa-user"></i> Reset
-        </p> */}
         <form noValidate className="form" onSubmit={this.onSubmit}>
           <TextFieldGroup
             type="password"
@@ -92,7 +81,6 @@ ResetPassword.propTypes = {
   errors: PropTypes.object.isRequired,
   resetPassword: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
-  // isAuthenticated: PropTypes.bool
 };
 
 const mapStateToProps = state => ({

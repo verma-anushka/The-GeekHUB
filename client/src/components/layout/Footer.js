@@ -1,5 +1,4 @@
 import React from "react";
-// import { Link } from "react-router-dom";
 import "../../assets/styles/components/layout/Footer.scss";
 
 export default function Footer() {
@@ -117,19 +116,49 @@ export default function Footer() {
               <div className="footer-menu">
                 <ul>
                   <li>
-                    <a href="https://github.com/verma-anushka">Home</a>
+                    <a
+                      href="https://github.com/verma-anushka"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Home
+                    </a>
                   </li>
                   <li>
-                    <a href="https://github.com/verma-anushka">Terms</a>
+                    <a
+                      href="https://github.com/verma-anushka"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Terms
+                    </a>
                   </li>
                   <li>
-                    <a href="https://github.com/verma-anushka">Privacy</a>
+                    <a
+                      href="https://github.com/verma-anushka"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Privacy
+                    </a>
                   </li>
                   <li>
-                    <a href="https://github.com/verma-anushka">Policy</a>
+                    <a
+                      href="https://github.com/verma-anushka"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Policy
+                    </a>
                   </li>
                   <li>
-                    <a href="https://github.com/verma-anushka">Contact</a>
+                    <a
+                      href="https://github.com/verma-anushka"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Contact
+                    </a>
                   </li>
                 </ul>
               </div>

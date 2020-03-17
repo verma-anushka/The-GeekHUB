@@ -13,12 +13,9 @@ class ForgotPassword extends Component {
 
   onSubmit = event => {
     event.preventDefault();
-    // console.log(this.state);
-
     const user = {
       email: this.state.email
     };
-
     this.props.forgotPassword(user, this.props.history);
   };
 

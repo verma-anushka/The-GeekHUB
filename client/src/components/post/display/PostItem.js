@@ -33,9 +33,6 @@ class PostItem extends Component {
   render() {
     const { post, auth, showActions } = this.props;
     var time = moment(post.date).format("DD-MM-YYYY h:mm:ss");
-
-    // console.log(post);
-    // console.log(auth);
     return (
       <div className="content post-item">
         <div

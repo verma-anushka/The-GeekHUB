@@ -32,7 +32,6 @@ class Education extends Component {
         </td>
       </tr>
     ));
-    // console.log(education);
     return (
       <div>
         <h4 className="mb-4">Education Credentials</h4>

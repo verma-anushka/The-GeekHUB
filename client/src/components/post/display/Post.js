@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-// import { Link } from "react-router-dom";
 import classnames from "classnames";
 import PropTypes from "prop-types";
 import PostItem from "./PostItem";
@@ -8,7 +7,6 @@ import CreateComment from "../forms/CreateComment";
 import CommentList from "./CommentList";
 import Spinner from "../../Spinner";
 import { getPost } from "../../../store/actions/post";
-// import CurrentUser from "../../layout/CurrentUser";
 import "../../../assets/styles/components/layout/CurrentUser.scss";
 
 class Post extends Component {
@@ -77,11 +75,9 @@ class Post extends Component {
             className="main-content"
             style={{ minHeight: "auto", marginTop: "5%" }}
           >
-            {/* <div> */}
             <PostItem post={post} showActions={false} />
             <CreateComment postId={post._id} />
             <CommentList postId={post._id} comments={post.comments} />
-            {/* </div> */}
           </div>
         </div>
       );

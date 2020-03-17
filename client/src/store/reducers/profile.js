@@ -2,9 +2,7 @@ import {
   GET_PROFILE,
   GET_PROFILES,
   PROFILE_LOADING,
-  //   GET_ERRORS,
   CLEAR_CURRENT_PROFILE
-  //   PROFILE_NOT_FOUND
 } from "../actions/types";
 
 const initialState = {
@@ -14,7 +12,6 @@ const initialState = {
 };
 
 export default function(state = initialState, action) {
-  // console.log(state);
   switch (action.type) {
     case PROFILE_LOADING:
       return {

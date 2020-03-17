@@ -46,13 +46,11 @@ class CreateProfile extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
-      // console.log(nextProps.errors);
       this.setState({ errors: nextProps.errors });
     }
     if (nextProps.profile.profile) {
       const profile = nextProps.profile.profile;
 
-      // array -> CSV
       const skillsCSV = profile.skills.join(",");
 
       // If profile field doesnt exist, make empty string
@@ -119,8 +117,6 @@ class CreateProfile extends Component {
 
   onSubmit = event => {
     event.preventDefault();
-    // console.log(this.state);
-
     const profile = {
       handle: this.state.handle,
       organization: this.state.organization,
@@ -227,7 +223,6 @@ class CreateProfile extends Component {
       );
     }
 
-    // Select options for status
     const options = [
       { label: "Select Professional Status*", value: 0 },
       { label: "Student", value: "Student" },
@@ -351,7 +346,6 @@ class CreateProfile extends Component {
                 <button
                   type="button"
                   onClick={() => {
-                    // Toggle feature
                     this.setState(prevState => ({
                       displaySocialInputs: !prevState.displaySocialInputs
                     }));
@@ -360,7 +354,6 @@ class CreateProfile extends Component {
                 >
                   Add Social Network Links
                 </button>
-                {/* <span className="text-muted">Optional</span> */}
               </div>
               {socialInputs}
             </div>

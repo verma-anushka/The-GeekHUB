@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-// import { Link } from "react-router-dom";
 import Header from "./Header";
 import About from "./About";
 import Social from "./Social";
+import Spinner from "../../Spinner";
 import Credentials from "./Credentials";
 import GithubProjects from "./projects/github/ProjectList";
 import MediumPosts from "./projects/medium/PostList";
-import Spinner from "../../Spinner";
 import { getProfileByHandle } from "../../../store/actions/profile";
 import "../../../assets/styles/components/profile/Profile.scss";
 
@@ -44,10 +43,7 @@ class Profile extends Component {
   }
   render() {
     const { profile, loading } = this.props.profile;
-    // console.log(profile);
-
     let content;
-
     if (profile === null || loading) {
       content = <Spinner />;
     } else {

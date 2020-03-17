@@ -21,7 +21,6 @@ export default props => (
         />
       </label>
     </div>
-
     {/* <div className="button">
       <label htmlFor="multi">
         <FontAwesomeIcon icon={faImages} color="#6d84b4" size="10x" />

@@ -3,12 +3,11 @@ import classnames from "classnames";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import TextFieldGroup from "../formInputs/TextFieldGroup";
 import { Link } from "react-router-dom";
 import zxcvbn from "zxcvbn";
 import GoogleOAuth from "./GoogleOAuth";
 import FacebookAuth from "./FacebookAuth";
-
+import TextFieldGroup from "../formInputs/TextFieldGroup";
 import { signUpUser, signInUser } from "../../store/actions/auth";
 import "../../assets/styles/components/auth/signup.scss";
 
@@ -38,7 +37,6 @@ class SignUp extends Component {
   }
 
   showHide(event) {
-    // console.log(this.state.type);
     event.preventDefault();
     event.stopPropagation();
     this.setState({
@@ -77,7 +75,6 @@ class SignUp extends Component {
   }
 
   onSignupSubmit = event => {
-    // console.log("onSignupSubmit");
     event.preventDefault();
     const newUser = {
       firstname: this.state.firstname,
@@ -91,7 +88,6 @@ class SignUp extends Component {
   };
 
   onSigninSubmit = event => {
-    // console.log("onSigninSubmit");
     event.preventDefault();
     const user = {
       email: this.state.email,
@@ -118,8 +114,6 @@ class SignUp extends Component {
 
   render() {
     const { errors } = this.state;
-    console.log(errors);
-
     const { form } = this.state;
     return (
       <div className="auth">

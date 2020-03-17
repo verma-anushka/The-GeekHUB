@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import CreatePost from "../forms/CreatePost";
+import classnames from "classnames";
 import PostList from "./PostList";
 import Spinner from "../../Spinner";
+import CreatePost from "../forms/CreatePost";
 import { getPosts } from "../../../store/actions/post";
-// import CurrentUser from "../../layout/CurrentUser";
-import classnames from "classnames";
-
 import "../../../assets/styles/components/layout/CurrentUser.scss";
 
 class Posts extends Component {
@@ -22,7 +20,6 @@ class Posts extends Component {
   render() {
     const { posts, loading } = this.props.post;
     const { auth } = this.props;
-    console.log(this.props.profile);
     let content;
 
     if (posts === null || loading) {
@@ -66,7 +63,6 @@ class Posts extends Component {
             <button
               type="button"
               onClick={() => {
-                // Toggle feature
                 this.setState(prevState => ({
                   show: !prevState.show
                 }));

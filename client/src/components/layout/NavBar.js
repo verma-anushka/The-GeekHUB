@@ -14,8 +14,6 @@ class NavBar extends Component {
   }
 
   isActive = path => {
-    // console.log(this.props.match.path);
-    // console.log(path);
     if (this.props.match.path === path) {
       return { color: "red" };
     } else {
@@ -35,7 +33,7 @@ class NavBar extends Component {
               style={this.isActive("/profiles")}
               className="nav-link"
             >
-              Go Geeks
+              TheGeekHUB
             </Link>
           </li>
           <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
@@ -94,7 +92,7 @@ class NavBar extends Component {
         </ul>
 
         <ul className="navbar-nav ml-auto py-4 py-md-0">
-          {/* <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
+          <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
             <Link
               to="/signup"
               style={this.isActive("/signup")}
@@ -102,7 +100,7 @@ class NavBar extends Component {
             >
               Sign Up
             </Link>
-          </li> */}
+          </li>
           <li className="nav-item pl-4 pl-md-0 ml-0 ml-md-4">
             <Link
               to="/signin"

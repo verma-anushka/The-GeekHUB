@@ -12,10 +12,7 @@ class CommentItem extends Component {
     const { comment, postId, auth } = this.props;
 
     return (
-      <div
-        className="comment-item mb-3"
-        // style={{ marginTop: "10%" }}
-      >
+      <div className="comment-item mb-3">
         <div className="card card-body" style={{ backgroundColor: "#fff" }}>
           <div className="firstinfo">
             <div className="row">

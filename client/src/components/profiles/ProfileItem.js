@@ -5,7 +5,6 @@ import isEmpty from "../../validation/isEmpty";
 
 class ProfileItem extends Component {
   render() {
-    // console.log(this.props);
     const { profile } = this.props;
 
     return (

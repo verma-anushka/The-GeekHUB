@@ -4,31 +4,32 @@ import { Provider } from "react-redux";
 import jwtDecode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import store from "./store";
-
 import "./App.css";
 
 import NavBar from "./components/layout/NavBar";
 import HomePage from "./components/layout/HomePage";
 import Footer from "./components/layout/Footer";
+import Dashboard from "./components/dashboard/Dashboard";
+import PrivateRoute from "./components/PrivateRoute";
 
 import SignUp from "./components/auth/SignUp";
 import SignIn from "./components/auth/SignIn";
-import Dashboard from "./components/dashboard/Dashboard";
-import { setCurrentUser, logoutUser } from "./store/actions/auth";
-import { clearCurrentProfile } from "./store/actions/profile";
+import ActivateAccount from "./components/auth/ActivateAccount";
+import ForgotPassword from "./components/auth/ForgotPassword";
+import ResetPassword from "./components/auth/ResetPassword";
+
 import CreateProfile from "./components/profile/forms/CreateProfile";
 import EditProfile from "./components/profile/forms/EditProfile";
 import AddExperience from "./components/profile/forms/AddExperience";
 import AddEducation from "./components/profile/forms/AddEducation";
-import ProfileList from "./components/profiles/ProfileList";
 import Profile from "./components/profile/display/Profile";
-import Posts from "./components/post/display/Posts";
-import Post from "./components/post/display/Post";
+import ProfileList from "./components/profiles/ProfileList";
 
-import PrivateRoute from "./components/PrivateRoute";
-import ActivateAccount from "./components/auth/ActivateAccount";
-import ForgotPassword from "./components/auth/ForgotPassword";
-import ResetPassword from "./components/auth/ResetPassword";
+import Post from "./components/post/display/Post";
+import Posts from "./components/post/display/Posts";
+
+import { setCurrentUser, logoutUser } from "./store/actions/auth";
+import { clearCurrentProfile } from "./store/actions/profile";
 
 // Check for token
 if (localStorage.jwtToken) {

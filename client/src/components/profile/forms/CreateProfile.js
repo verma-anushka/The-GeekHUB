@@ -46,9 +46,6 @@ class CreateProfile extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-
-    // const { user } = this.props.auth;
-    // console.log(user);
     const profile = {
       handle: this.state.handle,
       organization: this.state.organization,
@@ -78,7 +75,6 @@ class CreateProfile extends Component {
   render() {
     const { user } = this.props.auth;
     const { errors, displaySocialInputs } = this.state;
-    // console.log(this.props.auth.user);
     let socialInputs;
 
     if (displaySocialInputs) {
@@ -157,7 +153,6 @@ class CreateProfile extends Component {
       );
     }
 
-    // Select options for status
     const options = [
       { label: "* Select Professional Status", value: 0 },
       { label: "Developer", value: "Developer" },

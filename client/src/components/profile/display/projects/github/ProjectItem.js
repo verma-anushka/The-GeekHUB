@@ -4,7 +4,6 @@ import Moment from "react-moment";
 class PostItem extends Component {
   render() {
     const { repo } = this.props;
-    // console.log(repo);
 
     return (
       <div className="card card-body">

@@ -41,8 +41,6 @@ class CreateComment extends Component {
 
   render() {
     const { errors } = this.state;
-    console.log(errors);
-
     return (
       <div className="comment-form mb-3">
         <div className="card card-info" style={{ backgroundColor: "#fff" }}>
@@ -76,26 +74,6 @@ class CreateComment extends Component {
               </div>
             </div>
           </div>
-
-          {/* <div className="card-header bg-info text-white">
-            Make a comment...
-          </div>
-          <div className="card-body">
-            <form onSubmit={this.onSubmit}>
-              <div className="form-group">
-                <TextAreaFieldGroup
-                  placeholder="Reply to post"
-                  name="content"
-                  value={this.state.content}
-                  onChange={this.onChange}
-                  error={errors.content}
-                />
-              </div>
-              <button type="submit" className="btn btn-dark">
-                Submit
-              </button>
-            </form>
-          </div> */}
         </div>
       </div>
     );

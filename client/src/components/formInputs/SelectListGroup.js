@@ -14,7 +14,6 @@ const SelectListGroup = props => {
     <div>
       <div className="form-group select">
         <select
-          // name="format"
           id="format"
           name={name}
           className={classnames({ "is-invalid": error })}

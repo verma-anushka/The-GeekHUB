@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import TextFieldGroup from "../../formInputs/TextFieldGroup";
-import TextAreaFieldGroup from "../../formInputs/TextAreaFieldGroup";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import TextFieldGroup from "../../formInputs/TextFieldGroup";
+import TextAreaFieldGroup from "../../formInputs/TextAreaFieldGroup";
 import { addExperience } from "../../../store/actions/profile";
 
 class AddExperience extends Component {
@@ -57,8 +57,6 @@ class AddExperience extends Component {
 
   render() {
     const { errors } = this.state;
-
-    // console.log(errors);
     return (
       <div style={{ marginTop: "10%" }} className="add-experience">
         <div className="row">

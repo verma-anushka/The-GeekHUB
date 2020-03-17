@@ -32,7 +32,6 @@ class ProjectList extends Component {
 
   render() {
     const { repos } = this.state;
-
     const repoItems = repos.map(repo => {
       return <ProjectItem key={repo.id} repo={repo} />;
     });

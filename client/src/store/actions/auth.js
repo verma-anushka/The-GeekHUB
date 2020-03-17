@@ -1,6 +1,6 @@
 import axios from "axios";
-import setAuthToken from "../../utils/setAuthToken";
 import jwtDecode from "jwt-decode";
+import setAuthToken from "../../utils/setAuthToken";
 import { GET_ERRORS, SET_CURRENT_USER } from "./types";
 
 // Register User
@@ -24,7 +24,6 @@ export const activateAccount = (token, history) => dispatch => {
   axios
     .post("/api/users/activate-account", token)
     .then(res => {
-      // console.log(res);
       history.push("/signin");
     })
     .catch(err => {
@@ -95,7 +94,6 @@ export const forgotPassword = (email, history) => dispatch => {
   axios
     .post("/api/users/forgot-password", email)
     .then(res => {
-      // console.log(res);
       history.push("/forgot-password");
     })
     .catch(err => {
@@ -109,11 +107,9 @@ export const forgotPassword = (email, history) => dispatch => {
 
 // Reset password
 export const resetPassword = (reset, history) => dispatch => {
-  // console.log(reset);
   axios
     .put("/api/users/reset-password", reset)
     .then(res => {
-      // console.log(res);
       history.push("/signin");
     })
     .catch(err => {

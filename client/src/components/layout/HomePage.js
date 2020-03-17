@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import "../../assets/styles/components/layout/HomePage.scss";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import GroupsFolder from "../../assets/images/groups-folders.png";
+import "../../assets/styles/components/layout/HomePage.scss";
 
 class HomePage extends Component {
   componentDidMount = () => {

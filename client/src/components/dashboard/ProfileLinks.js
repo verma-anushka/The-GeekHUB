@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-
 import { deleteAccount } from "../../store/actions/profile";
 
 class ProfileLinks extends Component {
@@ -39,7 +38,6 @@ ProfileLinks.propTypes = {
 };
 
 const mapStateToProps = state => {
-  // console.log(state.profile);
   return {
     auth: state.auth,
     profile: state.profile

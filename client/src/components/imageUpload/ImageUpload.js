@@ -40,7 +40,6 @@ export default class App extends Component {
     })
       .then(res => res.json())
       .then(res => {
-        console.log(res.user);
         this.setState({
           uploading: false,
           images: res.user
@@ -68,7 +67,6 @@ export default class App extends Component {
   render() {
     const { uploading, imgPreview, images, avatar, banner } = this.state;
 
-    console.log(images.bannerImg);
     const content = () => {
       switch (true) {
         case uploading:
@@ -95,8 +93,3 @@ export default class App extends Component {
     );
   }
 }
-
-// Loop through all elements x in the first array and check all elements u in the second array for any elements with abs(x-y) <= d.
-// For the rows with no reserved seats, the answer is 2. For the other rows, we will try to use 4 seats starting at columns 2, 4, and 6 (in this order).
-// Calculate the power for each element, create the pairs (power, element), then sort the pairs lexicographically and find the kth element.
-// Find the maximum non-adjacent subsequence sum of length n/3. This can be done with dp[i][j] = max sum of j elements from first i elements.

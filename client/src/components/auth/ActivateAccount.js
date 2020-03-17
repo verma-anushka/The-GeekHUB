@@ -1,19 +1,15 @@
 import React, { Component } from "react";
-// import classnames from "classnames";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-// import jwt from "jsonwebtoken";
 import { activateAccount } from "../../store/actions/auth";
 
 class ActivateAccount extends Component {
   state = {
     firstname: "",
-    // lastname: "",
     username: "",
     token: "",
     display: true,
-    // email: "",
     errors: {}
   };
 
@@ -26,10 +22,7 @@ class ActivateAccount extends Component {
   };
 
   componentDidMount = () => {
-    console.log(this.state);
-
     const { token } = this.props.match.params;
-
     if (token) {
       this.setState({ token: token });
     }
@@ -51,7 +44,6 @@ class ActivateAccount extends Component {
   );
 
   render() {
-    // const { firstname, username, token, display } = this.state;
     return (
       <div className="activate-account">
         <h1 style={{ color: "#fff", textAlign: "center" }}>

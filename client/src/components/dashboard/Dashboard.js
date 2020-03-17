@@ -5,13 +5,12 @@ import { connect } from "react-redux";
 import Spinner from "../Spinner";
 import Experience from "./Experience";
 import Education from "./Education";
-import { getCurrentProfile, deleteAccount } from "../../store/actions/profile";
 import ProfileLinks from "./ProfileLinks";
 import GroupsFolder from "../../assets/images/groups-folders.png";
+import { getCurrentProfile, deleteAccount } from "../../store/actions/profile";
 
 class Dashboard extends Component {
   componentDidMount() {
-    // console.log(this.props.auth);
     this.props.getCurrentProfile(this.props.auth.user.id);
   }
 
@@ -23,7 +22,6 @@ class Dashboard extends Component {
     if (profile === null || loading) {
       content = <Spinner />;
     } else {
-      // Check empty object
       if (Object.keys(profile).length > 0) {
         content = (
           <div className="row">
@@ -196,7 +194,6 @@ Dashboard.propTypes = {
 };
 
 const mapStateToProps = state => {
-  // console.log(state.profile);
   return {
     auth: state.auth,
     profile: state.profile

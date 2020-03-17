@@ -21,9 +21,7 @@ class CreatePost extends Component {
 
   onSubmit = event => {
     event.preventDefault();
-
     const { user } = this.props.auth;
-
     const newPost = {
       content: this.state.content,
       name: user.username,
@@ -39,7 +37,6 @@ class CreatePost extends Component {
   };
 
   render() {
-    // console.log(this.props.auth);
     const { errors } = this.state;
 
     return (

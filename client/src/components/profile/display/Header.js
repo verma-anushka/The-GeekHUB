@@ -48,7 +48,6 @@ class Header extends Component {
             </li>
             <li className="pull-right" style={{ verticalAlign: "middle" }}>
               <button
-                // style={{ borderRadius: "50%", width: "80px" }}
                 onClick={this.onFollowClick.bind(this, profile.user._id)}
                 type="button"
                 className="btn btn-light mr-1"

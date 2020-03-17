@@ -28,23 +28,14 @@ class Profiles extends Component {
 
     return (
       <div className="profiles" style={{ marginTop: "10%" }}>
-        {/* <div className="container"> */}
-        {/* <div className="row"> */}
-        {/* <div className="col-md-12"> */}
         <h1
           className="display-4 text-center"
           style={{ textTransform: "uppercase" }}
         >
           Developer Profiles
         </h1>
-        {/* <p className="lead text-center">
-                Browse and connect with developers
-              </p> */}
         {profileItems}
       </div>
-      // </div>
-      // </div>
-      // </div>
     );
   }
 }
@@ -55,7 +46,6 @@ Profiles.propTypes = {
 };
 
 const mapStateToProps = state => {
-  //   console.log(state.profile);
   return {
     profile: state.profile
   };

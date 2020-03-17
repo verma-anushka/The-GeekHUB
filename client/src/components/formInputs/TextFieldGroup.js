@@ -13,8 +13,6 @@ const TextFieldGroup = props => {
     onChange,
     disabled
   } = props;
-  // console.log(error);
-
   return (
     <div className="form-group">
       <label className={placeholder}>
