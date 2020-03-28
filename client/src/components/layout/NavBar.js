@@ -86,7 +86,7 @@ class NavBar extends Component {
               style={this.isActive("/profiles")}
               className="nav-link"
             >
-              Go Geeks
+              TheGeekHUB
             </Link>
           </li>
         </ul>

@@ -649,6 +649,8 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 router.post("/google-login", (req, res) => {
   const errors = {};
   const { idToken } = req.body;
+  // console.log(idToken);
+
   client
     .verifyIdToken({ idToken, audience: process.env.GOOGLE_CLIENT_ID })
     .then(response => {
