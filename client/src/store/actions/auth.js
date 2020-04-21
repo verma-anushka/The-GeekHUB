@@ -1,17 +1,30 @@
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import setAuthToken from "../../utils/setAuthToken";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { GET_ERRORS, SET_CURRENT_USER } from "./types";
 
 // Register User
 export const signUpUser = (newUser, history) => dispatch => {
+
   axios
     .post("/api/users/signup", newUser)
     .then(res => {
       history.push("/signin");
+      toast(`An email has been sent to ${newUser.email} with further instructions.`, {
+        className: "info-toast"
+        // position: toast.POSITION.TOP_RIGHT
+      });
     })
     .catch(err => {
       console.log(err);
+      // if(err) {
+      //   toast("API Error!", {
+      //     className: "error-toast",
+      //     position: toast.POSITION.TOP_RIGHT
+      //   });
+      // }
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
