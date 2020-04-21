@@ -27,15 +27,20 @@ class ProjectList extends Component {
           this.setState({ repos: data });
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err)
+      });
   }
 
   render() {
     const { repos } = this.state;
-    const repoItems = repos.map(repo => {
-      return <ProjectItem key={repo.id} repo={repo} />;
-    });
-
+    var repoItems;
+    if(repos.length > 0) {
+      repoItems = repos.map(repo => {
+        return <ProjectItem key={repo.id} repo={repo} />;
+      });
+    }
+    
     return (
       <div ref="myRef">
         <hr />
@@ -47,9 +52,17 @@ class ProjectList extends Component {
             textTransform: "uppercase"
           }}
         >
-          Latest Github Repos
+          
         </h3>
-        {repoItems}
+        {
+          repos.length > 0 ?
+            <div>
+              Latest Github Repos
+              {repoItems}
+            </div>
+            :
+            <></>
+        }
       </div>
     );
   }

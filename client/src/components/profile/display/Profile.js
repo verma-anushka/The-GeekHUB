@@ -41,6 +41,7 @@ class Profile extends Component {
       return false;
     }
   }
+  
   render() {
     const { profile, loading } = this.props.profile;
     let content;
