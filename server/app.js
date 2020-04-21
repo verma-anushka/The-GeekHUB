@@ -10,6 +10,7 @@ const path = require("path");
 const auth = require("./routes/api/auth");
 const profile = require("./routes/api/profile");
 const posts = require("./routes/api/posts");
+
 const app = express();
 app.use(cors());
 

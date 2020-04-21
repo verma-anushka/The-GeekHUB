@@ -41,11 +41,17 @@ export default class App extends Component {
       .then(res => res.json())
       .then(res => {
         this.setState({
-          uploading: false,
-          images: res.user
+          uploading: false
         });
 
-        if (this.state.images.avatar) {
+        console.log(res);
+        
+        // if(res.user) {
+        //   this.setState({
+        //     images: res.user
+        //   });
+        // }
+        if (this.state.images & this.state.images.avatar) {
           this.setState({
             avatar: true
           });

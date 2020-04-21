@@ -9,6 +9,8 @@ import GoogleOAuth from "./GoogleOAuth";
 import FacebookAuth from "./FacebookAuth";
 import TextFieldGroup from "../formInputs/TextFieldGroup";
 import { signUpUser, signInUser } from "../../store/actions/auth";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "../../assets/styles/components/auth/signup.scss";
 
 class SignUp extends Component {
@@ -115,6 +117,7 @@ class SignUp extends Component {
   render() {
     const { errors } = this.state;
     const { form } = this.state;
+    toast.info = `An email has been sent to ${this.state.email} with further instructions.`;
     return (
       <div className="auth">
         <div
@@ -175,12 +178,20 @@ class SignUp extends Component {
                 <p>If you already has an account, just sign in.!</p>
               </div>
               <button
-                className="auth-btn span img__btn m--up"
+                style={{
+                  display: "block",
+                  margin: "0 auto",
+                  outline: "none",
+                  focus: "none",
+                  border: "none"
+                }}
+                className="span img__btn m--up"
                 onClick={() => {
                   this.setState({
                     form: this.toggle[this.state.form],
                     password: "",
-                    score: "null"
+                    score: "null",
+                    errors: {}
                   });
                 }}
               >
@@ -189,6 +200,7 @@ class SignUp extends Component {
             </div>
             {this.state.form === "signup" && (
               <div className="form sign-up" style={{ padding: "20px" }}>
+               <ToastContainer />
                 <h2 style={{ marginBottom: "0" }}>Sign Up!</h2>
                 <div style={{ textAlign: "center" }}>
                   <GoogleOAuth />
@@ -289,9 +301,9 @@ class SignUp extends Component {
                         data-score={this.state.confirmscore}
                       />
                     </div>
-                  </div>
+                  </div>           
                   <input type="submit" className="submit" value="Sign Up" />
-                </form>
+                </form>          
               </div>
             )}
           </div>
@@ -316,3 +328,4 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, { signUpUser, signInUser })(
   withRouter(SignUp)
 );
+  

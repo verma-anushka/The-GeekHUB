@@ -42,12 +42,13 @@ class CreateProfile extends Component {
 
   componentDidMount() {
     this.props.getCurrentProfile(this.props.auth.user.id);
+  
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
-    }
+    // if (nextProps.errors) {
+    //   this.setState({ errors: nextProps.errors });
+    // }
     if (nextProps.profile.profile) {
       const profile = nextProps.profile.profile;
 

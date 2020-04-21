@@ -9,6 +9,8 @@ import GoogleOAuth from "./GoogleOAuth";
 import FacebookAuth from "./FacebookAuth";
 import TextFieldGroup from "../formInputs/TextFieldGroup";
 import { signUpUser, signInUser } from "../../store/actions/auth";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "../../assets/styles/components/auth/signup.scss";
 
 class SignUp extends Component {
@@ -115,6 +117,7 @@ class SignUp extends Component {
   render() {
     const { errors } = this.state;
     const { form } = this.state;
+    toast.info = `An email has been sent to ${this.state.email} with further instructions.`;
     return (
       <div className="auth">
         <div
@@ -197,6 +200,7 @@ class SignUp extends Component {
             </div>
             {this.state.form === "signup" && (
               <div className="form sign-up" style={{ padding: "40px" }}>
+                <ToastContainer />
                 <h2 style={{ marginBottom: "0" }}>Sign Up!</h2>
                 <div style={{ textAlign: "center" }}>
                   <GoogleOAuth />
@@ -299,6 +303,7 @@ class SignUp extends Component {
                     </div>
                   </div>
                   <input type="submit" className="submit" value="Sign Up" />
+                  {/* {error && <div className="invalid-feedback">{error}</div>} */}
                 </form>
               </div>
             )}
