@@ -13,18 +13,12 @@ export const signUpUser = (newUser, history) => dispatch => {
     .then(res => {
       history.push("/signin");
       toast(`An email has been sent to ${newUser.email} with further instructions.`, {
-        className: "info-toast"
-        // position: toast.POSITION.TOP_RIGHT
+        className: "info-toast",
+        position: toast.POSITION.TOP_RIGHT
       });
     })
     .catch(err => {
-      console.log(err);
-      // if(err) {
-      //   toast("API Error!", {
-      //     className: "error-toast",
-      //     position: toast.POSITION.TOP_RIGHT
-      //   });
-      // }
+      console.log(err.response);
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
