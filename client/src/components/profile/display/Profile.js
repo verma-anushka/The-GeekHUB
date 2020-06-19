@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Header from "./Header";
@@ -49,24 +49,27 @@ class Profile extends Component {
       content = <Spinner />;
     } else {
       content = (
-        <div className="card">
-          <Header profile={profile} />
-          {/* <Link to="/profiles" className="btn btn-light mb-3 float-left">
-            Back To Profiles
-          </Link> */}
-          <About profile={profile} />
-          <Credentials
-            education={profile.education}
-            experience={profile.experience}
-          />
-          {profile.githubUsername ? (
-            <GithubProjects username={profile.githubUsername} />
-          ) : null}
-          {profile.socialLinks && profile.socialLinks.medium ? (
-            <MediumPosts username={profile.socialLinks.medium} />
-          ) : null}
-          <Social profile={profile} />
-        </div>
+        <Fragment >
+          <div className="card">
+            <Header profile={profile} />
+            {/* <Link to="/profiles" className="btn btn-light mb-3 float-left">
+              Back To Profiles
+            </Link> */}
+            <About profile={profile} />
+            <Credentials
+              education={profile.education}
+              experience={profile.experience}
+            />
+            {profile.githubUsername ? (
+              <GithubProjects username={profile.githubUsername} />
+            ) : null}
+            {profile.socialLinks && profile.socialLinks.medium ? (
+              <MediumPosts username={profile.socialLinks.medium} />
+            ) : null}
+            <Social profile={profile} />
+          </div>
+        </Fragment>
+
       );
     }
 

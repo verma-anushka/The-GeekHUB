@@ -163,10 +163,12 @@ export const deleteEducation = id => dispatch => {
 };
 
 // ACTION CREATOR TO GET ALL THE USER PROFILES
-export const getProfiles = () => dispatch => {
+export const getProfiles = (query, cancelToken) => dispatch => {
   dispatch(setProfileLoading());
   axios
-    .get("/api/profile/allprofiles")
+    .get(`/api/profile/allprofiles?search=${query}`, {
+      cancelToken: cancelToken
+    })
     .then(res =>
       dispatch({
         type: GET_PROFILES,

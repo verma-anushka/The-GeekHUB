@@ -19,7 +19,7 @@ class ProfileItem extends Component {
             />
           </div>
           <div className="col-lg-6 col-md-4 col-8">
-            <h3>{profile.user.username}</h3>
+            <h3>{profile.handle}</h3>
             <p style={{ textAlign: "left" }}>
               {profile.status}{" "}
               {isEmpty(profile.organization) ? null : (

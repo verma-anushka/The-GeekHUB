@@ -3,11 +3,13 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Spinner from "../Spinner";
 import ProfileItem from "./ProfileItem";
+import SearchProfiles from "./SearchProfiles";
 import { getProfiles } from "../../store/actions/profile";
 
 class Profiles extends Component {
+
   componentDidMount() {
-    this.props.getProfiles();
+    this.props.getProfiles("");
   }
 
   render() {
@@ -28,6 +30,7 @@ class Profiles extends Component {
 
     return (
       <div className="profiles" style={{ marginTop: "10%" }}>
+        <SearchProfiles />
         <h1
           className="display-4 text-center"
           style={{ textTransform: "uppercase" }}

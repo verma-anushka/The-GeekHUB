@@ -11,6 +11,10 @@ var cloudinary = require("cloudinary");
 const keys = require("../../config/keys.js");
 const formData = require("express-form-data");
 
+//import child_process module
+const child_process = require("child_process");
+// Sleep for 5 seconds
+
 const storage = multer.diskStorage({
   filename: function(req, file, callback) {
     // cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
@@ -149,32 +153,76 @@ router.get("/user/:user_id", (req, res) => {
 // @method      : GET
 // @access      : public
 // @description : route to show all users profiles
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
+
 router.get("/allprofiles", (req, res) => {
+
+
+  // console.log("going to sleep");
+  
+  // child_process.execSync("sleep 5");
+
+  // console.log("back from sleep");
+
   const errors = {};
 
-  Profile.find() // find all the available profiles
-    .populate("user", [
-      "username",
-      "firstname",
-      "lastname",
-      "email",
-      "avatar",
-      "bannerImg"
-    ]) // populate fields from users into the response
-    .then(profiles => {
-      if (!profiles) {
-        // no profiles found
-        // console.log("no profiles");
+  console.log(req.query.search);
+  
+  if(req.query.search !== "") {
+    const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+    Profile.find({handle: regex}) // find all the available profiles
+      .populate("user", [
+        "username",
+        "firstname",
+        "lastname",
+        "email",
+        "avatar",
+        "bannerImg"
+      ]) // populate fields from users into the response
+      .then(profiles => {
+
+        console.log("profiles");
+        
+        if (!profiles) {
+          // no profiles found
+          // console.log("no profiles");
+          errors.noprofile = "There are no profiles to display!";
+          return res.status(404).json(errors);
+        }
+        res.json(profiles); // return the profile found
+      })
+      .catch(err => {
+        console.log(err);
         errors.noprofile = "There are no profiles to display!";
         return res.status(404).json(errors);
-      }
-      res.json(profiles); // return the profile found
-    })
-    .catch(err => {
-      console.log(err);
-      errors.noprofile = "There are no profiles to display!";
-      return res.status(404).json(errors);
-    });
+      });
+  } else {
+    Profile.find() // find all the available profiles
+      .populate("user", [
+        "username",
+        "firstname",
+        "lastname",
+        "email",
+        "avatar",
+        "bannerImg"
+      ]) // populate fields from users into the response
+      .then(profiles => {
+        if (!profiles) {
+          // no profiles found
+          // console.log("no profiles");
+          errors.noprofile = "There are no profiles to display!";
+          return res.status(404).json(errors);
+        }
+        res.json(profiles); // return the profile found
+      })
+      .catch(err => {
+        console.log(err);
+        errors.noprofile = "There are no profiles to display!";
+        return res.status(404).json(errors);
+      });
+  }
 });
 
 // @route       : /api/profile
