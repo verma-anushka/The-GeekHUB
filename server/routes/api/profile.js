@@ -11,9 +11,7 @@ var cloudinary = require("cloudinary");
 const keys = require("../../config/keys.js");
 const formData = require("express-form-data");
 
-//import child_process module
 const child_process = require("child_process");
-// Sleep for 5 seconds
 
 const storage = multer.diskStorage({
   filename: function(req, file, callback) {
@@ -159,17 +157,10 @@ function escapeRegex(text) {
 
 router.get("/allprofiles", (req, res) => {
 
-
-  // console.log("going to sleep");
-  
   // child_process.execSync("sleep 5");
-
-  // console.log("back from sleep");
 
   const errors = {};
 
-  console.log(req.query.search);
-  
   if(req.query.search !== "") {
     const regex = new RegExp(escapeRegex(req.query.search), 'gi');
     Profile.find({handle: regex}) // find all the available profiles
@@ -182,9 +173,6 @@ router.get("/allprofiles", (req, res) => {
         "bannerImg"
       ]) // populate fields from users into the response
       .then(profiles => {
-
-        console.log("profiles");
-        
         if (!profiles) {
           // no profiles found
           // console.log("no profiles");

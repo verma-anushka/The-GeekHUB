@@ -1,0 +1,45 @@
+.mentions {
+  margin: 1em 0;
+  color: black;
+  margin-left: 8%;
+}
+.mentions .mentions__control {
+  display: inline-block;
+}
+.mentions .mentions__higlighter {
+  padding: 1px;
+  border: 2px inset transparent;
+}
+.mentions .mentions__input {
+  padding: 5px;
+  border: none;
+  width: 100%;
+  padding: 10px 0px;
+  color: #5a5a5a;
+  line-height: 1.2;
+  font-style: initial;
+}
+.mentions .mentions__input:focus {
+  border: none;
+  outline: none;
+}
+.mentions__suggestions__list {
+  background-color: white;
+  color: black;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  font-size: 10pt;
+}
+
+.mentions__suggestions__item {
+  padding: 5px 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.mentions__suggestions__item--focused {
+  background-color: #8167a9;
+}
+
+.mentions__mention {
+  /* background-color: #8167a9; */
+  /* color: #8167a9; */
+}

@@ -61,7 +61,6 @@ class Post extends Component {
             <button
               type="button"
               onClick={() => {
-                // Toggle feature
                 this.setState(prevState => ({
                   show: !prevState.show
                 }));

@@ -50,6 +50,8 @@ router.get("/", (req, res) => {
   Post.find()
     .sort({ date: -1 }) // descending order- most recent posts on top
     .then(posts => {
+      // console.log(posts);
+      
       res.json(posts);
     })
     .catch(err => {
