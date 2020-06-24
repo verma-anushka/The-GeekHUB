@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import TextAreaFieldGroup from "../../formInputs/TextAreaFieldGroup";
+import { MentionsInput, Mention } from 'react-mentions';
+
 import { addComment } from "../../../store/actions/post";
+import { getProfiles } from "../../../store/actions/profile";
+
 
 class CreateComment extends Component {
   constructor(props) {
@@ -11,6 +14,7 @@ class CreateComment extends Component {
       content: "",
       errors: {}
     };
+    this.cancel = '';
   }
 
   componentWillReceiveProps(nextProps) {
@@ -21,26 +25,50 @@ class CreateComment extends Component {
 
   onSubmit = event => {
     event.preventDefault();
-
     const { user } = this.props.auth;
     const { postId } = this.props;
-
+    
     const newComment = {
       content: this.state.content,
-      name: user.name,
+      name: user.username,
       avatar: user.avatar
     };
-
     this.props.addComment(postId, newComment);
     this.setState({ content: "" });
   };
 
   onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ content : event.target.value });
   };
+
+   getUsers = (si) => {
+    var { content } = this.state;
+    var ei = si+1; 
+    while(ei<content.length && content[ei] !== " ") ei++;
+    var query = content.substring(si+1, ei);
+    this.props.getProfiles(query, this.cancel.token);
+  }
+
+  oninputkeypressup = () => {
+    var si = this.state.content.indexOf("@");
+    while(si !== -1) {  
+      this.getUsers(si);
+      si = this.state.content.indexOf("@", si+1);
+    }
+	} 
+
+  displayMentions = (id, display) => {
+    return `@${display}`
+  }
 
   render() {
     const { errors } = this.state;
+    const { profiles } = this.props.profile;
+    const allusers = profiles.map(profile => ({
+      id: profile.user._id,
+      display: profile.handle
+    }));
+
     return (
       <div className="comment-form mb-3">
         <div className="card card-info" style={{ backgroundColor: "#fff" }}>
@@ -54,13 +82,24 @@ class CreateComment extends Component {
                   <h1 style={{ color: "#222" }}>Make a comment...</h1>
                   <div className="card-body" style={{ padding: "0" }}>
                     <form onSubmit={this.onSubmit}>
-                      <TextAreaFieldGroup
-                        placeholder="Reply to post"
+                      <MentionsInput
+                        placeholder="Give your comment.."
                         name="content"
                         value={this.state.content}
                         onChange={this.onChange}
-                        error={errors.content}
-                      />
+                        onKeyUp={this.oninputkeypressup}
+                        className="mentions"
+                      >
+                        <Mention
+                          trigger="@"
+                          data={allusers}
+                          displayTransform={this.displayMentions}
+                          markup="@[__display__]"
+                          className="mentions__mention"
+                          appendSpaceOnAdd
+                        />
+                      </MentionsInput>
+                      {errors.content && <div className="invalid-feedback">{errors.content}</div>}
                       <button
                         type="submit"
                         className="btn btn-dark"
@@ -89,7 +128,8 @@ CreateComment.propTypes = {
 
 const mapStateToProps = state => ({
   auth: state.auth,
+  profile: state.profile,
   errors: state.errors
 });
 
-export default connect(mapStateToProps, { addComment })(CreateComment);
+export default connect(mapStateToProps, { addComment, getProfiles })(CreateComment);

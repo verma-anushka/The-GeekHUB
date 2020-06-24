@@ -190,9 +190,6 @@ router.post(
   "/comment/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    // console
-    console.log("aaya?");
-
     // Destructuring the errors and validations
     const { errors, isValid } = validatePostInputs(req.body);
 
