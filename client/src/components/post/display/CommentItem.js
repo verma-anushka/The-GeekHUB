@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import moment from "moment";
 
 import getMentions from './utils/getMentions';
 import markupToRegex from './utils/markupToRegex';
@@ -42,6 +43,8 @@ class CommentItem extends Component {
         curr++;
     }
 
+    var time = moment(comment.date).format("DD-MM-YYYY h:mm:ss");
+    
     return (
       <div className="comment-item mb-3">
         <div className="card card-body" style={{ backgroundColor: "#fff" }}>
@@ -49,12 +52,11 @@ class CommentItem extends Component {
             <div className="row">
               <div className="col-md-2">
                 <img src={comment.avatar} alt={comment.name} />
-                <br />
-                <p className="text-center">{comment.name}</p>
               </div>
               <div className="col-md-10">
                 <div className="profileinfo">
-                  <h1 style={{ color: "#222" }}>{comment.name}</h1>
+                  <h1 style={{ color: "#222" }}>{comment.name} <span className="text-muted" style={{ fontSize:"20px", fontWeight:"200" }}> commented... </span> </h1>
+                  <h3>{time}</h3>
                   {/* <p className="bio">{comment.content}</p> */}
                   <p className="bio" dangerouslySetInnerHTML={{ __html: text.replace(/\n\r?/g, '<br />') }}/>
                   {comment.user === auth.user.id ? (
@@ -93,3 +95,4 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, { deleteComment })(CommentItem);
+
