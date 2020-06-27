@@ -3,10 +3,14 @@ import { Button, Modal, Form, InputGroup} from "react-bootstrap"
 import { string, element } from "prop-types"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShareAlt, faCopy, faEnvelopeOpen } from "@fortawesome/free-solid-svg-icons";
+import { faFacebookF, faTwitter, faLinkedinIn, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+
+
 
 const Share = ({ children, url, title, size, className, variant }) => {
 
     const [show, setShow] = useState(false)
+
 
     const handleShare = () => {
         setShow(true)
@@ -56,6 +60,18 @@ const Share = ({ children, url, title, size, className, variant }) => {
                     </InputGroup.Append>
                 </InputGroup>
                 <p className="mt-4">
+                    <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`} target="_blank" rel="noopener noreferrer" className="btn btn-primary rounded text-white ml-3" style={{ background: "#8167a9", borderColor: "#8167a9" }} >
+                        <FontAwesomeIcon size="2x" icon={faFacebookF} />
+                    </a>
+                    <a href={`http://twitter.com/share?text=#TheGeekHUB&url=${url}`} target="_blank" rel="noopener noreferrer" className="btn btn-primary rounded text-white ml-3" style={{ background: "#8167a9", borderColor: "#8167a9" }} >
+                        <FontAwesomeIcon size="2x" icon={faTwitter} />
+                    </a>
+                    <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=#TheGeekHUB&summary=The GeekHUB is an online platform for develpoers and programmers to connect with each other! Find us at: https://go-geeks.herokuapp.com/.`} target="_blank" rel="noopener noreferrer" className="btn btn-primary rounded text-white ml-3" style={{ background: "#8167a9", borderColor: "#8167a9" }} >
+                        <FontAwesomeIcon size="2x" icon={faLinkedinIn} />
+                    </a>
+                    <a href={`https://wa.me?text=${url}`} target="_blank" rel="noopener noreferrer" className="btn btn-primary rounded text-white ml-3" style={{ background: "#8167a9", borderColor: "#8167a9" }} >
+                        <FontAwesomeIcon size="2x" icon={faWhatsapp} />
+                    </a>
                     <a href={`mailto:?subject=${encodeURI('#TheGeekHUB')}&body=${encodeURI(url)}`} target="_blank" rel="noopener noreferrer" className="btn btn-primary rounded text-white ml-3" style={{ background: "#8167a9", borderColor: "#8167a9" }} >
                         <FontAwesomeIcon size="2x" icon={faEnvelopeOpen} />
                     </a>
@@ -84,4 +100,3 @@ Share.propTypes = {
 }
 
 export default Share;
-

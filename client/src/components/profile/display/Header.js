@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import classnames from "classnames";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import Share from "../../../common/Share";
 import { follow, unfollow } from "../../../store/actions/profile";
 
 class Header extends Component {
@@ -25,6 +26,7 @@ class Header extends Component {
   }
   render() {
     const { profile } = this.props.profile;
+    console.log(profile.handle);
 
     return (
       <div className="card-bg">
@@ -72,6 +74,8 @@ class Header extends Component {
               </button>
             </li>
           </ul>
+
+          <Share url={`${window.origin}/profile/${profile.handle}`} className="" variant="light" size="" />
         </div>
       </div>
     );
