@@ -11,7 +11,7 @@ This application is a full stack application developed using the MERN stack i.e.
 ## QUICK START
 
 - Clone the repository **'The GeekHUB'** by clicking on the Clone button `https://github.com/verma-anushka/The-GeekHUB.git`. Alternatively, download the repository.
-- Navigate to the folder `$ cd the-geekhub-master`
+- Navigate to the folder `$ cd The-GeekHUB`
 
 ### CLIENT SETUP
 
